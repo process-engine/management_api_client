@@ -1,4 +1,5 @@
 import {
+  EventList,
   IManagementApiAccessor,
   IManagementApiService,
   ManagementContext,
@@ -31,6 +32,13 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(context);
 
     return this.managementApiService.startProcessInstance(context, processModelKey, startEventKey, payload, startCallbackType, endEventKey);
+  }
+
+  public async getEventsForProcessModel(context: ManagementContext, processModelKey: string): Promise<EventList> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getEventsForProcessModel(context, processModelKey);
   }
 
   private _ensureIsAuthorized(context: ManagementContext): void {
