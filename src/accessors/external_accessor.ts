@@ -1,5 +1,6 @@
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {
+  EventList,
   IManagementApiAccessor,
   ManagementContext,
   ProcessModelExecution,
@@ -36,6 +37,18 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const httpResponse: IResponse<ProcessModelExecution.ProcessStartResponsePayload> =
       await this.httpClient.post<ProcessModelExecution.ProcessStartRequestPayload,
         ProcessModelExecution.ProcessStartResponsePayload>(url, payload, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getEventsForProcessModel(context: ManagementContext, processModelKey: string): Promise<EventList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.processModelEvents.replace(restSettings.params.processModelKey, processModelKey);
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<EventList> = await this.httpClient.get<EventList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }

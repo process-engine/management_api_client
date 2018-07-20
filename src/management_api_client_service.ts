@@ -1,5 +1,6 @@
 import * as EssentialProjectErrors from '@essential-projects/errors_ts';
 import {
+  EventList,
   IManagementApiAccessor,
   IManagementApiService,
   ManagementContext,
@@ -36,6 +37,10 @@ export class ManagementApiClientService implements IManagementApiService {
     }
 
     return this.managementApiAccessor.startProcessInstance(context, processModelKey, startEventKey, payload, startCallbackType, endEventKey);
+  }
+
+  public async getEventsForProcessModel(context: ManagementContext, processModelKey: string): Promise<EventList> {
+    return this.managementApiAccessor.getEventsForProcessModel(context, processModelKey);
   }
 
 }
