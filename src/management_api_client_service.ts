@@ -21,6 +21,16 @@ export class ManagementApiClientService implements IManagementApiService {
     return this._managementApiAccessor;
   }
 
+  public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {
+
+    return this.managementApiAccessor.getProcessModels(context);
+  }
+
+  public async getProcessModelById(context: ManagementContext, processModelKey: string): Promise<ProcessModelExecution.ProcessModel> {
+
+    return this.managementApiAccessor.getProcessModelById(context, processModelKey);
+  }
+
   public async startProcessInstance(context: ManagementContext,
                                     processModelKey: string,
                                     startEventKey: string,
