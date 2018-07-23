@@ -5,6 +5,8 @@ import {
   ManagementContext,
   ProcessModelExecution,
   restSettings,
+  UserTaskList,
+  UserTaskResult,
 } from '@process-engine/management_api_contracts';
 
 export class ExternalAccessor implements IManagementApiAccessor {
@@ -71,6 +73,66 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     return url;
+  }
+
+  // UserTasks
+  public async getUserTasksForProcessModel(context: ManagementContext, processModelKey: string): Promise<UserTaskList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.processModelUserTasks.replace(restSettings.params.processModelKey, processModelKey);
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<UserTaskList> = await this.httpClient.get<UserTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getUserTasksForCorrelation(context: ManagementContext, correlationId: string): Promise<UserTaskList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.correlationUserTasks.replace(restSettings.params.correlationId, correlationId);
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<UserTaskList> = await this.httpClient.get<UserTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
+                                                        processModelKey: string,
+                                                        correlationId: string): Promise<UserTaskList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.processModelCorrelationUserTasks
+      .replace(restSettings.params.processModelKey, processModelKey)
+      .replace(restSettings.params.correlationId, correlationId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<UserTaskList> = await this.httpClient.get<UserTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async finishUserTask(context: ManagementContext,
+                              processModelKey: string,
+                              correlationId: string,
+                              userTaskId: string,
+                              userTaskResult: UserTaskResult): Promise<void> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.finishUserTask
+      .replace(restSettings.params.processModelKey, processModelKey)
+      .replace(restSettings.params.correlationId, correlationId)
+      .replace(restSettings.params.userTaskId, userTaskId);
+
+    url = this._applyBaseUrl(url);
+
+    await this.httpClient.post<UserTaskResult, any>(url, userTaskResult, requestAuthHeaders);
   }
 
   private _createRequestAuthHeaders(context: ManagementContext): IRequestOptions {

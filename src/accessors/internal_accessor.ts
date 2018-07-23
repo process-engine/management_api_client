@@ -4,6 +4,8 @@ import {
   IManagementApiService,
   ManagementContext,
   ProcessModelExecution,
+  UserTaskList,
+  UserTaskResult,
 } from '@process-engine/management_api_contracts';
 
 import {UnauthorizedError} from '@essential-projects/errors_ts';
@@ -39,6 +41,41 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(context);
 
     return this.managementApiService.getEventsForProcessModel(context, processModelKey);
+  }
+
+  // UserTasks
+  public async getUserTasksForProcessModel(context: ManagementContext, processModelKey: string): Promise<UserTaskList> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getUserTasksForProcessModel(context, processModelKey);
+  }
+
+  public async getUserTasksForCorrelation(context: ManagementContext, correlationId: string): Promise<UserTaskList> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getUserTasksForCorrelation(context, correlationId);
+  }
+
+  public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
+                                                        processModelKey: string,
+                                                        correlationId: string): Promise<UserTaskList> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getUserTasksForProcessModelInCorrelation(context, processModelKey, correlationId);
+  }
+
+  public async finishUserTask(context: ManagementContext,
+                              processModelKey: string,
+                              correlationId: string,
+                              userTaskId: string,
+                              userTaskResult: UserTaskResult): Promise<void> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.finishUserTask(context, processModelKey, correlationId, userTaskId, userTaskResult);
   }
 
   private _ensureIsAuthorized(context: ManagementContext): void {
