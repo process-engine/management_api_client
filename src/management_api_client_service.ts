@@ -5,6 +5,8 @@ import {
   IManagementApiService,
   ManagementContext,
   ProcessModelExecution,
+  UserTaskList,
+  UserTaskResult,
 } from '@process-engine/management_api_contracts';
 
 export class ManagementApiClientService implements IManagementApiService {
@@ -17,6 +19,16 @@ export class ManagementApiClientService implements IManagementApiService {
 
   public get managementApiAccessor(): IManagementApiAccessor {
     return this._managementApiAccessor;
+  }
+
+  public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {
+
+    return this.managementApiAccessor.getProcessModels(context);
+  }
+
+  public async getProcessModelById(context: ManagementContext, processModelKey: string): Promise<ProcessModelExecution.ProcessModel> {
+
+    return this.managementApiAccessor.getProcessModelById(context, processModelKey);
   }
 
   public async startProcessInstance(context: ManagementContext,
@@ -41,6 +53,33 @@ export class ManagementApiClientService implements IManagementApiService {
 
   public async getEventsForProcessModel(context: ManagementContext, processModelKey: string): Promise<EventList> {
     return this.managementApiAccessor.getEventsForProcessModel(context, processModelKey);
+  }
+
+  // UserTasks
+  public async getUserTasksForProcessModel(context: ManagementContext, processModelKey: string): Promise<UserTaskList> {
+
+    return this.managementApiAccessor.getUserTasksForProcessModel(context, processModelKey);
+  }
+
+  public async getUserTasksForCorrelation(context: ManagementContext, correlationId: string): Promise<UserTaskList> {
+
+    return this.managementApiAccessor.getUserTasksForCorrelation(context, correlationId);
+  }
+
+  public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
+                                                        processModelKey: string,
+                                                        correlationId: string): Promise<UserTaskList> {
+
+    return this.managementApiAccessor.getUserTasksForProcessModelInCorrelation(context, processModelKey, correlationId);
+  }
+
+  public async finishUserTask(context: ManagementContext,
+                              processModelKey: string,
+                              correlationId: string,
+                              userTaskId: string,
+                              userTaskResult: UserTaskResult): Promise<void> {
+
+    return this.managementApiAccessor.finishUserTask(context, processModelKey, correlationId, userTaskId, userTaskResult);
   }
 
 }
