@@ -1,4 +1,5 @@
 import {
+  Correlation,
   EventList,
   IManagementApiAccessor,
   IManagementApiService,
@@ -20,6 +21,13 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public get managementApiService(): IManagementApiService {
     return this._managementApiService;
+  }
+
+  public async getAllActiveCorrelations(context: ManagementContext): Promise<Array<Correlation>> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getAllActiveCorrelations(context);
   }
 
   public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {

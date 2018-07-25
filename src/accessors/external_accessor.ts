@@ -1,5 +1,6 @@
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {
+  Correlation,
   EventList,
   IManagementApiAccessor,
   ManagementContext,
@@ -21,6 +22,17 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
   public get httpClient(): IHttpClient {
     return this._httpClient;
+  }
+
+  public async getAllActiveCorrelations(context: ManagementContext): Promise<Array<Correlation>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    const url: string = this._applyBaseUrl(restSettings.paths.activeCorrelations);
+
+    const httpResponse: IResponse<Array<Correlation>> = await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
   }
 
   public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {

@@ -1,5 +1,6 @@
 import * as EssentialProjectErrors from '@essential-projects/errors_ts';
 import {
+  Correlation,
   EventList,
   IManagementApiAccessor,
   IManagementApiService,
@@ -19,6 +20,11 @@ export class ManagementApiClientService implements IManagementApiService {
 
   public get managementApiAccessor(): IManagementApiAccessor {
     return this._managementApiAccessor;
+  }
+
+  public async getAllActiveCorrelations(context: ManagementContext): Promise<Array<Correlation>> {
+
+    return this.managementApiAccessor.getAllActiveCorrelations(context);
   }
 
   public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {
