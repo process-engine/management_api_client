@@ -32,33 +32,33 @@ export class ManagementApiClientService implements IManagementApiService {
     return this.managementApiAccessor.getProcessModels(context);
   }
 
-  public async getProcessModelById(context: ManagementContext, processModelKey: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelById(context: ManagementContext, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
 
-    return this.managementApiAccessor.getProcessModelById(context, processModelKey);
+    return this.managementApiAccessor.getProcessModelById(context, processModelId);
   }
 
   public async startProcessInstance(context: ManagementContext,
-                                    processModelKey: string,
-                                    startEventKey: string,
+                                    processModelId: string,
+                                    startEventId: string,
                                     payload: ProcessModelExecution.ProcessStartRequestPayload,
                                     startCallbackType: ProcessModelExecution.StartCallbackType =
                                       ProcessModelExecution.StartCallbackType.CallbackOnProcessInstanceCreated,
-                                    endEventKey?: string,
+                                    endEventId?: string,
                                   ): Promise<ProcessModelExecution.ProcessStartResponsePayload> {
 
     if (!Object.values(ProcessModelExecution.StartCallbackType).includes(startCallbackType)) {
       throw new EssentialProjectErrors.BadRequestError(`${startCallbackType} is not a valid return option!`);
     }
 
-    if (startCallbackType === ProcessModelExecution.StartCallbackType.CallbackOnEndEventReached && !endEventKey) {
-      throw new EssentialProjectErrors.BadRequestError(`Must provide an EndEventKey, when using callback type 'CallbackOnEndEventReached'!`);
+    if (startCallbackType === ProcessModelExecution.StartCallbackType.CallbackOnEndEventReached && !endEventId) {
+      throw new EssentialProjectErrors.BadRequestError(`Must provide an EndEventId, when using callback type 'CallbackOnEndEventReached'!`);
     }
 
-    return this.managementApiAccessor.startProcessInstance(context, processModelKey, startEventKey, payload, startCallbackType, endEventKey);
+    return this.managementApiAccessor.startProcessInstance(context, processModelId, startEventId, payload, startCallbackType, endEventId);
   }
 
-  public async getEventsForProcessModel(context: ManagementContext, processModelKey: string): Promise<EventList> {
-    return this.managementApiAccessor.getEventsForProcessModel(context, processModelKey);
+  public async getEventsForProcessModel(context: ManagementContext, processModelId: string): Promise<EventList> {
+    return this.managementApiAccessor.getEventsForProcessModel(context, processModelId);
   }
 
   public async updateProcessModelById(context: ManagementContext,
@@ -70,9 +70,9 @@ export class ManagementApiClientService implements IManagementApiService {
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(context: ManagementContext, processModelKey: string): Promise<UserTaskList> {
+  public async getUserTasksForProcessModel(context: ManagementContext, processModelId: string): Promise<UserTaskList> {
 
-    return this.managementApiAccessor.getUserTasksForProcessModel(context, processModelKey);
+    return this.managementApiAccessor.getUserTasksForProcessModel(context, processModelId);
   }
 
   public async getUserTasksForCorrelation(context: ManagementContext, correlationId: string): Promise<UserTaskList> {
@@ -81,19 +81,19 @@ export class ManagementApiClientService implements IManagementApiService {
   }
 
   public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
-                                                        processModelKey: string,
+                                                        processModelId: string,
                                                         correlationId: string): Promise<UserTaskList> {
 
-    return this.managementApiAccessor.getUserTasksForProcessModelInCorrelation(context, processModelKey, correlationId);
+    return this.managementApiAccessor.getUserTasksForProcessModelInCorrelation(context, processModelId, correlationId);
   }
 
   public async finishUserTask(context: ManagementContext,
-                              processModelKey: string,
+                              processModelId: string,
                               correlationId: string,
                               userTaskId: string,
                               userTaskResult: UserTaskResult): Promise<void> {
 
-    return this.managementApiAccessor.finishUserTask(context, processModelKey, correlationId, userTaskId, userTaskResult);
+    return this.managementApiAccessor.finishUserTask(context, processModelId, correlationId, userTaskId, userTaskResult);
   }
 
 }

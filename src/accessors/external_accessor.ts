@@ -47,11 +47,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getProcessModelById(context: ManagementContext, processModelKey: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelById(context: ManagementContext, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
-    let url: string = restSettings.paths.processModelById.replace(restSettings.params.processModelKey, processModelKey);
+    let url: string = restSettings.paths.processModelById.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<ProcessModelExecution.ProcessModel> =
@@ -61,15 +61,15 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   public async startProcessInstance(context: ManagementContext,
-                                    processModelKey: string,
-                                    startEventKey: string,
+                                    processModelId: string,
+                                    startEventId: string,
                                     payload: ProcessModelExecution.ProcessStartRequestPayload,
                                     startCallbackType: ProcessModelExecution.StartCallbackType =
                                       ProcessModelExecution.StartCallbackType.CallbackOnProcessInstanceCreated,
-                                    endEventKey?: string,
+                                    endEventId?: string,
                                   ): Promise<ProcessModelExecution.ProcessStartResponsePayload> {
 
-    const url: string = this._buildStartProcessInstanceUrl(processModelKey, startEventKey, startCallbackType, endEventKey);
+    const url: string = this._buildStartProcessInstanceUrl(processModelId, startEventId, startCallbackType, endEventId);
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
@@ -80,11 +80,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getEventsForProcessModel(context: ManagementContext, processModelKey: string): Promise<EventList> {
+  public async getEventsForProcessModel(context: ManagementContext, processModelId: string): Promise<EventList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
-    let url: string = restSettings.paths.processModelEvents.replace(restSettings.params.processModelKey, processModelKey);
+    let url: string = restSettings.paths.processModelEvents.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<EventList> = await this.httpClient.get<EventList>(url, requestAuthHeaders);
@@ -105,19 +105,19 @@ export class ExternalAccessor implements IManagementApiAccessor {
     await this.httpClient.post<ProcessModelExecution.UpdateProcessModelRequestPayload, void>(url, payload, requestAuthHeaders);
   }
 
-  private _buildStartProcessInstanceUrl(processModelKey: string,
-                                        startEventKey: string,
+  private _buildStartProcessInstanceUrl(processModelId: string,
+                                        startEventId: string,
                                         startCallbackType: ProcessModelExecution.StartCallbackType,
-                                        endEventKey: string): string {
+                                        endEventId: string): string {
 
     let url: string = restSettings.paths.startProcessInstance
-      .replace(restSettings.params.processModelKey, processModelKey)
-      .replace(restSettings.params.startEventKey, startEventKey);
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.startEventId, startEventId);
 
     url = `${url}?start_callback_type=${startCallbackType}`;
 
     if (startCallbackType === ProcessModelExecution.StartCallbackType.CallbackOnEndEventReached) {
-      url = `${url}&end_event_key=${endEventKey}`;
+      url = `${url}&end_event_id=${endEventId}`;
     }
 
     url = this._applyBaseUrl(url);
@@ -126,11 +126,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(context: ManagementContext, processModelKey: string): Promise<UserTaskList> {
+  public async getUserTasksForProcessModel(context: ManagementContext, processModelId: string): Promise<UserTaskList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
-    let url: string = restSettings.paths.processModelUserTasks.replace(restSettings.params.processModelKey, processModelKey);
+    let url: string = restSettings.paths.processModelUserTasks.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<UserTaskList> = await this.httpClient.get<UserTaskList>(url, requestAuthHeaders);
@@ -151,13 +151,13 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
-                                                        processModelKey: string,
+                                                        processModelId: string,
                                                         correlationId: string): Promise<UserTaskList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
     let url: string = restSettings.paths.processModelCorrelationUserTasks
-      .replace(restSettings.params.processModelKey, processModelKey)
+      .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.correlationId, correlationId);
 
     url = this._applyBaseUrl(url);
@@ -168,7 +168,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   public async finishUserTask(context: ManagementContext,
-                              processModelKey: string,
+                              processModelId: string,
                               correlationId: string,
                               userTaskId: string,
                               userTaskResult: UserTaskResult): Promise<void> {
@@ -176,7 +176,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
     let url: string = restSettings.paths.finishUserTask
-      .replace(restSettings.params.processModelKey, processModelKey)
+      .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.correlationId, correlationId)
       .replace(restSettings.params.userTaskId, userTaskId);
 
