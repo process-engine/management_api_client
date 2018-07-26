@@ -37,40 +37,48 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.getProcessModels(context);
   }
 
-  public async getProcessModelById(context: ManagementContext, processModelKey: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelById(context: ManagementContext, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
 
     this._ensureIsAuthorized(context);
 
-    return this.managementApiService.getProcessModelById(context, processModelKey);
+    return this.managementApiService.getProcessModelById(context, processModelId);
   }
 
   public async startProcessInstance(context: ManagementContext,
-                                    processModelKey: string,
-                                    startEventKey: string,
+                                    processModelId: string,
+                                    startEventId: string,
                                     payload: ProcessModelExecution.ProcessStartRequestPayload,
                                     startCallbackType: ProcessModelExecution.StartCallbackType =
                                       ProcessModelExecution.StartCallbackType.CallbackOnProcessInstanceCreated,
-                                    endEventKey?: string,
+                                    endEventId?: string,
                                   ): Promise<ProcessModelExecution.ProcessStartResponsePayload> {
 
     this._ensureIsAuthorized(context);
 
-    return this.managementApiService.startProcessInstance(context, processModelKey, startEventKey, payload, startCallbackType, endEventKey);
+    return this.managementApiService.startProcessInstance(context, processModelId, startEventId, payload, startCallbackType, endEventId);
   }
 
-  public async getEventsForProcessModel(context: ManagementContext, processModelKey: string): Promise<EventList> {
+  public async getEventsForProcessModel(context: ManagementContext, processModelId: string): Promise<EventList> {
 
     this._ensureIsAuthorized(context);
 
-    return this.managementApiService.getEventsForProcessModel(context, processModelKey);
+    return this.managementApiService.getEventsForProcessModel(context, processModelId);
+  }
+
+  public async updateProcessModelById(context: ManagementContext,
+                                      processModelId: string,
+                                      payload: ProcessModelExecution.UpdateProcessModelRequestPayload,
+                                     ): Promise<void> {
+
+    return this.managementApiService.updateProcessModelById(context, processModelId, payload);
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(context: ManagementContext, processModelKey: string): Promise<UserTaskList> {
+  public async getUserTasksForProcessModel(context: ManagementContext, processModelId: string): Promise<UserTaskList> {
 
     this._ensureIsAuthorized(context);
 
-    return this.managementApiService.getUserTasksForProcessModel(context, processModelKey);
+    return this.managementApiService.getUserTasksForProcessModel(context, processModelId);
   }
 
   public async getUserTasksForCorrelation(context: ManagementContext, correlationId: string): Promise<UserTaskList> {
@@ -81,23 +89,23 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
-                                                        processModelKey: string,
+                                                        processModelId: string,
                                                         correlationId: string): Promise<UserTaskList> {
 
     this._ensureIsAuthorized(context);
 
-    return this.managementApiService.getUserTasksForProcessModelInCorrelation(context, processModelKey, correlationId);
+    return this.managementApiService.getUserTasksForProcessModelInCorrelation(context, processModelId, correlationId);
   }
 
   public async finishUserTask(context: ManagementContext,
-                              processModelKey: string,
+                              processModelId: string,
                               correlationId: string,
                               userTaskId: string,
                               userTaskResult: UserTaskResult): Promise<void> {
 
     this._ensureIsAuthorized(context);
 
-    return this.managementApiService.finishUserTask(context, processModelKey, correlationId, userTaskId, userTaskResult);
+    return this.managementApiService.finishUserTask(context, processModelId, correlationId, userTaskId, userTaskResult);
   }
 
   private _ensureIsAuthorized(context: ManagementContext): void {
