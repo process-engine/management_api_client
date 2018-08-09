@@ -66,7 +66,7 @@ export class ManagementApiClientService implements IManagementApiService {
                                             payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
                                           ): Promise<void> {
 
-    return this.managementApiAccessor.updateProcessModelById(context, name, payload);
+    return this.managementApiAccessor.updateProcessDefinitionsByName(context, name, payload);
   }
 
   // UserTasks
