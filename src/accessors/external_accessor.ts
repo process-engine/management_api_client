@@ -92,17 +92,17 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async updateProcessModelById(context: ManagementContext,
-                                      processModelId: string,
-                                      payload: ProcessModelExecution.UpdateProcessModelRequestPayload,
+  public async updateProcessDefinitionsById(context: ManagementContext,
+                                            name: string,
+                                            payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
                                      ): Promise<void> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
-    let url: string = restSettings.paths.updateProcessModelById.replace(restSettings.params.processModelId, processModelId);
+    let url: string = restSettings.paths.updateProcessDefinitionsById.replace(restSettings.params.processDefinitionsName, name);
     url = this._applyBaseUrl(url);
 
-    await this.httpClient.post<ProcessModelExecution.UpdateProcessModelRequestPayload, void>(url, payload, requestAuthHeaders);
+    await this.httpClient.post<ProcessModelExecution.UpdateProcessDefinitionsRequestPayload, void>(url, payload, requestAuthHeaders);
   }
 
   private _buildStartProcessInstanceUrl(processModelId: string,
@@ -117,7 +117,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = `${url}?start_callback_type=${startCallbackType}`;
 
     if (startCallbackType === ProcessModelExecution.StartCallbackType.CallbackOnEndEventReached) {
-      url = `${url}&end_event_id=${endEventId}`;
+      url = `${url}&${restSettings.queryParams.endEventId}=${endEventId}`;
     }
 
     url = this._applyBaseUrl(url);

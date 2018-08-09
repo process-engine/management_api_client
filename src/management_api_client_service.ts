@@ -61,12 +61,12 @@ export class ManagementApiClientService implements IManagementApiService {
     return this.managementApiAccessor.getEventsForProcessModel(context, processModelId);
   }
 
-  public async updateProcessModelById(context: ManagementContext,
-                                      processModelId: string,
-                                      payload: ProcessModelExecution.UpdateProcessModelRequestPayload,
-                                     ): Promise<void> {
+  public async updateProcessDefinitionsById(context: ManagementContext,
+                                            name: string,
+                                            payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
+                                          ): Promise<void> {
 
-    return this.managementApiAccessor.updateProcessModelById(context, processModelId, payload);
+    return this.managementApiAccessor.updateProcessModelById(context, name, payload);
   }
 
   // UserTasks
