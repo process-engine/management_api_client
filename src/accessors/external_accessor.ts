@@ -92,14 +92,14 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async updateProcessDefinitionsById(context: ManagementContext,
-                                            name: string,
-                                            payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
+  public async updateProcessDefinitionsByName(context: ManagementContext,
+                                              name: string,
+                                              payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
                                      ): Promise<void> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
 
-    let url: string = restSettings.paths.updateProcessDefinitionsById.replace(restSettings.params.processDefinitionsName, name);
+    let url: string = restSettings.paths.updateProcessDefinitionsByName.replace(restSettings.params.processDefinitionsName, name);
     url = this._applyBaseUrl(url);
 
     await this.httpClient.post<ProcessModelExecution.UpdateProcessDefinitionsRequestPayload, void>(url, payload, requestAuthHeaders);

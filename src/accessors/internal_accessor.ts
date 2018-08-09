@@ -65,12 +65,12 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.getEventsForProcessModel(context, processModelId);
   }
 
-  public async updateProcessDefinitionsById(context: ManagementContext,
-                                            name: string,
-                                            payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
+  public async updateProcessDefinitionsByName(context: ManagementContext,
+                                              name: string,
+                                              payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
                                           ): Promise<void> {
 
-    return this.managementApiService.updateProcessDefinitionsById(context, name, payload);
+    return this.managementApiService.updateProcessDefinitionsByName(context, name, payload);
   }
 
   // UserTasks
