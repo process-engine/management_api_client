@@ -1,4 +1,7 @@
 import * as EssentialProjectErrors from '@essential-projects/errors_ts';
+
+import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
+import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
   Correlation,
   EventList,
@@ -9,6 +12,7 @@ import {
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
+import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
 export class ManagementApiClientService implements IManagementApiService {
 
@@ -94,6 +98,42 @@ export class ManagementApiClientService implements IManagementApiService {
                               userTaskResult: UserTaskResult): Promise<void> {
 
     return this.managementApiAccessor.finishUserTask(context, processModelId, correlationId, userTaskId, userTaskResult);
+  }
+
+  // Heatmap related features
+  public async getRuntimeInformationForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
+
+    return this.managementApiAccessor.getRuntimeInformationForProcessModel(context, processModelId);
+  }
+
+  public async getRuntimeInformationForFlowNode(context: ManagementContext,
+                                                processModelId: string,
+                                                flowNodeId: string): Promise<FlowNodeRuntimeInformation> {
+
+    return this.managementApiAccessor.getRuntimeInformationForFlowNode(context, processModelId, flowNodeId);
+  }
+
+  public async getActiveTokensForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<ActiveToken>> {
+
+    return this.managementApiAccessor.getActiveTokensForProcessModel(context, processModelId);
+  }
+
+  public async getActiveTokensForFlowNode(context: ManagementContext, flowNodeId: string): Promise<Array<ActiveToken>> {
+
+    return this.managementApiAccessor.getActiveTokensForFlowNode(context, flowNodeId);
+  }
+
+  public async getLogsForProcessModel(context: ManagementContext, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
+
+    return this.managementApiAccessor.getLogsForProcessModel(context, correlationId, processModelId);
+  }
+
+  public async getTokensForFlowNodeInstance(context: ManagementContext,
+                                            processModelId: string,
+                                            correlationId: string,
+                                            flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
+
+    return this.managementApiAccessor.getTokensForFlowNodeInstance(context, processModelId, correlationId, flowNodeId);
   }
 
 }
