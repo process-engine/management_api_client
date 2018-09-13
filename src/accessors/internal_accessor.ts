@@ -33,6 +33,13 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.getAllActiveCorrelations(context);
   }
 
+  public async getProcessModelForCorrelation(context: ManagementContext, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getProcessModelForCorrelation(context, correlationId);
+  }
+
   public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {
 
     this._ensureIsAuthorized(context);
