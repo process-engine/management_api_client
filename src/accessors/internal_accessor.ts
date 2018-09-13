@@ -1,3 +1,5 @@
+import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
+import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
   Correlation,
   EventList,
@@ -8,6 +10,7 @@ import {
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
+import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
 import {UnauthorizedError} from '@essential-projects/errors_ts';
 
@@ -28,6 +31,13 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(context);
 
     return this.managementApiService.getAllActiveCorrelations(context);
+  }
+
+  public async getProcessModelForCorrelation(context: ManagementContext, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getProcessModelForCorrelation(context, correlationId);
   }
 
   public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {
@@ -106,6 +116,55 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(context);
 
     return this.managementApiService.finishUserTask(context, processModelId, correlationId, userTaskId, userTaskResult);
+  }
+
+  // Heatmap related features
+  public async getRuntimeInformationForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getRuntimeInformationForProcessModel(context, processModelId);
+  }
+
+  public async getRuntimeInformationForFlowNode(context: ManagementContext,
+                                                processModelId: string,
+                                                flowNodeId: string): Promise<FlowNodeRuntimeInformation> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getRuntimeInformationForFlowNode(context, processModelId, flowNodeId);
+  }
+
+  public async getActiveTokensForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<ActiveToken>> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getActiveTokensForProcessModel(context, processModelId);
+
+  }
+
+  public async getActiveTokensForFlowNode(context: ManagementContext, flowNodeId: string): Promise<Array<ActiveToken>> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getActiveTokensForFlowNode(context, flowNodeId);
+  }
+
+  public async getLogsForProcessModel(context: ManagementContext, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getLogsForProcessModel(context, correlationId, processModelId);
+  }
+
+  public async getTokensForFlowNodeInstance(context: ManagementContext,
+                                            processModelId: string,
+                                            correlationId: string,
+                                            flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
+
+    this._ensureIsAuthorized(context);
+
+    return this.managementApiService.getTokensForFlowNodeInstance(context, processModelId, correlationId, flowNodeId);
   }
 
   private _ensureIsAuthorized(context: ManagementContext): void {

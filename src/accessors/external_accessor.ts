@@ -1,4 +1,7 @@
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
+
+import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
+import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
   Correlation,
   EventList,
@@ -9,6 +12,7 @@ import {
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
+import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
 export class ExternalAccessor implements IManagementApiAccessor {
 
@@ -31,6 +35,22 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const url: string = this._applyBaseUrl(restSettings.paths.activeCorrelations);
 
     const httpResponse: IResponse<Array<Correlation>> = await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getProcessModelForCorrelation(context: ManagementContext, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths
+      .getProcessModelForCorrelation
+      .replace(restSettings.params.correlationId, correlationId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<ProcessModelExecution.ProcessModel> =
+      await this.httpClient.get<ProcessModelExecution.ProcessModel>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -183,6 +203,102 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     await this.httpClient.post<UserTaskResult, any>(url, userTaskResult, requestAuthHeaders);
+  }
+
+  // Heatmap related features
+  public async getRuntimeInformationForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.getRuntimeInformationForProcessModel
+      .replace(restSettings.params.processModelId, processModelId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Array<FlowNodeRuntimeInformation>> =
+      await this.httpClient.get<Array<FlowNodeRuntimeInformation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getRuntimeInformationForFlowNode(context: ManagementContext,
+                                                processModelId: string,
+                                                flowNodeId: string): Promise<FlowNodeRuntimeInformation> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.getRuntimeInformationForFlowNode
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.flowNodeId, flowNodeId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<FlowNodeRuntimeInformation> =
+      await this.httpClient.get<FlowNodeRuntimeInformation>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getActiveTokensForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<ActiveToken>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.getActiveTokensForProcessModel
+      .replace(restSettings.params.processModelId, processModelId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Array<ActiveToken>> = await this.httpClient.get<Array<ActiveToken>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getActiveTokensForFlowNode(context: ManagementContext, flowNodeId: string): Promise<Array<ActiveToken>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.getActiveTokensForFlowNode
+      .replace(restSettings.params.flowNodeId, flowNodeId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Array<ActiveToken>> = await this.httpClient.get<Array<ActiveToken>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getLogsForProcessModel(context: ManagementContext, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.getLogsForProcessModel
+      .replace(restSettings.params.correlationId, correlationId)
+      .replace(restSettings.params.processModelId, processModelId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Array<LogEntry>> = await this.httpClient.get<Array<LogEntry>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getTokensForFlowNodeInstance(context: ManagementContext,
+                                            processModelId: string,
+                                            correlationId: string,
+                                            flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+
+    let url: string = restSettings.paths.getTokensForFlowNode
+      .replace(restSettings.params.correlationId, correlationId)
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.flowNodeId, flowNodeId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Array<TokenHistoryEntry>> = await this.httpClient.get<Array<TokenHistoryEntry>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
   }
 
   private _createRequestAuthHeaders(context: ManagementContext): IRequestOptions {
