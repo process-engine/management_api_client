@@ -1,4 +1,5 @@
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
+import {IIdentity} from '@essential-projects/iam_contracts';
 
 import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
 import {LogEntry} from '@process-engine/logging_api_contracts';
@@ -6,7 +7,6 @@ import {
   Correlation,
   EventList,
   IManagementApiAccessor,
-  ManagementContext,
   ProcessModelExecution,
   restSettings,
   UserTaskList,
@@ -28,9 +28,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return this._httpClient;
   }
 
-  public async getAllActiveCorrelations(context: ManagementContext): Promise<Array<Correlation>> {
+  public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const url: string = this._applyBaseUrl(restSettings.paths.activeCorrelations);
 
@@ -39,9 +39,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getProcessModelForCorrelation(context: ManagementContext, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelForCorrelation(identity: IIdentity, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths
       .getProcessModelForCorrelation
@@ -55,9 +55,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {
+  public async getProcessModels(identity: IIdentity): Promise<ProcessModelExecution.ProcessModelList> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const url: string = this._applyBaseUrl(restSettings.paths.processModels);
 
@@ -67,9 +67,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getProcessModelById(context: ManagementContext, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.processModelById.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
@@ -80,7 +80,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async startProcessInstance(context: ManagementContext,
+  public async startProcessInstance(identity: IIdentity,
                                     processModelId: string,
                                     startEventId: string,
                                     payload: ProcessModelExecution.ProcessStartRequestPayload,
@@ -91,7 +91,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const url: string = this._buildStartProcessInstanceUrl(processModelId, startEventId, startCallbackType, endEventId);
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const httpResponse: IResponse<ProcessModelExecution.ProcessStartResponsePayload> =
       await this.httpClient.post<ProcessModelExecution.ProcessStartRequestPayload,
@@ -100,9 +100,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getEventsForProcessModel(context: ManagementContext, processModelId: string): Promise<EventList> {
+  public async getEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.processModelEvents.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
@@ -112,12 +112,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async updateProcessDefinitionsByName(context: ManagementContext,
+  public async updateProcessDefinitionsByName(identity: IIdentity,
                                               name: string,
                                               payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
                                      ): Promise<void> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.updateProcessDefinitionsByName.replace(restSettings.params.processDefinitionsName, name);
     url = this._applyBaseUrl(url);
@@ -146,9 +146,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(context: ManagementContext, processModelId: string): Promise<UserTaskList> {
+  public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<UserTaskList> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.processModelUserTasks.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
@@ -158,9 +158,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getUserTasksForCorrelation(context: ManagementContext, correlationId: string): Promise<UserTaskList> {
+  public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<UserTaskList> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.correlationUserTasks.replace(restSettings.params.correlationId, correlationId);
     url = this._applyBaseUrl(url);
@@ -170,11 +170,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
+  public async getUserTasksForProcessModelInCorrelation(identity: IIdentity,
                                                         processModelId: string,
                                                         correlationId: string): Promise<UserTaskList> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.processModelCorrelationUserTasks
       .replace(restSettings.params.processModelId, processModelId)
@@ -187,13 +187,13 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async finishUserTask(context: ManagementContext,
+  public async finishUserTask(identity: IIdentity,
                               processModelId: string,
                               correlationId: string,
                               userTaskId: string,
                               userTaskResult: UserTaskResult): Promise<void> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.finishUserTask
       .replace(restSettings.params.processModelId, processModelId)
@@ -206,9 +206,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   // Heatmap related features
-  public async getRuntimeInformationForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
+  public async getRuntimeInformationForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.getRuntimeInformationForProcessModel
       .replace(restSettings.params.processModelId, processModelId);
@@ -221,11 +221,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getRuntimeInformationForFlowNode(context: ManagementContext,
+  public async getRuntimeInformationForFlowNode(identity: IIdentity,
                                                 processModelId: string,
                                                 flowNodeId: string): Promise<FlowNodeRuntimeInformation> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.getRuntimeInformationForFlowNode
       .replace(restSettings.params.processModelId, processModelId)
@@ -239,9 +239,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getActiveTokensForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<ActiveToken>> {
+  public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<ActiveToken>> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.getActiveTokensForProcessModel
       .replace(restSettings.params.processModelId, processModelId);
@@ -253,9 +253,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getActiveTokensForFlowNode(context: ManagementContext, flowNodeId: string): Promise<Array<ActiveToken>> {
+  public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<ActiveToken>> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.getActiveTokensForFlowNode
       .replace(restSettings.params.flowNodeId, flowNodeId);
@@ -267,9 +267,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getLogsForProcessModel(context: ManagementContext, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
+  public async getLogsForProcessModel(identity: IIdentity, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.getLogsForProcessModel
       .replace(restSettings.params.correlationId, correlationId)
@@ -282,12 +282,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getTokensForFlowNodeInstance(context: ManagementContext,
+  public async getTokensForFlowNodeInstance(identity: IIdentity,
                                             processModelId: string,
                                             correlationId: string,
                                             flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
 
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(context);
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths.getTokensForFlowNode
       .replace(restSettings.params.correlationId, correlationId)
@@ -301,14 +301,16 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  private _createRequestAuthHeaders(context: ManagementContext): IRequestOptions {
-    if (context.identity === undefined || context.identity === null) {
+  private _createRequestAuthHeaders(identity: IIdentity): IRequestOptions {
+
+    const authTokenNotProvided: boolean = !identity || typeof identity.token !== 'string';
+    if (authTokenNotProvided) {
       return {};
     }
 
     const requestAuthHeaders: IRequestOptions = {
       headers: {
-        Authorization: `Bearer ${context.identity}`,
+        Authorization: `Bearer ${identity.token}`,
       },
     };
 
