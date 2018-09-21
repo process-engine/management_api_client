@@ -1,4 +1,5 @@
 import * as EssentialProjectErrors from '@essential-projects/errors_ts';
+import {IIdentity} from '@essential-projects/iam_contracts';
 
 import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
 import {LogEntry} from '@process-engine/logging_api_contracts';
@@ -7,7 +8,6 @@ import {
   EventList,
   IManagementApiAccessor,
   IManagementApiService,
-  ManagementContext,
   ProcessModelExecution,
   UserTaskList,
   UserTaskResult,
@@ -26,27 +26,27 @@ export class ManagementApiClientService implements IManagementApiService {
     return this._managementApiAccessor;
   }
 
-  public async getAllActiveCorrelations(context: ManagementContext): Promise<Array<Correlation>> {
+  public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
 
-    return this.managementApiAccessor.getAllActiveCorrelations(context);
+    return this.managementApiAccessor.getAllActiveCorrelations(identity);
   }
 
-  public async getProcessModelForCorrelation(context: ManagementContext, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelForCorrelation(identity: IIdentity, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
 
-    return this.managementApiAccessor.getProcessModelForCorrelation(context, correlationId);
+    return this.managementApiAccessor.getProcessModelForCorrelation(identity, correlationId);
   }
 
-  public async getProcessModels(context: ManagementContext): Promise<ProcessModelExecution.ProcessModelList> {
+  public async getProcessModels(identity: IIdentity): Promise<ProcessModelExecution.ProcessModelList> {
 
-    return this.managementApiAccessor.getProcessModels(context);
+    return this.managementApiAccessor.getProcessModels(identity);
   }
 
-  public async getProcessModelById(context: ManagementContext, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
 
-    return this.managementApiAccessor.getProcessModelById(context, processModelId);
+    return this.managementApiAccessor.getProcessModelById(identity, processModelId);
   }
 
-  public async startProcessInstance(context: ManagementContext,
+  public async startProcessInstance(identity: IIdentity,
                                     processModelId: string,
                                     startEventId: string,
                                     payload: ProcessModelExecution.ProcessStartRequestPayload,
@@ -63,82 +63,82 @@ export class ManagementApiClientService implements IManagementApiService {
       throw new EssentialProjectErrors.BadRequestError(`Must provide an EndEventId, when using callback type 'CallbackOnEndEventReached'!`);
     }
 
-    return this.managementApiAccessor.startProcessInstance(context, processModelId, startEventId, payload, startCallbackType, endEventId);
+    return this.managementApiAccessor.startProcessInstance(identity, processModelId, startEventId, payload, startCallbackType, endEventId);
   }
 
-  public async getEventsForProcessModel(context: ManagementContext, processModelId: string): Promise<EventList> {
-    return this.managementApiAccessor.getEventsForProcessModel(context, processModelId);
+  public async getEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
+    return this.managementApiAccessor.getEventsForProcessModel(identity, processModelId);
   }
 
-  public async updateProcessDefinitionsByName(context: ManagementContext,
+  public async updateProcessDefinitionsByName(identity: IIdentity,
                                               name: string,
                                               payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
                                           ): Promise<void> {
 
-    return this.managementApiAccessor.updateProcessDefinitionsByName(context, name, payload);
+    return this.managementApiAccessor.updateProcessDefinitionsByName(identity, name, payload);
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(context: ManagementContext, processModelId: string): Promise<UserTaskList> {
+  public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<UserTaskList> {
 
-    return this.managementApiAccessor.getUserTasksForProcessModel(context, processModelId);
+    return this.managementApiAccessor.getUserTasksForProcessModel(identity, processModelId);
   }
 
-  public async getUserTasksForCorrelation(context: ManagementContext, correlationId: string): Promise<UserTaskList> {
+  public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<UserTaskList> {
 
-    return this.managementApiAccessor.getUserTasksForCorrelation(context, correlationId);
+    return this.managementApiAccessor.getUserTasksForCorrelation(identity, correlationId);
   }
 
-  public async getUserTasksForProcessModelInCorrelation(context: ManagementContext,
+  public async getUserTasksForProcessModelInCorrelation(identity: IIdentity,
                                                         processModelId: string,
                                                         correlationId: string): Promise<UserTaskList> {
 
-    return this.managementApiAccessor.getUserTasksForProcessModelInCorrelation(context, processModelId, correlationId);
+    return this.managementApiAccessor.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
-  public async finishUserTask(context: ManagementContext,
+  public async finishUserTask(identity: IIdentity,
                               processModelId: string,
                               correlationId: string,
                               userTaskId: string,
                               userTaskResult: UserTaskResult): Promise<void> {
 
-    return this.managementApiAccessor.finishUserTask(context, processModelId, correlationId, userTaskId, userTaskResult);
+    return this.managementApiAccessor.finishUserTask(identity, processModelId, correlationId, userTaskId, userTaskResult);
   }
 
   // Heatmap related features
-  public async getRuntimeInformationForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
+  public async getRuntimeInformationForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
 
-    return this.managementApiAccessor.getRuntimeInformationForProcessModel(context, processModelId);
+    return this.managementApiAccessor.getRuntimeInformationForProcessModel(identity, processModelId);
   }
 
-  public async getRuntimeInformationForFlowNode(context: ManagementContext,
+  public async getRuntimeInformationForFlowNode(identity: IIdentity,
                                                 processModelId: string,
                                                 flowNodeId: string): Promise<FlowNodeRuntimeInformation> {
 
-    return this.managementApiAccessor.getRuntimeInformationForFlowNode(context, processModelId, flowNodeId);
+    return this.managementApiAccessor.getRuntimeInformationForFlowNode(identity, processModelId, flowNodeId);
   }
 
-  public async getActiveTokensForProcessModel(context: ManagementContext, processModelId: string): Promise<Array<ActiveToken>> {
+  public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<ActiveToken>> {
 
-    return this.managementApiAccessor.getActiveTokensForProcessModel(context, processModelId);
+    return this.managementApiAccessor.getActiveTokensForProcessModel(identity, processModelId);
   }
 
-  public async getActiveTokensForFlowNode(context: ManagementContext, flowNodeId: string): Promise<Array<ActiveToken>> {
+  public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<ActiveToken>> {
 
-    return this.managementApiAccessor.getActiveTokensForFlowNode(context, flowNodeId);
+    return this.managementApiAccessor.getActiveTokensForFlowNode(identity, flowNodeId);
   }
 
-  public async getLogsForProcessModel(context: ManagementContext, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
+  public async getLogsForProcessModel(identity: IIdentity, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
 
-    return this.managementApiAccessor.getLogsForProcessModel(context, correlationId, processModelId);
+    return this.managementApiAccessor.getLogsForProcessModel(identity, correlationId, processModelId);
   }
 
-  public async getTokensForFlowNodeInstance(context: ManagementContext,
+  public async getTokensForFlowNodeInstance(identity: IIdentity,
                                             processModelId: string,
                                             correlationId: string,
                                             flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
 
-    return this.managementApiAccessor.getTokensForFlowNodeInstance(context, processModelId, correlationId, flowNodeId);
+    return this.managementApiAccessor.getTokensForFlowNodeInstance(identity, processModelId, correlationId, flowNodeId);
   }
 
 }
