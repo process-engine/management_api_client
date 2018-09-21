@@ -6,15 +6,15 @@ import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
   Correlation,
   EventList,
+  IManagementApi,
   IManagementApiAccessor,
-  IManagementApiService,
   ProcessModelExecution,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
 import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
-export class ManagementApiClientService implements IManagementApiService {
+export class ManagementApiClientService implements IManagementApi {
 
   private _managementApiAccessor: IManagementApiAccessor = undefined;
 

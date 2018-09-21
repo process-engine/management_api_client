@@ -6,8 +6,8 @@ import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
   Correlation,
   EventList,
+  IManagementApi,
   IManagementApiAccessor,
-  IManagementApiService,
   ProcessModelExecution,
   UserTaskList,
   UserTaskResult,
@@ -16,13 +16,13 @@ import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
 export class InternalAccessor implements IManagementApiAccessor {
 
-  private _managementApiService: IManagementApiService = undefined;
+  private _managementApiService: IManagementApi = undefined;
 
-  constructor(managementApiService: IManagementApiService) {
+  constructor(managementApiService: IManagementApi) {
     this._managementApiService = managementApiService;
   }
 
-  public get managementApiService(): IManagementApiService {
+  public get managementApiService(): IManagementApi {
     return this._managementApiService;
   }
 
