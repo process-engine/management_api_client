@@ -1,33 +1,31 @@
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
-import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
-import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
+  ActiveToken,
   Correlation,
   EventList,
+  FlowNodeRuntimeInformation,
   IManagementApiAccessor,
+  LogEntry,
   ProcessModelExecution,
   restSettings,
+  TokenHistoryEntry,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
-import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
 export class ExternalAccessor implements IManagementApiAccessor {
 
   private baseUrl: string = 'api/management/v1';
 
-  private _httpClient: IHttpClient = undefined;
+  private httpClient: IHttpClient = undefined;
 
   constructor(httpClient: IHttpClient) {
-    this._httpClient = httpClient;
+    this.httpClient = httpClient;
   }
 
-  public get httpClient(): IHttpClient {
-    return this._httpClient;
-  }
-
+  // Correlations
   public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
@@ -39,22 +37,23 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getProcessModelForCorrelation(identity: IIdentity, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelsForCorrelation(identity: IIdentity, correlationId: string): Promise<Array<ProcessModelExecution.ProcessModel>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths
-      .getProcessModelForCorrelation
+      .getProcessModelsForCorrelation
       .replace(restSettings.params.correlationId, correlationId);
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<ProcessModelExecution.ProcessModel> =
-      await this.httpClient.get<ProcessModelExecution.ProcessModel>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Array<ProcessModelExecution.ProcessModel>> =
+      await this.httpClient.get<Array<ProcessModelExecution.ProcessModel>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
+  // ProcessModels
   public async getProcessModels(identity: IIdentity): Promise<ProcessModelExecution.ProcessModelList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
@@ -76,6 +75,21 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const httpResponse: IResponse<ProcessModelExecution.ProcessModel> =
       await this.httpClient.get<ProcessModelExecution.ProcessModel>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getCorrelationsForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.getCorrelationsForProcessModel
+      .replace(restSettings.params.processModelId, processModelId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Array<Correlation>> =
+      await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -123,26 +137,6 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     await this.httpClient.post<ProcessModelExecution.UpdateProcessDefinitionsRequestPayload, void>(url, payload, requestAuthHeaders);
-  }
-
-  private _buildStartProcessInstanceUrl(processModelId: string,
-                                        startEventId: string,
-                                        startCallbackType: ProcessModelExecution.StartCallbackType,
-                                        endEventId: string): string {
-
-    let url: string = restSettings.paths.startProcessInstance
-      .replace(restSettings.params.processModelId, processModelId)
-      .replace(restSettings.params.startEventId, startEventId);
-
-    url = `${url}?start_callback_type=${startCallbackType}`;
-
-    if (startCallbackType === ProcessModelExecution.StartCallbackType.CallbackOnEndEventReached) {
-      url = `${url}&${restSettings.queryParams.endEventId}=${endEventId}`;
-    }
-
-    url = this._applyBaseUrl(url);
-
-    return url;
   }
 
   // UserTasks
@@ -267,12 +261,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getLogsForProcessModel(identity: IIdentity, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
+  public async getProcessModelLog(identity: IIdentity, processModelId: string): Promise<Array<LogEntry>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    let url: string = restSettings.paths.getLogsForProcessModel
-      .replace(restSettings.params.correlationId, correlationId)
+    let url: string = restSettings.paths.getProcessModelLog
       .replace(restSettings.params.processModelId, processModelId);
 
     url = this._applyBaseUrl(url);
@@ -299,6 +292,26 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const httpResponse: IResponse<Array<TokenHistoryEntry>> = await this.httpClient.get<Array<TokenHistoryEntry>>(url, requestAuthHeaders);
 
     return httpResponse.result;
+  }
+
+  private _buildStartProcessInstanceUrl(processModelId: string,
+                                        startEventId: string,
+                                        startCallbackType: ProcessModelExecution.StartCallbackType,
+                                        endEventId: string): string {
+
+    let url: string = restSettings.paths.startProcessInstance
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.startEventId, startEventId);
+
+    url = `${url}?start_callback_type=${startCallbackType}`;
+
+    if (startCallbackType === ProcessModelExecution.StartCallbackType.CallbackOnEndEventReached) {
+      url = `${url}&${restSettings.queryParams.endEventId}=${endEventId}`;
+    }
+
+    url = this._applyBaseUrl(url);
+
+    return url;
   }
 
   private _createRequestAuthHeaders(identity: IIdentity): IRequestOptions {
