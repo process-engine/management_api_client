@@ -28,8 +28,8 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getAllActiveCorrelations(identity);
   }
 
-  public async getProcessModelsForCorrelation(identity: IIdentity, correlationId: string): Promise<Array<ProcessModelExecution.ProcessModel>> {
-    return this.managementApiAccessor.getProcessModelsForCorrelation(identity, correlationId);
+  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
+    return this.managementApiAccessor.getCorrelationById(identity, correlationId);
   }
 
   // ProcessModels

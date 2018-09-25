@@ -37,18 +37,18 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getProcessModelsForCorrelation(identity: IIdentity, correlationId: string): Promise<Array<ProcessModelExecution.ProcessModel>> {
+  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     let url: string = restSettings.paths
-      .getProcessModelsForCorrelation
+      .getCorrelationById
       .replace(restSettings.params.correlationId, correlationId);
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<Array<ProcessModelExecution.ProcessModel>> =
-      await this.httpClient.get<Array<ProcessModelExecution.ProcessModel>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Correlation> =
+      await this.httpClient.get<Correlation>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }

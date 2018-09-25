@@ -31,11 +31,11 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.getAllActiveCorrelations(identity);
   }
 
-  public async getProcessModelsForCorrelation(identity: IIdentity, correlationId: string): Promise<Array<ProcessModelExecution.ProcessModel>> {
+  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
 
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiService.getProcessModelsForCorrelation(identity, correlationId);
+    return this.managementApiService.getCorrelationById(identity, correlationId);
   }
 
   // ProcessModels
