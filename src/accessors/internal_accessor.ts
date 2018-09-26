@@ -24,11 +24,18 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Correlations
-  public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
 
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiService.getAllActiveCorrelations(identity);
+    return this.managementApiService.getAllCorrelations(identity);
+  }
+
+  public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiService.getActiveCorrelations(identity);
   }
 
   public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
@@ -36,6 +43,20 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(identity);
 
     return this.managementApiService.getCorrelationById(identity, correlationId);
+  }
+
+  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<Correlation> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiService.getCorrelationByProcessInstanceId(identity, processInstanceId);
+  }
+
+  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiService.getCorrelationsByProcessModelId(identity, processModelId);
   }
 
   // ProcessModels
@@ -51,13 +72,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(identity);
 
     return this.managementApiService.getProcessModelById(identity, processModelId);
-  }
-
-  public async getCorrelationsForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
-
-    this._ensureIsAuthorized(identity);
-
-    return this.managementApiService.getCorrelationsForProcessModel(identity, processModelId);
   }
 
   public async startProcessInstance(identity: IIdentity,

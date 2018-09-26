@@ -24,12 +24,24 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   // Correlations
-  public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
-    return this.managementApiAccessor.getAllActiveCorrelations(identity);
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+    return this.managementApiAccessor.getAllCorrelations(identity);
+  }
+
+  public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+    return this.managementApiAccessor.getActiveCorrelations(identity);
   }
 
   public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
     return this.managementApiAccessor.getCorrelationById(identity, correlationId);
+  }
+
+  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<Correlation> {
+    return this.managementApiAccessor.getCorrelationByProcessInstanceId(identity, processInstanceId);
+  }
+
+  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
+    return this.managementApiAccessor.getCorrelationsByProcessModelId(identity, processModelId);
   }
 
   // ProcessModels
@@ -39,10 +51,6 @@ export class ManagementApiClientService implements IManagementApi {
 
   public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
     return this.managementApiAccessor.getProcessModelById(identity, processModelId);
-  }
-
-  public async getCorrelationsForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
-    return this.managementApiAccessor.getCorrelationsForProcessModel(identity, processModelId);
   }
 
   public async startProcessInstance(identity: IIdentity,

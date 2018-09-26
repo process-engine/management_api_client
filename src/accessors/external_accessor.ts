@@ -26,11 +26,22 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   // Correlations
-  public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    const url: string = this._applyBaseUrl(restSettings.paths.activeCorrelations);
+    const url: string = this._applyBaseUrl(restSettings.paths.getAllCorrelations);
+
+    const httpResponse: IResponse<Array<Correlation>> = await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const url: string = this._applyBaseUrl(restSettings.paths.getActiveCorrelations);
 
     const httpResponse: IResponse<Array<Correlation>> = await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
 
@@ -49,6 +60,35 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const httpResponse: IResponse<Correlation> =
       await this.httpClient.get<Correlation>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<Correlation> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.getCorrelationByProcessInstanceId
+      .replace(restSettings.params.processInstanceId, processInstanceId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Correlation> = await this.httpClient.get<Correlation>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.getCorrelationsByProcessModelId
+      .replace(restSettings.params.processModelId, processModelId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<Array<Correlation>> =
+      await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -75,21 +115,6 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const httpResponse: IResponse<ProcessModelExecution.ProcessModel> =
       await this.httpClient.get<ProcessModelExecution.ProcessModel>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getCorrelationsForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
-
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
-
-    let url: string = restSettings.paths.getCorrelationsForProcessModel
-      .replace(restSettings.params.processModelId, processModelId);
-
-    url = this._applyBaseUrl(url);
-
-    const httpResponse: IResponse<Array<Correlation>> =
-      await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
