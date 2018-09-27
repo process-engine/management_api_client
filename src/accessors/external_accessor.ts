@@ -8,6 +8,7 @@ import {
   FlowNodeRuntimeInformation,
   IManagementApiAccessor,
   LogEntry,
+  Messages,
   ProcessModelExecution,
   restSettings,
   socketSettings,
@@ -15,12 +16,6 @@ import {
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
-import {
-  ProcessEndedMessage,
-  ProcessEndType,
-  UserTaskFinishedMessage,
-  UserTaskWaitingMessage,
-} from '@process-engine/process_engine_contracts';
 
 import * as io from 'socket.io-client';
 
@@ -30,7 +25,6 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
   private _socket: SocketIOClient.Socket = undefined;
   private _httpClient: IHttpClient = undefined;
-  private _context: ManagementContext = undefined;
 
   public config: any;
 
@@ -50,13 +44,13 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public initializeSocket(context: ManagementContext): void {
+  public initializeSocket(identity: IIdentity): void {
     const socketUrl: string = `${this.config.socketUrl}/${socketSettings.namespace}`;
     const socketIoOptions: SocketIOClient.ConnectOpts = {
       transportOptions: {
         polling: {
           extraHeaders: {
-            Authorization: context.identity,
+            Authorization: identity.token,
           },
         },
       },
@@ -64,34 +58,20 @@ export class ExternalAccessor implements IManagementApiAccessor {
     this._socket = io(socketUrl, socketIoOptions);
   }
 
-  public onUserTaskWaiting(callback: (userTaskWaiting: UserTaskWaitingMessage) => void|Promise<void>): void {
-    this._socket.on(socketSettings.paths.userTaskWaiting, (userTaskWaiting: UserTaskWaitingMessage) => {
-      callback(userTaskWaiting);
-    });
+  public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+    this._socket.on(socketSettings.paths.userTaskWaiting, callback);
   }
 
-  public onUserTaskFinished(callback: (userTaskFinished: UserTaskFinishedMessage) => void|Promise<void>): void {
-    this._socket.on(socketSettings.paths.userTaskFinished, (userTaskFinished: UserTaskFinishedMessage) => {
-      callback(userTaskFinished);
-    });
+  public onUserTaskFinished(callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+    this._socket.on(socketSettings.paths.userTaskFinished, callback);
   }
 
-  public onProcessTerminated(callback: (processEnded: ProcessEndedMessage) => void|Promise<void>): void {
-    this._socket.on(socketSettings.paths.processEnded, (processEnded: ProcessEndedMessage) => {
-      const isProcessTerminated: boolean = processEnded.endType === ProcessEndType.Terminated;
-      if (isProcessTerminated) {
-        callback(processEnded);
-      }
-    });
+  public onProcessTerminated(callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+    this._socket.on(socketSettings.paths.processTerminated, callback);
   }
 
-  public onProcessEnded(callback: (processEnded: ProcessEndedMessage) => void|Promise<void>): void {
-    this._socket.on(socketSettings.paths.processEnded, (processEnded: ProcessEndedMessage) => {
-      const isProcessEnded: boolean = processEnded.endType === ProcessEndType.Ended;
-      if (isProcessEnded) {
-        callback(processEnded);
-      }
-    });
+  public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this._socket.on(socketSettings.paths.processEnded, callback);
   }
 
   public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {

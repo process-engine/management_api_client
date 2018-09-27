@@ -9,16 +9,12 @@ import {
   IManagementApi,
   IManagementApiAccessor,
   LogEntry,
+  Messages,
   ProcessModelExecution,
   TokenHistoryEntry,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
-import {
-  ProcessEndedMessage,
-  UserTaskFinishedMessage,
-  UserTaskWaitingMessage,
-} from '@process-engine/process_engine_contracts';
 
 export class ManagementApiClientService implements IManagementApi {
 
@@ -33,28 +29,20 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getAllCorrelations(identity);
   }
 
-  public onUserTaskWaiting(callback: (userTaskWaiting: UserTaskWaitingMessage) => void|Promise<void>): void {
-    this.managementApiAccessor.onUserTaskWaiting((userTaskWaiting: UserTaskWaitingMessage) => {
-      callback(userTaskWaiting);
-    });
+  public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+    this.managementApiAccessor.onUserTaskWaiting(callback);
   }
 
-  public onUserTaskFinished(callback: (userTaskFinished: UserTaskFinishedMessage) => void|Promise<void>): void {
-    this.managementApiAccessor.onUserTaskFinished((userTaskFinished: UserTaskFinishedMessage) => {
-      callback(userTaskFinished);
-    });
+  public onUserTaskFinished(callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+    this.managementApiAccessor.onUserTaskFinished(callback);
   }
 
-  public onProcessTerminated(callback: (processTerminated: ProcessEndedMessage) => void|Promise<void>): void {
-    this.managementApiAccessor.onProcessTerminated((processTerminated: ProcessEndedMessage) => {
-      callback(processTerminated);
-    });
+  public onProcessTerminated(callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+    this.managementApiAccessor.onProcessTerminated(callback);
   }
 
-  public onProcessEnded(callback: (processEnded: ProcessEndedMessage) => void|Promise<void>): void {
-    this.managementApiAccessor.onProcessEnded((processEnded: ProcessEndedMessage) => {
-      callback(processEnded);
-    });
+  public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this.managementApiAccessor.onProcessEnded(callback);
   }
 
   public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
