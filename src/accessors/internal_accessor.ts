@@ -1,45 +1,65 @@
 import {UnauthorizedError} from '@essential-projects/errors_ts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
-import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
-import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
+  ActiveToken,
   Correlation,
   EventList,
+  FlowNodeRuntimeInformation,
   IManagementApi,
   IManagementApiAccessor,
+  LogEntry,
   ProcessModelExecution,
+  TokenHistoryEntry,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
-import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
 export class InternalAccessor implements IManagementApiAccessor {
 
-  private _managementApiService: IManagementApi = undefined;
+  private managementApiService: IManagementApi = undefined;
 
   constructor(managementApiService: IManagementApi) {
-    this._managementApiService = managementApiService;
+    this.managementApiService = managementApiService;
   }
 
-  public get managementApiService(): IManagementApi {
-    return this._managementApiService;
-  }
-
-  public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+  // Correlations
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
 
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiService.getAllActiveCorrelations(identity);
+    return this.managementApiService.getAllCorrelations(identity);
   }
 
-  public async getProcessModelForCorrelation(identity: IIdentity, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
 
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiService.getProcessModelForCorrelation(identity, correlationId);
+    return this.managementApiService.getActiveCorrelations(identity);
   }
 
+  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiService.getCorrelationById(identity, correlationId);
+  }
+
+  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<Correlation> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiService.getCorrelationByProcessInstanceId(identity, processInstanceId);
+  }
+
+  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiService.getCorrelationsByProcessModelId(identity, processModelId);
+  }
+
+  // ProcessModels
   public async getProcessModels(identity: IIdentity): Promise<ProcessModelExecution.ProcessModelList> {
 
     this._ensureIsAuthorized(identity);
@@ -150,11 +170,11 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.getActiveTokensForFlowNode(identity, flowNodeId);
   }
 
-  public async getLogsForProcessModel(identity: IIdentity, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
+  public async getProcessModelLog(identity: IIdentity, processModelId: string): Promise<Array<LogEntry>> {
 
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiService.getLogsForProcessModel(identity, correlationId, processModelId);
+    return this.managementApiService.getProcessModelLog(identity, processModelId);
   }
 
   public async getTokensForFlowNodeInstance(identity: IIdentity,
