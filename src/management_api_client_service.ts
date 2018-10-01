@@ -9,6 +9,7 @@ import {
   IManagementApi,
   IManagementApiAccessor,
   LogEntry,
+  Messages,
   ProcessModelExecution,
   TokenHistoryEntry,
   UserTaskList,
@@ -26,6 +27,22 @@ export class ManagementApiClientService implements IManagementApi {
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
     return this.managementApiAccessor.getAllCorrelations(identity);
+  }
+
+  public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+    this.managementApiAccessor.onUserTaskWaiting(callback);
+  }
+
+  public onUserTaskFinished(callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+    this.managementApiAccessor.onUserTaskFinished(callback);
+  }
+
+  public onProcessTerminated(callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+    this.managementApiAccessor.onProcessTerminated(callback);
+  }
+
+  public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this.managementApiAccessor.onProcessEnded(callback);
   }
 
   public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {

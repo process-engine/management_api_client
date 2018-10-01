@@ -8,21 +8,28 @@ import {
   FlowNodeRuntimeInformation,
   IManagementApiAccessor,
   LogEntry,
+  Messages,
   ProcessModelExecution,
   restSettings,
+  socketSettings,
   TokenHistoryEntry,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
 
+import * as io from 'socket.io-client';
+
 export class ExternalAccessor implements IManagementApiAccessor {
 
   private baseUrl: string = 'api/management/v1';
 
-  private httpClient: IHttpClient = undefined;
+  private _socket: SocketIOClient.Socket = undefined;
+  private _httpClient: IHttpClient = undefined;
+
+  public config: any;
 
   constructor(httpClient: IHttpClient) {
-    this.httpClient = httpClient;
+    this._httpClient = httpClient;
   }
 
   // Correlations
@@ -32,9 +39,39 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const url: string = this._applyBaseUrl(restSettings.paths.getAllCorrelations);
 
-    const httpResponse: IResponse<Array<Correlation>> = await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Array<Correlation>> = await this._httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
 
     return httpResponse.result;
+  }
+
+  public initializeSocket(identity: IIdentity): void {
+    const socketUrl: string = `${this.config.socketUrl}/${socketSettings.namespace}`;
+    const socketIoOptions: SocketIOClient.ConnectOpts = {
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            Authorization: identity.token,
+          },
+        },
+      },
+    };
+    this._socket = io(socketUrl, socketIoOptions);
+  }
+
+  public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+    this._socket.on(socketSettings.paths.userTaskWaiting, callback);
+  }
+
+  public onUserTaskFinished(callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+    this._socket.on(socketSettings.paths.userTaskFinished, callback);
+  }
+
+  public onProcessTerminated(callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+    this._socket.on(socketSettings.paths.processTerminated, callback);
+  }
+
+  public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this._socket.on(socketSettings.paths.processEnded, callback);
   }
 
   public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
@@ -43,7 +80,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const url: string = this._applyBaseUrl(restSettings.paths.getActiveCorrelations);
 
-    const httpResponse: IResponse<Array<Correlation>> = await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Array<Correlation>> = await this._httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -59,7 +96,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<Correlation> =
-      await this.httpClient.get<Correlation>(url, requestAuthHeaders);
+      await this._httpClient.get<Correlation>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -73,7 +110,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<Correlation> = await this.httpClient.get<Correlation>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Correlation> = await this._httpClient.get<Correlation>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -88,7 +125,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<Array<Correlation>> =
-      await this.httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
+      await this._httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -101,7 +138,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const url: string = this._applyBaseUrl(restSettings.paths.processModels);
 
     const httpResponse: IResponse<ProcessModelExecution.ProcessModelList> =
-      await this.httpClient.get<ProcessModelExecution.ProcessModelList>(url, requestAuthHeaders);
+      await this._httpClient.get<ProcessModelExecution.ProcessModelList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -114,7 +151,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<ProcessModelExecution.ProcessModel> =
-      await this.httpClient.get<ProcessModelExecution.ProcessModel>(url, requestAuthHeaders);
+      await this._httpClient.get<ProcessModelExecution.ProcessModel>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -133,7 +170,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const httpResponse: IResponse<ProcessModelExecution.ProcessStartResponsePayload> =
-      await this.httpClient.post<ProcessModelExecution.ProcessStartRequestPayload,
+      await this._httpClient.post<ProcessModelExecution.ProcessStartRequestPayload,
         ProcessModelExecution.ProcessStartResponsePayload>(url, payload, requestAuthHeaders);
 
     return httpResponse.result;
@@ -146,7 +183,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     let url: string = restSettings.paths.processModelEvents.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<EventList> = await this.httpClient.get<EventList>(url, requestAuthHeaders);
+    const httpResponse: IResponse<EventList> = await this._httpClient.get<EventList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -161,7 +198,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     let url: string = restSettings.paths.updateProcessDefinitionsByName.replace(restSettings.params.processDefinitionsName, name);
     url = this._applyBaseUrl(url);
 
-    await this.httpClient.post<ProcessModelExecution.UpdateProcessDefinitionsRequestPayload, void>(url, payload, requestAuthHeaders);
+    await this._httpClient.post<ProcessModelExecution.UpdateProcessDefinitionsRequestPayload, void>(url, payload, requestAuthHeaders);
   }
 
   // UserTasks
@@ -172,7 +209,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     let url: string = restSettings.paths.processModelUserTasks.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<UserTaskList> = await this.httpClient.get<UserTaskList>(url, requestAuthHeaders);
+    const httpResponse: IResponse<UserTaskList> = await this._httpClient.get<UserTaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -184,7 +221,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     let url: string = restSettings.paths.correlationUserTasks.replace(restSettings.params.correlationId, correlationId);
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<UserTaskList> = await this.httpClient.get<UserTaskList>(url, requestAuthHeaders);
+    const httpResponse: IResponse<UserTaskList> = await this._httpClient.get<UserTaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -201,7 +238,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<UserTaskList> = await this.httpClient.get<UserTaskList>(url, requestAuthHeaders);
+    const httpResponse: IResponse<UserTaskList> = await this._httpClient.get<UserTaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -221,7 +258,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     url = this._applyBaseUrl(url);
 
-    await this.httpClient.post<UserTaskResult, any>(url, userTaskResult, requestAuthHeaders);
+    await this._httpClient.post<UserTaskResult, any>(url, userTaskResult, requestAuthHeaders);
   }
 
   // Heatmap related features
@@ -235,7 +272,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<Array<FlowNodeRuntimeInformation>> =
-      await this.httpClient.get<Array<FlowNodeRuntimeInformation>>(url, requestAuthHeaders);
+      await this._httpClient.get<Array<FlowNodeRuntimeInformation>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -253,7 +290,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<FlowNodeRuntimeInformation> =
-      await this.httpClient.get<FlowNodeRuntimeInformation>(url, requestAuthHeaders);
+      await this._httpClient.get<FlowNodeRuntimeInformation>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -267,7 +304,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<Array<ActiveToken>> = await this.httpClient.get<Array<ActiveToken>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Array<ActiveToken>> = await this._httpClient.get<Array<ActiveToken>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -281,7 +318,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<Array<ActiveToken>> = await this.httpClient.get<Array<ActiveToken>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Array<ActiveToken>> = await this._httpClient.get<Array<ActiveToken>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -295,7 +332,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<Array<LogEntry>> = await this.httpClient.get<Array<LogEntry>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Array<LogEntry>> = await this._httpClient.get<Array<LogEntry>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -314,7 +351,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     url = this._applyBaseUrl(url);
 
-    const httpResponse: IResponse<Array<TokenHistoryEntry>> = await this.httpClient.get<Array<TokenHistoryEntry>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<Array<TokenHistoryEntry>> = await this._httpClient.get<Array<TokenHistoryEntry>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
