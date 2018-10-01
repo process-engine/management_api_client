@@ -1,48 +1,55 @@
 import * as EssentialProjectErrors from '@essential-projects/errors_ts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
-import {ActiveToken, FlowNodeRuntimeInformation} from '@process-engine/kpi_api_contracts';
-import {LogEntry} from '@process-engine/logging_api_contracts';
 import {
+  ActiveToken,
   Correlation,
   EventList,
+  FlowNodeRuntimeInformation,
   IManagementApi,
   IManagementApiAccessor,
+  LogEntry,
   ProcessModelExecution,
+  TokenHistoryEntry,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
-import {TokenHistoryEntry} from '@process-engine/token_history_api_contracts';
 
 export class ManagementApiClientService implements IManagementApi {
 
-  private _managementApiAccessor: IManagementApiAccessor = undefined;
+  private managementApiAccessor: IManagementApiAccessor = undefined;
 
   constructor(managementApiAccessor: IManagementApiAccessor) {
-    this._managementApiAccessor = managementApiAccessor;
+    this.managementApiAccessor = managementApiAccessor;
   }
 
-  public get managementApiAccessor(): IManagementApiAccessor {
-    return this._managementApiAccessor;
+  // Correlations
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+    return this.managementApiAccessor.getAllCorrelations(identity);
   }
 
-  public async getAllActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
-
-    return this.managementApiAccessor.getAllActiveCorrelations(identity);
+  public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+    return this.managementApiAccessor.getActiveCorrelations(identity);
   }
 
-  public async getProcessModelForCorrelation(identity: IIdentity, correlationId: string): Promise<ProcessModelExecution.ProcessModel> {
-
-    return this.managementApiAccessor.getProcessModelForCorrelation(identity, correlationId);
+  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
+    return this.managementApiAccessor.getCorrelationById(identity, correlationId);
   }
 
+  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<Correlation> {
+    return this.managementApiAccessor.getCorrelationByProcessInstanceId(identity, processInstanceId);
+  }
+
+  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
+    return this.managementApiAccessor.getCorrelationsByProcessModelId(identity, processModelId);
+  }
+
+  // ProcessModels
   public async getProcessModels(identity: IIdentity): Promise<ProcessModelExecution.ProcessModelList> {
-
     return this.managementApiAccessor.getProcessModels(identity);
   }
 
   public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
-
     return this.managementApiAccessor.getProcessModelById(identity, processModelId);
   }
 
@@ -80,12 +87,10 @@ export class ManagementApiClientService implements IManagementApi {
 
   // UserTasks
   public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<UserTaskList> {
-
     return this.managementApiAccessor.getUserTasksForProcessModel(identity, processModelId);
   }
 
   public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<UserTaskList> {
-
     return this.managementApiAccessor.getUserTasksForCorrelation(identity, correlationId);
   }
 
@@ -107,7 +112,6 @@ export class ManagementApiClientService implements IManagementApi {
 
   // Heatmap related features
   public async getRuntimeInformationForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
-
     return this.managementApiAccessor.getRuntimeInformationForProcessModel(identity, processModelId);
   }
 
@@ -119,18 +123,15 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<ActiveToken>> {
-
     return this.managementApiAccessor.getActiveTokensForProcessModel(identity, processModelId);
   }
 
   public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<ActiveToken>> {
-
     return this.managementApiAccessor.getActiveTokensForFlowNode(identity, flowNodeId);
   }
 
-  public async getLogsForProcessModel(identity: IIdentity, correlationId: string, processModelId: string): Promise<Array<LogEntry>> {
-
-    return this.managementApiAccessor.getLogsForProcessModel(identity, correlationId, processModelId);
+  public async getProcessModelLog(identity: IIdentity, processModelId: string): Promise<Array<LogEntry>> {
+    return this.managementApiAccessor.getProcessModelLog(identity, processModelId);
   }
 
   public async getTokensForFlowNodeInstance(identity: IIdentity,
