@@ -153,11 +153,11 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   public async getTokensForFlowNodeInstance(identity: IIdentity,
-                                            processModelId: string,
                                             correlationId: string,
+                                            processModelId: string,
                                             flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
 
-    return this.managementApiAccessor.getTokensForFlowNodeInstance(identity, processModelId, correlationId, flowNodeId);
+    return this.managementApiAccessor.getTokensForFlowNodeInstance(identity, correlationId, processModelId, flowNodeId);
   }
 
 }

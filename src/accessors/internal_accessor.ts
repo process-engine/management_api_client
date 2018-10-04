@@ -196,13 +196,13 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async getTokensForFlowNodeInstance(identity: IIdentity,
-                                            processModelId: string,
                                             correlationId: string,
+                                            processModelId: string,
                                             flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
 
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.getTokensForFlowNodeInstance(identity, processModelId, correlationId, flowNodeId);
+    return this._managementApiService.getTokensForFlowNodeInstance(identity, correlationId, processModelId, flowNodeId);
   }
 
   private _ensureIsAuthorized(identity: IIdentity): void {

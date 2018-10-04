@@ -343,8 +343,8 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   public async getTokensForFlowNodeInstance(identity: IIdentity,
-                                            processModelId: string,
                                             correlationId: string,
+                                            processModelId: string,
                                             flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
