@@ -32,18 +32,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     this._httpClient = httpClient;
   }
 
-  // Correlations
-  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
-
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
-
-    const url: string = this._applyBaseUrl(restSettings.paths.getAllCorrelations);
-
-    const httpResponse: IResponse<Array<Correlation>> = await this._httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
+  // Notifications
   public initializeSocket(identity: IIdentity): void {
     const socketUrl: string = `${this.config.socketUrl}/${socketSettings.namespace}`;
     const socketIoOptions: SocketIOClient.ConnectOpts = {
@@ -72,6 +61,18 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
   public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
     this._socket.on(socketSettings.paths.processEnded, callback);
+  }
+
+  // Correlations
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const url: string = this._applyBaseUrl(restSettings.paths.getAllCorrelations);
+
+    const httpResponse: IResponse<Array<Correlation>> = await this._httpClient.get<Array<Correlation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
   }
 
   public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
@@ -323,7 +324,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getProcessModelLog(identity: IIdentity, processModelId: string): Promise<Array<LogEntry>> {
+  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<LogEntry>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -331,6 +332,10 @@ export class ExternalAccessor implements IManagementApiAccessor {
       .replace(restSettings.params.processModelId, processModelId);
 
     url = this._applyBaseUrl(url);
+
+    if (correlationId) {
+      url = `${url}?${restSettings.queryParams.correlationId}=${correlationId}`;
+    }
 
     const httpResponse: IResponse<Array<LogEntry>> = await this._httpClient.get<Array<LogEntry>>(url, requestAuthHeaders);
 

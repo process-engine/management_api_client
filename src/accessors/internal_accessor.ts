@@ -188,11 +188,11 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.getActiveTokensForFlowNode(identity, flowNodeId);
   }
 
-  public async getProcessModelLog(identity: IIdentity, processModelId: string): Promise<Array<LogEntry>> {
+  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<LogEntry>> {
 
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.getProcessModelLog(identity, processModelId);
+    return this._managementApiService.getProcessModelLog(identity, processModelId, correlationId);
   }
 
   public async getTokensForFlowNodeInstance(identity: IIdentity,
