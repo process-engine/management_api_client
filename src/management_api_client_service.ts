@@ -24,11 +24,7 @@ export class ManagementApiClientService implements IManagementApi {
     this.managementApiAccessor = managementApiAccessor;
   }
 
-  // Correlations
-  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
-    return this.managementApiAccessor.getAllCorrelations(identity);
-  }
-
+  // Notifications
   public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
     this.managementApiAccessor.onUserTaskWaiting(callback);
   }
@@ -43,6 +39,11 @@ export class ManagementApiClientService implements IManagementApi {
 
   public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
     this.managementApiAccessor.onProcessEnded(callback);
+  }
+
+  // Correlations
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+    return this.managementApiAccessor.getAllCorrelations(identity);
   }
 
   public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
@@ -147,16 +148,16 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getActiveTokensForFlowNode(identity, flowNodeId);
   }
 
-  public async getProcessModelLog(identity: IIdentity, processModelId: string): Promise<Array<LogEntry>> {
-    return this.managementApiAccessor.getProcessModelLog(identity, processModelId);
+  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<LogEntry>> {
+    return this.managementApiAccessor.getProcessModelLog(identity, processModelId, correlationId);
   }
 
   public async getTokensForFlowNodeInstance(identity: IIdentity,
-                                            processModelId: string,
                                             correlationId: string,
+                                            processModelId: string,
                                             flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
 
-    return this.managementApiAccessor.getTokensForFlowNodeInstance(identity, processModelId, correlationId, flowNodeId);
+    return this.managementApiAccessor.getTokensForFlowNodeInstance(identity, correlationId, processModelId, flowNodeId);
   }
 
 }
