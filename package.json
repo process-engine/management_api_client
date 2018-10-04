@@ -1,6 +1,6 @@
 {
   "name": "@process-engine/management_api_client",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "description": "client implementation for using the process-engine.io Management API",
   "main": "dist/commonjs/index.js",
   "typings": "dist/index.d.ts",
@@ -32,6 +32,7 @@
     "gulp": "3.9.1",
     "gulptraum": "2.3.0",
     "gulptraum-typescript": "1.5.0",
+    "socket.io-client": "2.1.1",
     "tsconfig": "7.0.0",
     "tslint": "5.11.0",
     "typescript": "2.8.3"
