@@ -21,7 +21,7 @@
   "dependencies": {
     "@essential-projects/http_contracts": "~2.3.0",
     "@essential-projects/errors_ts": "~1.4.0",
-    "@process-engine/management_api_contracts": "feature~add_usertask_name"
+    "@process-engine/management_api_contracts": "~0.13.0"
   },
   "devDependencies": {
     "@essential-projects/tslint-config": "^1.1.3",
