@@ -146,14 +146,14 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async finishUserTask(identity: IIdentity,
-                              processModelId: string,
+                              processInstanceId: string,
                               correlationId: string,
-                              userTaskId: string,
+                              userTaskInstanceId: string,
                               userTaskResult: UserTaskResult): Promise<void> {
 
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.finishUserTask(identity, processModelId, correlationId, userTaskId, userTaskResult);
+    return this._managementApiService.finishUserTask(identity, processInstanceId, correlationId, userTaskInstanceId, userTaskResult);
   }
 
   // Heatmap related features
