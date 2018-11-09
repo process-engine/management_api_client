@@ -21,7 +21,8 @@
   "dependencies": {
     "@essential-projects/http_contracts": "~2.3.0",
     "@essential-projects/errors_ts": "~1.4.0",
-    "@process-engine/management_api_contracts": "feature~use_unique_ids_for_usertask_events"
+    "@process-engine/management_api_contracts": "feature~use_unique_ids_for_usertask_events",
+    "socket.io-client": "2.1.1"
   },
   "devDependencies": {
     "@essential-projects/tslint-config": "^1.1.3",
