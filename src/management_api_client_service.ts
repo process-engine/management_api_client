@@ -10,6 +10,7 @@ import {
   IManagementApi,
   IManagementApiAccessor,
   LogEntry,
+  ManualTaskList,
   Messages,
   ProcessModelExecution,
   TokenHistoryEntry,
@@ -32,6 +33,14 @@ export class ManagementApiClientService implements IManagementApi {
 
   public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
     this.managementApiAccessor.onUserTaskFinished(identity, callback);
+  }
+
+  public onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): void {
+    this.managementApiAccessor.onManualTaskWaiting(identity, callback);
+  }
+
+  public onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): void {
+    this.managementApiAccessor.onManualTaskFinished(identity, callback);
   }
 
   public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
@@ -157,6 +166,30 @@ export class ManagementApiClientService implements IManagementApi {
                               userTaskResult: UserTaskResult): Promise<void> {
 
     return this.managementApiAccessor.finishUserTask(identity, processInstanceId, correlationId, userTaskInstanceId, userTaskResult);
+  }
+
+  // ManualTasks
+  public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<ManualTaskList> {
+    return this.managementApiAccessor.getManualTasksForProcessModel(identity, processModelId);
+  }
+
+  public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<ManualTaskList> {
+    return this.managementApiAccessor.getManualTasksForCorrelation(identity, correlationId);
+  }
+
+  public async getManualTasksForProcessModelInCorrelation(identity: IIdentity,
+                                                          processModelId: string,
+                                                          correlationId: string): Promise<ManualTaskList> {
+
+    return this.managementApiAccessor.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+  }
+
+  public async finishManualTask(identity: IIdentity,
+                                processModelId: string,
+                                correlationId: string,
+                                manualTaskId: string): Promise<void> {
+
+    return this.managementApiAccessor.finishManualTask(identity, processModelId, correlationId, manualTaskId);
   }
 
   // Heatmap related features
