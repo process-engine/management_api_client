@@ -1,6 +1,6 @@
 {
   "name": "@process-engine/management_api_client",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "client implementation for using the process-engine.io Management API",
   "main": "dist/commonjs/index.js",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@essential-projects/http_contracts": "~2.3.0",
     "@essential-projects/errors_ts": "~1.4.0",
-    "@process-engine/management_api_contracts": "feature~use_unique_ids_for_usertask_events",
+    "@process-engine/management_api_contracts": "~0.14.0",
     "socket.io-client": "2.1.1"
   },
   "devDependencies": {
