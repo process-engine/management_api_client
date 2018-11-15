@@ -97,10 +97,14 @@ export class ManagementApiClientService implements IManagementApi {
 
   public async updateProcessDefinitionsByName(identity: IIdentity,
                                               name: string,
-                                              payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
-                                          ): Promise<void> {
+                                              payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload): Promise<void> {
 
     return this.managementApiAccessor.updateProcessDefinitionsByName(identity, name, payload);
+  }
+
+  public async deleteProcessDefinitionsByProcessModelId(identity: IIdentity, processModelId: string): Promise<void> {
+
+    return this.managementApiAccessor.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
   }
 
   // UserTasks
