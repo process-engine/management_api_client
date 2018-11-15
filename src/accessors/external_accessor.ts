@@ -5,6 +5,7 @@ import {
   ActiveToken,
   Correlation,
   EventList,
+  EventTriggerPayload,
   FlowNodeRuntimeInformation,
   IManagementApiAccessor,
   LogEntry,
@@ -177,11 +178,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
+  public async getStartEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    let url: string = restSettings.paths.processModelEvents.replace(restSettings.params.processModelId, processModelId);
+    let url: string = restSettings.paths.processModelStartEvents.replace(restSettings.params.processModelId, processModelId);
     url = this._applyBaseUrl(url);
 
     const httpResponse: IResponse<EventList> = await this._httpClient.get<EventList>(url, requestAuthHeaders);
@@ -209,6 +210,70 @@ export class ExternalAccessor implements IManagementApiAccessor {
     url = this._applyBaseUrl(url);
 
     await this._httpClient.get(url, requestAuthHeaders);
+  }
+
+  // Events
+  public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.waitingProcessModelEvents.replace(restSettings.params.processModelId, processModelId);
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<EventList> = await this._httpClient.get<EventList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<EventList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.waitingCorrelationEvents.replace(restSettings.params.correlationId, correlationId);
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<EventList> = await this._httpClient.get<EventList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getWaitingEventsForProcessModelInCorrelation(identity: IIdentity, processModelId: string, correlationId: string): Promise<EventList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.waitingProcessModelCorrelationEvents
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.correlationId, correlationId);
+
+    url = this._applyBaseUrl(url);
+
+    const httpResponse: IResponse<EventList> = await this._httpClient.get<EventList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: EventTriggerPayload): Promise<void> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.triggerMessageEvent
+      .replace(restSettings.params.eventName, messageName);
+
+    url = this._applyBaseUrl(url);
+
+    await this._httpClient.post<EventTriggerPayload, any>(url, payload, requestAuthHeaders);
+  }
+
+  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: EventTriggerPayload): Promise<void> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    let url: string = restSettings.paths.triggerSignalEvent
+      .replace(restSettings.params.eventName, signalName);
+
+    url = this._applyBaseUrl(url);
+
+    await this._httpClient.post<EventTriggerPayload, any>(url, payload, requestAuthHeaders);
   }
 
   // UserTasks

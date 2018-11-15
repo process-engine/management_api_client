@@ -5,6 +5,7 @@ import {
   ActiveToken,
   Correlation,
   EventList,
+  EventTriggerPayload,
   FlowNodeRuntimeInformation,
   IManagementApi,
   IManagementApiAccessor,
@@ -91,8 +92,8 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.startProcessInstance(identity, processModelId, startEventId, payload, startCallbackType, endEventId);
   }
 
-  public async getEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
-    return this.managementApiAccessor.getEventsForProcessModel(identity, processModelId);
+  public async getStartEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
+    return this.managementApiAccessor.getStartEventsForProcessModel(identity, processModelId);
   }
 
   public async updateProcessDefinitionsByName(identity: IIdentity,
@@ -105,6 +106,32 @@ export class ManagementApiClientService implements IManagementApi {
   public async deleteProcessDefinitionsByProcessModelId(identity: IIdentity, processModelId: string): Promise<void> {
 
     return this.managementApiAccessor.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
+  }
+
+  // Events
+  public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
+
+    return this.managementApiAccessor.getWaitingEventsForProcessModel(identity, processModelId);
+  }
+
+  public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<EventList> {
+
+    return this.managementApiAccessor.getWaitingEventsForCorrelation(identity, correlationId);
+  }
+
+  public async getWaitingEventsForProcessModelInCorrelation(identity: IIdentity, processModelId: string, correlationId: string): Promise<EventList> {
+
+    return this.managementApiAccessor.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId);
+  }
+
+  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: EventTriggerPayload): Promise<void> {
+
+    return this.managementApiAccessor.triggerMessageEvent(identity, messageName, payload);
+  }
+
+  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: EventTriggerPayload): Promise<void> {
+
+    return this.managementApiAccessor.triggerSignalEvent(identity, signalName, payload);
   }
 
   // UserTasks
