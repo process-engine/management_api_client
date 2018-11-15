@@ -121,6 +121,12 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.updateProcessDefinitionsByName(identity, name, payload);
   }
 
+  public async deleteProcessDefinitionsByProcessModelId(identity: IIdentity, processModelId: string): Promise<void> {
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
+  }
+
   // UserTasks
   public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<UserTaskList> {
 
