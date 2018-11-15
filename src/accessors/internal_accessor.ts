@@ -122,6 +122,8 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async deleteProcessDefinitionsByProcessModelId(identity: IIdentity, processModelId: string): Promise<void> {
+    this._ensureIsAuthorized(identity);
+
     return this._managementApiService.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
   }
 
