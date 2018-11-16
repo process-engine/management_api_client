@@ -358,8 +358,8 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    let url: string = restSettings.paths.processModelManualTasks.replace(restSettings.params.processModelId, processModelId);
-    url = this._applyBaseUrl(url);
+    const urlRestPart: string = restSettings.paths.processModelManualTasks.replace(restSettings.params.processModelId, processModelId);
+    const url = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<ManualTaskList> = await this._httpClient.get<ManualTaskList>(url, requestAuthHeaders);
 
@@ -370,8 +370,8 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    let url: string = restSettings.paths.correlationManualTasks.replace(restSettings.params.correlationId, correlationId);
-    url = this._applyBaseUrl(url);
+    const urlRestPart: string = restSettings.paths.correlationManualTasks.replace(restSettings.params.correlationId, correlationId);
+    const url = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<ManualTaskList> = await this._httpClient.get<ManualTaskList>(url, requestAuthHeaders);
 
@@ -384,11 +384,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    let url: string = restSettings.paths.processModelCorrelationManualTasks
+    const urlRestPart: string = restSettings.paths.processModelCorrelationManualTasks
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.correlationId, correlationId);
 
-    url = this._applyBaseUrl(url);
+    const url = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<ManualTaskList> = await this._httpClient.get<ManualTaskList>(url, requestAuthHeaders);
 
@@ -407,7 +407,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
       .replace(restSettings.params.correlationId, correlationId)
       .replace(restSettings.params.manualTaskId, manualTaskId);
 
-    url = this._applyBaseUrl(url);
+    const url = this._applyBaseUrl(urlRestPart);
 
     await this._httpClient.post(url, {}, requestAuthHeaders);
   }
