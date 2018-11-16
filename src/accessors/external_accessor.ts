@@ -75,9 +75,13 @@ export class ExternalAccessor implements IManagementApiAccessor {
     this._socket.on(socketSettings.paths.processTerminated, callback);
   }
 
+  public onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): void {
+    this._socket.on(socketSettings.paths.processStarted, callback);
+    this._socket.on(socketSettings.paths.processStarted, callback);
+  }
+
   public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
     this._ensureIsAuthorized(identity);
-
     this._socket.on(socketSettings.paths.processEnded, callback);
   }
 
