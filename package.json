@@ -21,7 +21,7 @@
   "dependencies": {
     "@essential-projects/http_contracts": "~2.3.0",
     "@essential-projects/errors_ts": "~1.4.0",
-    "@process-engine/management_api_contracts": "feature/add_identity_to_events",
+    "@process-engine/management_api_contracts": "feature~add_identity_to_events",
     "socket.io-client": "2.1.1"
   },
   "devDependencies": {
