@@ -185,11 +185,11 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   public async finishManualTask(identity: IIdentity,
-                                processModelId: string,
+                                processInstanceId: string,
                                 correlationId: string,
-                                manualTaskId: string): Promise<void> {
+                                manualTaskInstanceId: string): Promise<void> {
 
-    return this.managementApiAccessor.finishManualTask(identity, processModelId, correlationId, manualTaskId);
+    return this.managementApiAccessor.finishManualTask(identity, processInstanceId, correlationId, manualTaskInstanceId);
   }
 
   // Heatmap related features

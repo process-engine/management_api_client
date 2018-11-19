@@ -359,7 +359,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const urlRestPart: string = restSettings.paths.processModelManualTasks.replace(restSettings.params.processModelId, processModelId);
-    const url = this._applyBaseUrl(urlRestPart);
+    const url: string = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<ManualTaskList> = await this._httpClient.get<ManualTaskList>(url, requestAuthHeaders);
 
@@ -371,7 +371,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const urlRestPart: string = restSettings.paths.correlationManualTasks.replace(restSettings.params.correlationId, correlationId);
-    const url = this._applyBaseUrl(urlRestPart);
+    const url: string = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<ManualTaskList> = await this._httpClient.get<ManualTaskList>(url, requestAuthHeaders);
 
@@ -388,7 +388,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.correlationId, correlationId);
 
-    const url = this._applyBaseUrl(urlRestPart);
+    const url: string = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<ManualTaskList> = await this._httpClient.get<ManualTaskList>(url, requestAuthHeaders);
 
@@ -396,18 +396,18 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   public async finishManualTask(identity: IIdentity,
-                                processModelId: string,
+                                processInstanceId: string,
                                 correlationId: string,
-                                manualTaskId: string): Promise<void> {
+                                manualTaskInstanceId: string): Promise<void> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    let url: string = restSettings.paths.finishManualTask
-      .replace(restSettings.params.processModelId, processModelId)
+    const urlRestPart: string = restSettings.paths.finishManualTask
+      .replace(restSettings.params.processInstanceId, processInstanceId)
       .replace(restSettings.params.correlationId, correlationId)
-      .replace(restSettings.params.manualTaskId, manualTaskId);
+      .replace(restSettings.params.manualTaskInstanceId, manualTaskInstanceId);
 
-    const url = this._applyBaseUrl(urlRestPart);
+    const url: string = this._applyBaseUrl(urlRestPart);
 
     await this._httpClient.post(url, {}, requestAuthHeaders);
   }
