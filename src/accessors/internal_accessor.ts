@@ -29,25 +29,25 @@ export class InternalAccessor implements IManagementApiAccessor {
   public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
     this._ensureIsAuthorized(identity);
 
-    this._managementApiService.onUserTaskWaiting(callback);
+    this._managementApiService.onUserTaskWaiting(identity, callback);
   }
 
   public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
     this._ensureIsAuthorized(identity);
 
-    this._managementApiService.onUserTaskFinished(callback);
+    this._managementApiService.onUserTaskFinished(identity, callback);
   }
 
   public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
     this._ensureIsAuthorized(identity);
 
-    this._managementApiService.onProcessTerminated(callback);
+    this._managementApiService.onProcessTerminated(identity, callback);
   }
 
   public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
     this._ensureIsAuthorized(identity);
 
-    this._managementApiService.onProcessEnded(callback);
+    this._managementApiService.onProcessEnded(identity, callback);
   }
 
   // Correlations
