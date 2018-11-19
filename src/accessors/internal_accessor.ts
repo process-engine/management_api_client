@@ -26,20 +26,28 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Notifications
-  public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
-    this._managementApiService.onUserTaskWaiting(callback);
+  public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+    this._ensureIsAuthorized(identity);
+
+    this._managementApiService.onUserTaskWaiting(identity, callback);
   }
 
-  public onUserTaskFinished(callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
-    this._managementApiService.onUserTaskFinished(callback);
+  public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+    this._ensureIsAuthorized(identity);
+
+    this._managementApiService.onUserTaskFinished(identity, callback);
   }
 
-  public onProcessTerminated(callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
-    this._managementApiService.onProcessTerminated(callback);
+  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+    this._ensureIsAuthorized(identity);
+
+    this._managementApiService.onProcessTerminated(identity, callback);
   }
 
-  public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
-    this._managementApiService.onProcessEnded(callback);
+  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this._ensureIsAuthorized(identity);
+
+    this._managementApiService.onProcessEnded(identity, callback);
   }
 
   // Correlations

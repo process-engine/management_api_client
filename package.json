@@ -1,6 +1,6 @@
 {
   "name": "@process-engine/management_api_client",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "client implementation for using the process-engine.io Management API",
   "main": "dist/commonjs/index.js",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@essential-projects/http_contracts": "~2.3.0",
     "@essential-projects/errors_ts": "~1.4.0",
-    "@process-engine/management_api_contracts": "~1.0.0",
+    "@process-engine/management_api_contracts": "~1.1.0",
     "socket.io-client": "2.1.1"
   },
   "devDependencies": {
