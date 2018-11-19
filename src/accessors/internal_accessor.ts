@@ -26,19 +26,27 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Notifications
-  public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+  public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._managementApiService.onUserTaskWaiting(callback);
   }
 
-  public onUserTaskFinished(callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+  public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._managementApiService.onUserTaskFinished(callback);
   }
 
-  public onProcessTerminated(callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._managementApiService.onProcessTerminated(callback);
   }
 
-  public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._managementApiService.onProcessEnded(callback);
   }
 

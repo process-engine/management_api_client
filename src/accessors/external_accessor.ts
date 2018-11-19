@@ -1,3 +1,4 @@
+import {UnauthorizedError} from '@essential-projects/errors_ts';
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
@@ -48,19 +49,27 @@ export class ExternalAccessor implements IManagementApiAccessor {
     this._socket = io(socketUrl, socketIoOptions);
   }
 
-  public onUserTaskWaiting(callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+  public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._socket.on(socketSettings.paths.userTaskWaiting, callback);
   }
 
-  public onUserTaskFinished(callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+  public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._socket.on(socketSettings.paths.userTaskFinished, callback);
   }
 
-  public onProcessTerminated(callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._socket.on(socketSettings.paths.processTerminated, callback);
   }
 
-  public onProcessEnded(callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this._ensureIsAuthorized(identity);
+
     this._socket.on(socketSettings.paths.processEnded, callback);
   }
 
@@ -473,5 +482,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
   private _applyBaseUrl(url: string): string {
     return `${this.baseUrl}${url}`;
+  }
+
+  private _ensureIsAuthorized(identity: IIdentity): void {
+    const noAuthTokenProvided: boolean = !identity || typeof identity.token !== 'string';
+    if (noAuthTokenProvided) {
+      throw new UnauthorizedError('No auth token provided!');
+    }
   }
 }
