@@ -10,6 +10,7 @@ import {
   IManagementApi,
   IManagementApiAccessor,
   LogEntry,
+  ManualTaskList,
   Messages,
   ProcessModelExecution,
   TokenHistoryEntry,
@@ -28,25 +29,31 @@ export class InternalAccessor implements IManagementApiAccessor {
   // Notifications
   public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
     this._ensureIsAuthorized(identity);
-
     this._managementApiService.onUserTaskWaiting(identity, callback);
   }
 
   public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
     this._ensureIsAuthorized(identity);
-
     this._managementApiService.onUserTaskFinished(identity, callback);
+  }
+
+  public onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): void {
+    this._ensureIsAuthorized(identity);
+    this._managementApiService.onManualTaskWaiting(identity, callback);
+  }
+
+  public onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): void {
+    this._ensureIsAuthorized(identity);
+    this._managementApiService.onManualTaskFinished(identity, callback);
   }
 
   public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
     this._ensureIsAuthorized(identity);
-
     this._managementApiService.onProcessTerminated(identity, callback);
   }
 
   public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
     this._ensureIsAuthorized(identity);
-
     this._managementApiService.onProcessEnded(identity, callback);
   }
 
@@ -195,6 +202,40 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.finishUserTask(identity, processInstanceId, correlationId, userTaskInstanceId, userTaskResult);
+  }
+
+  // ManualTasks
+  public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<ManualTaskList> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.getManualTasksForProcessModel(identity, processModelId);
+  }
+
+  public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<ManualTaskList> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.getManualTasksForCorrelation(identity, correlationId);
+  }
+
+  public async getManualTasksForProcessModelInCorrelation(identity: IIdentity,
+                                                          processModelId: string,
+                                                          correlationId: string): Promise<ManualTaskList> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+  }
+
+  public async finishManualTask(identity: IIdentity,
+                                processInstanceId: string,
+                                correlationId: string,
+                                manualTaskInstanceId: string): Promise<void> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.finishManualTask(identity, processInstanceId, correlationId, manualTaskInstanceId);
   }
 
   // Heatmap related features
