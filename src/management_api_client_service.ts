@@ -51,10 +51,6 @@ export class ManagementApiClientService implements IManagementApi {
     this.managementApiAccessor.onManualTaskFinished(identity, callback);
   }
 
-  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
-    this.managementApiAccessor.onProcessTerminated(identity, callback);
-  }
-
   public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
     this.managementApiAccessor.onProcessEnded(identity, callback);
   }
