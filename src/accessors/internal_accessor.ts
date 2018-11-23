@@ -52,6 +52,15 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._managementApiService.onProcessStarted(identity, callback);
   }
 
+  public onProcessWithProcessModelIdStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    processModelId: string,
+  ): void {
+    this._ensureIsAuthorized(identity);
+    this._managementApiService.onProcessWithProcessModelIdStarted(identity, callback, processModelId);
+  }
+
   public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
     this._ensureIsAuthorized(identity);
     this._managementApiService.onProcessTerminated(identity, callback);

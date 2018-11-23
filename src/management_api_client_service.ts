@@ -43,6 +43,14 @@ export class ManagementApiClientService implements IManagementApi {
     this.managementApiAccessor.onProcessStarted(identity, callback);
   }
 
+  public onProcessWithProcessModelIdStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    processModelId: string,
+  ): void {
+    this.managementApiAccessor.onProcessWithProcessModelIdStarted(identity, callback, processModelId);
+  }
+
   public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
     this.managementApiAccessor.onProcessTerminated(identity, callback);
   }
