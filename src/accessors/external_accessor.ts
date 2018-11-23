@@ -1,3 +1,5 @@
+/*tslint:disable:max-file-line-count*/
+
 import {UnauthorizedError} from '@essential-projects/errors_ts';
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
