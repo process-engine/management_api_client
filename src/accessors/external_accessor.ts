@@ -89,6 +89,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
   ): void {
     this._ensureIsAuthorized(identity);
 
+    /*
+     * This will create the event name dynamically; the name consists of the event root path + the Process Model ID.
+     */
     const eventName: string = socketSettings.paths.processInstanceStarted
       .replace(socketSettings.pathParams.processModelId, processModelId);
 
