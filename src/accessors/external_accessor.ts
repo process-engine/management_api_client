@@ -83,7 +83,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
   }
 
   public onProcessWithProcessModelIdStarted(
-    identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback, processModelId: string,
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    processModelId: string,
   ): void {
     this._ensureIsAuthorized(identity);
 
