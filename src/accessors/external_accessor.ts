@@ -1,3 +1,5 @@
+/*tslint:disable:max-file-line-count*/
+
 import {UnauthorizedError} from '@essential-projects/errors_ts';
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
@@ -75,9 +77,29 @@ export class ExternalAccessor implements IManagementApiAccessor {
     this._socket.on(socketSettings.paths.processTerminated, callback);
   }
 
-  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+  public onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): void {
+    this._ensureIsAuthorized(identity);
+    this._socket.on(socketSettings.paths.processStarted, callback);
+  }
+
+  public onProcessWithProcessModelIdStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    processModelId: string,
+  ): void {
     this._ensureIsAuthorized(identity);
 
+    /*
+     * This will create the event name dynamically; the name consists of the event root path + the Process Model ID.
+     */
+    const eventName: string = socketSettings.paths.processInstanceStarted
+      .replace(socketSettings.pathParams.processModelId, processModelId);
+
+    this._socket.on(eventName, callback);
+  }
+
+  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+    this._ensureIsAuthorized(identity);
     this._socket.on(socketSettings.paths.processEnded, callback);
   }
 
