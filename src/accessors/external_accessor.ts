@@ -482,9 +482,9 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getActiveTokensForPCorrelationAndProcessModel(identity: IIdentity,
-                                                             correlationId: string,
-                                                             processModelId: string): Promise<Array<ActiveToken>> {
+  public async getActiveTokensForCorrelationAndProcessModel(identity: IIdentity,
+                                                            correlationId: string,
+                                                            processModelId: string): Promise<Array<ActiveToken>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
