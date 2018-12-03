@@ -557,8 +557,8 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const restPath: string = restSettings.paths.getTokensForCorrelationAndProcessModel
-    .replace(restSettings.params.correlationId, correlationId)
-    .replace(restSettings.params.processModelId, processModelId);
+      .replace(restSettings.params.correlationId, correlationId)
+      .replace(restSettings.params.processModelId, processModelId);
 
     const url: string = this._applyBaseUrl(restPath);
 
