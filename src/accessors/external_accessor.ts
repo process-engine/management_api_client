@@ -552,7 +552,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
   public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
                                                       correlationId: string,
-                                                      processModelId: string): Promise<Array<Array<TokenHistoryEntry>>> {
+                                                      processModelId: string): Promise<Array<TokenHistoryEntry>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -562,8 +562,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const url: string = this._applyBaseUrl(restPath);
 
-    const httpResponse: IResponse<Array<Array<TokenHistoryEntry>>> = await this._httpClient.get<Array<Array<TokenHistoryEntry>>>(url,
-                                                                                                                                 requestAuthHeaders);
+    const httpResponse: IResponse<Array<TokenHistoryEntry>> = await this._httpClient.get<Array<TokenHistoryEntry>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }

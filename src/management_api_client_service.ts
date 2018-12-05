@@ -245,7 +245,7 @@ export class ManagementApiClientService implements IManagementApi {
 
   public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
                                                       correlationId: string,
-                                                      processModelId: string): Promise<Array<Array<TokenHistoryEntry>>> {
+                                                      processModelId: string): Promise<Array<TokenHistoryEntry>> {
 
     return this.managementApiAccessor.getTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
   }
