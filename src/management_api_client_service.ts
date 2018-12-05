@@ -220,6 +220,13 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getActiveTokensForProcessModel(identity, processModelId);
   }
 
+  public async getActiveTokensForCorrelationAndProcessModel(identity: IIdentity,
+                                                            correlationId: string,
+                                                            processModelId: string): Promise<Array<ActiveToken>> {
+
+    return this.managementApiAccessor.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
+  }
+
   public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<ActiveToken>> {
     return this.managementApiAccessor.getActiveTokensForFlowNode(identity, flowNodeId);
   }
@@ -234,6 +241,13 @@ export class ManagementApiClientService implements IManagementApi {
                                             flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
 
     return this.managementApiAccessor.getTokensForFlowNodeInstance(identity, correlationId, processModelId, flowNodeId);
+  }
+
+  public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
+                                                      correlationId: string,
+                                                      processModelId: string): Promise<Array<Array<TokenHistoryEntry>>> {
+
+    return this.managementApiAccessor.getTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
   }
 
 }
