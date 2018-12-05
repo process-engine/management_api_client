@@ -312,7 +312,7 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
                                                       correlationId: string,
-                                                      processModelId: string): Promise<Array<Array<TokenHistoryEntry>>> {
+                                                      processModelId: string): Promise<Array<TokenHistoryEntry>> {
 
     this._ensureIsAuthorized(identity);
 
