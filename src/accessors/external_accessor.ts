@@ -18,6 +18,7 @@ import {
   restSettings,
   socketSettings,
   TokenHistoryEntry,
+  TokenHistoryGroup,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
