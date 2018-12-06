@@ -563,8 +563,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const url: string = this._applyBaseUrl(restPath);
 
-    const httpResponse: IResponse<TokenHistoryGroup> = await this._httpClient.get<TokenHistoryGroup>(url,
-                                                                                                     requestAuthHeaders);
+    const httpResponse: IResponse<TokenHistoryGroup> = await this._httpClient.get<TokenHistoryGroup>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
