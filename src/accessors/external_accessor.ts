@@ -18,6 +18,7 @@ import {
   restSettings,
   socketSettings,
   TokenHistoryEntry,
+  TokenHistoryGroup,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
@@ -552,7 +553,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
   public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
                                                       correlationId: string,
-                                                      processModelId: string): Promise<Array<TokenHistoryEntry>> {
+                                                      processModelId: string): Promise<TokenHistoryGroup> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -562,7 +563,7 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
     const url: string = this._applyBaseUrl(restPath);
 
-    const httpResponse: IResponse<Array<TokenHistoryEntry>> = await this._httpClient.get<Array<TokenHistoryEntry>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<TokenHistoryGroup> = await this._httpClient.get<TokenHistoryGroup>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
