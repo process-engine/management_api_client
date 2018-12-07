@@ -14,6 +14,7 @@ import {
   Messages,
   ProcessModelExecution,
   TokenHistoryEntry,
+  TokenHistoryGroup,
   UserTaskList,
   UserTaskResult,
 } from '@process-engine/management_api_contracts';
@@ -312,7 +313,7 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
                                                       correlationId: string,
-                                                      processModelId: string): Promise<Array<TokenHistoryEntry>> {
+                                                      processModelId: string): Promise<TokenHistoryGroup> {
 
     this._ensureIsAuthorized(identity);
 
