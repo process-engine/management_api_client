@@ -231,7 +231,7 @@ export class ManagementApiClientService implements IManagementApi {
   public async getActiveTokensForProcessInstance(identity: IIdentity,
                                                  processInstanceId: string): Promise<Array<ActiveToken>> {
 
-    return this.managementApiAccessor.getAcitveTokensForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getActiveTokensForProcessInstance(identity, processInstanceId);
   }
 
   public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<ActiveToken>> {
