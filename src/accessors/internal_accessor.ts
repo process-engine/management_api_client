@@ -287,6 +287,14 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
   }
 
+  public async getActiveTokensForProcessInstance(identity: IIdentity,
+                                                 processInstanceId: string): Promise<Array<ActiveToken>> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.getActiveTokensForProcessInstance(identity, processInstanceId);
+  }
+
   public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<ActiveToken>> {
 
     this._ensureIsAuthorized(identity);
@@ -318,6 +326,14 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
+  }
+
+  public async getTokensForProcessInstance(identity: IIdentity,
+                                           processInstanceId: string): Promise<TokenHistoryGroup> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.getTokensForProcessInstance(identity, processInstanceId);
   }
 
   private _ensureIsAuthorized(identity: IIdentity): void {
