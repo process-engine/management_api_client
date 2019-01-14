@@ -483,6 +483,20 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
+  public async getActiveTokensForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<Array<ActiveToken>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const restPath: string = restSettings.paths.getActiveTokensForProcessInstance
+      .replace(restSettings.params.processInstanceId, processInstanceId);
+
+    const url: string = this._applyBaseUrl(restPath);
+
+    const httpResponse: IResponse<Array<ActiveToken>> = await this._httpClient.get<Array<ActiveToken>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   public async getActiveTokensForCorrelationAndProcessModel(identity: IIdentity,
                                                             correlationId: string,
                                                             processModelId: string): Promise<Array<ActiveToken>> {
@@ -560,6 +574,21 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const restPath: string = restSettings.paths.getTokensForCorrelationAndProcessModel
       .replace(restSettings.params.correlationId, correlationId)
       .replace(restSettings.params.processModelId, processModelId);
+
+    const url: string = this._applyBaseUrl(restPath);
+
+    const httpResponse: IResponse<TokenHistoryGroup> = await this._httpClient.get<TokenHistoryGroup>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getTokensForProcessInstance(identity: IIdentity,
+                                           processInstanceId: string): Promise<TokenHistoryGroup> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const restPath: string = restSettings.paths.getTokensForProcessInstance
+    .replace(restSettings.params.processInstanceId, processInstanceId);
 
     const url: string = this._applyBaseUrl(restPath);
 
