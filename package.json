@@ -22,7 +22,7 @@
     "@essential-projects/http_contracts": "~2.3.0",
     "@essential-projects/errors_ts": "~1.4.0",
     "@process-engine/management_api_contracts": "~2.1.0",
-    "socket.io-client": "2.1.1"
+    "socket.io-client": "~2.2.0"
   },
   "devDependencies": {
     "@essential-projects/tslint-config": "^1.1.3",
