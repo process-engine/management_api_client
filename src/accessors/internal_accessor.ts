@@ -1,23 +1,7 @@
 import {UnauthorizedError} from '@essential-projects/errors_ts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
-import {
-  ActiveToken,
-  Correlation,
-  EventList,
-  EventTriggerPayload,
-  FlowNodeRuntimeInformation,
-  IManagementApi,
-  IManagementApiAccessor,
-  LogEntry,
-  ManualTaskList,
-  Messages,
-  ProcessModelExecution,
-  TokenHistoryEntry,
-  TokenHistoryGroup,
-  UserTaskList,
-  UserTaskResult,
-} from '@process-engine/management_api_contracts';
+import {DataModels, IManagementApi, IManagementApiAccessor, Messages} from '@process-engine/management_api_contracts';
 
 export class InternalAccessor implements IManagementApiAccessor {
 
@@ -73,35 +57,35 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Correlations
-  public async getAllCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+  public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getAllCorrelations(identity);
   }
 
-  public async getActiveCorrelations(identity: IIdentity): Promise<Array<Correlation>> {
+  public async getActiveCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getActiveCorrelations(identity);
   }
 
-  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<Correlation> {
+  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<DataModels.Correlations.Correlation> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getCorrelationById(identity, correlationId);
   }
 
-  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<Correlation> {
+  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.Correlation> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getCorrelationByProcessInstanceId(identity, processInstanceId);
   }
 
-  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<Correlation>> {
+  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Correlations.Correlation>> {
 
     this._ensureIsAuthorized(identity);
 
@@ -109,14 +93,14 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // ProcessModels
-  public async getProcessModels(identity: IIdentity): Promise<ProcessModelExecution.ProcessModelList> {
+  public async getProcessModels(identity: IIdentity): Promise<DataModels.ProcessModels.ProcessModelList> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getProcessModels(identity);
   }
 
-  public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<ProcessModelExecution.ProcessModel> {
+  public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<DataModels.ProcessModels.ProcessModel> {
 
     this._ensureIsAuthorized(identity);
 
@@ -126,18 +110,18 @@ export class InternalAccessor implements IManagementApiAccessor {
   public async startProcessInstance(identity: IIdentity,
                                     processModelId: string,
                                     startEventId: string,
-                                    payload: ProcessModelExecution.ProcessStartRequestPayload,
-                                    startCallbackType: ProcessModelExecution.StartCallbackType =
-                                      ProcessModelExecution.StartCallbackType.CallbackOnProcessInstanceCreated,
+                                    payload: DataModels.ProcessModels.ProcessStartRequestPayload,
+                                    startCallbackType: DataModels.ProcessModels.StartCallbackType =
+                                      DataModels.ProcessModels.StartCallbackType.CallbackOnProcessInstanceCreated,
                                     endEventId?: string,
-                                  ): Promise<ProcessModelExecution.ProcessStartResponsePayload> {
+                                  ): Promise<DataModels.ProcessModels.ProcessStartResponsePayload> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.startProcessInstance(identity, processModelId, startEventId, payload, startCallbackType, endEventId);
   }
 
-  public async getStartEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
+  public async getStartEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
 
     this._ensureIsAuthorized(identity);
 
@@ -146,7 +130,7 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public async updateProcessDefinitionsByName(identity: IIdentity,
                                               name: string,
-                                              payload: ProcessModelExecution.UpdateProcessDefinitionsRequestPayload,
+                                              payload: DataModels.ProcessModels.UpdateProcessDefinitionsRequestPayload,
                                           ): Promise<void> {
 
     return this._managementApiService.updateProcessDefinitionsByName(identity, name, payload);
@@ -159,40 +143,44 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Events
-  public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<EventList> {
+  public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
 
     return this._managementApiService.getWaitingEventsForProcessModel(identity, processModelId);
   }
 
-  public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<EventList> {
+  public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Events.EventList> {
 
     return this._managementApiService.getWaitingEventsForCorrelation(identity, correlationId);
   }
 
-  public async getWaitingEventsForProcessModelInCorrelation(identity: IIdentity, processModelId: string, correlationId: string): Promise<EventList> {
+  public async getWaitingEventsForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+  ): Promise<DataModels.Events.EventList> {
 
     return this._managementApiService.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
-  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: EventTriggerPayload): Promise<void> {
+  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
 
     return this._managementApiService.triggerMessageEvent(identity, messageName, payload);
   }
 
-  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: EventTriggerPayload): Promise<void> {
+  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
 
     return this._managementApiService.triggerSignalEvent(identity, signalName, payload);
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<UserTaskList> {
+  public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getUserTasksForProcessModel(identity, processModelId);
   }
 
-  public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<UserTaskList> {
+  public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
 
     this._ensureIsAuthorized(identity);
 
@@ -201,18 +189,20 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public async getUserTasksForProcessModelInCorrelation(identity: IIdentity,
                                                         processModelId: string,
-                                                        correlationId: string): Promise<UserTaskList> {
+                                                        correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
-  public async finishUserTask(identity: IIdentity,
-                              processInstanceId: string,
-                              correlationId: string,
-                              userTaskInstanceId: string,
-                              userTaskResult: UserTaskResult): Promise<void> {
+  public async finishUserTask(
+    identity: IIdentity,
+    processInstanceId: string,
+    correlationId: string,
+    userTaskInstanceId: string,
+    userTaskResult: DataModels.UserTasks.UserTaskResult,
+  ): Promise<void> {
 
     this._ensureIsAuthorized(identity);
 
@@ -220,23 +210,25 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // ManualTasks
-  public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<ManualTaskList> {
+  public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getManualTasksForProcessModel(identity, processModelId);
   }
 
-  public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<ManualTaskList> {
+  public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getManualTasksForCorrelation(identity, correlationId);
   }
 
-  public async getManualTasksForProcessModelInCorrelation(identity: IIdentity,
-                                                          processModelId: string,
-                                                          correlationId: string): Promise<ManualTaskList> {
+  public async getManualTasksForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
 
     this._ensureIsAuthorized(identity);
 
@@ -254,23 +246,28 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Heatmap related features
-  public async getRuntimeInformationForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<FlowNodeRuntimeInformation>> {
+  public async getRuntimeInformationForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+  ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getRuntimeInformationForProcessModel(identity, processModelId);
   }
 
-  public async getRuntimeInformationForFlowNode(identity: IIdentity,
-                                                processModelId: string,
-                                                flowNodeId: string): Promise<FlowNodeRuntimeInformation> {
+  public async getRuntimeInformationForFlowNode(
+    identity: IIdentity,
+    processModelId: string,
+    flowNodeId: string,
+  ): Promise<DataModels.Kpi.FlowNodeRuntimeInformation> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getRuntimeInformationForFlowNode(identity, processModelId, flowNodeId);
   }
 
-  public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<ActiveToken>> {
+  public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     this._ensureIsAuthorized(identity);
 
@@ -280,7 +277,7 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public async getActiveTokensForCorrelationAndProcessModel(identity: IIdentity,
                                                             correlationId: string,
-                                                            processModelId: string): Promise<Array<ActiveToken>> {
+                                                            processModelId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     this._ensureIsAuthorized(identity);
 
@@ -288,40 +285,44 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async getActiveTokensForProcessInstance(identity: IIdentity,
-                                                 processInstanceId: string): Promise<Array<ActiveToken>> {
+                                                 processInstanceId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getActiveTokensForProcessInstance(identity, processInstanceId);
   }
 
-  public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<ActiveToken>> {
+  public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getActiveTokensForFlowNode(identity, flowNodeId);
   }
 
-  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<LogEntry>> {
+  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<DataModels.Logging.LogEntry>> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getProcessModelLog(identity, processModelId, correlationId);
   }
 
-  public async getTokensForFlowNodeInstance(identity: IIdentity,
-                                            correlationId: string,
-                                            processModelId: string,
-                                            flowNodeId: string): Promise<Array<TokenHistoryEntry>> {
+  public async getTokensForFlowNodeInstance(
+    identity: IIdentity,
+    correlationId: string,
+    processModelId: string,
+    flowNodeId: string,
+  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
 
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.getTokensForFlowNodeInstance(identity, correlationId, processModelId, flowNodeId);
   }
 
-  public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
-                                                      correlationId: string,
-                                                      processModelId: string): Promise<TokenHistoryGroup> {
+  public async getTokensForCorrelationAndProcessModel(
+    identity: IIdentity,
+    correlationId: string,
+    processModelId: string,
+  ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
     this._ensureIsAuthorized(identity);
 
@@ -329,7 +330,7 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async getTokensForProcessInstance(identity: IIdentity,
-                                           processInstanceId: string): Promise<TokenHistoryGroup> {
+                                           processInstanceId: string): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
     this._ensureIsAuthorized(identity);
 
