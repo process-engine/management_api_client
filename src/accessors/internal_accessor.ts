@@ -155,6 +155,10 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.getProcessModelById(identity, processModelId);
   }
 
+  public async getProcessModelByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.ProcessModels.ProcessModel> {
+    return this._managementApiService.getProcessModelByProcessInstanceId(identity, processInstanceId);
+  }
+
   public async startProcessInstance(
     identity: IIdentity,
     processModelId: string,

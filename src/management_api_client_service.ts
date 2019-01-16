@@ -186,6 +186,10 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getProcessModelById(identity, processModelId);
   }
 
+  public async getProcessModelByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.ProcessModels.ProcessModel> {
+    return this.managementApiAccessor.getProcessModelByProcessInstanceId(identity, processInstanceId);
+  }
+
   public async startProcessInstance(
     identity: IIdentity,
     processModelId: string,

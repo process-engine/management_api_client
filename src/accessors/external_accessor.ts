@@ -300,6 +300,19 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
+  public async getProcessModelByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.ProcessModels.ProcessModel> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const restPath: string = restSettings.paths.processModelByProcessInstanceId.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url: string = this._applyBaseUrl(restPath);
+
+    const httpResponse: IResponse<DataModels.ProcessModels.ProcessModel> =
+      await this._httpClient.get<DataModels.ProcessModels.ProcessModel>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   public async startProcessInstance(
     identity: IIdentity,
     processModelId: string,
