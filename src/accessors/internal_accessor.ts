@@ -65,6 +65,10 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.onProcessEnded(identity, callback);
   }
 
+  public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
+    return this._managementApiService.removeSubscription(identity, subscription);
+  }
+
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
 

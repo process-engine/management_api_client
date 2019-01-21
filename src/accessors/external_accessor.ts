@@ -2,6 +2,7 @@
 import * as io from 'socket.io-client';
 
 import {UnauthorizedError} from '@essential-projects/errors_ts';
+import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
@@ -84,6 +85,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
   public async onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
     this._socket.on(socketSettings.paths.processEnded, callback); // TODO
+  }
+
+  public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
+    this._ensureIsAuthorized(identity);
+
+    return Promise.resolve(); // TODO
   }
 
   // Correlations

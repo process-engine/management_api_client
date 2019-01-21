@@ -49,6 +49,10 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.onProcessEnded(identity, callback);
   }
 
+  public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
+    return this.managementApiAccessor.removeSubscription(identity, subscription);
+  }
+
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
     return this.managementApiAccessor.getAllCorrelations(identity);
