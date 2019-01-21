@@ -1,4 +1,5 @@
 import * as EssentialProjectErrors from '@essential-projects/errors_ts';
+import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
 import {DataModels, IManagementApi, IManagementApiAccessor, Messages} from '@process-engine/management_api_contracts';
@@ -12,40 +13,40 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   // Notifications
-  public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
-    this.managementApiAccessor.onUserTaskWaiting(identity, callback);
+  public async onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): Promise<Subscription> {
+    return this.managementApiAccessor.onUserTaskWaiting(identity, callback);
   }
 
-  public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
-    this.managementApiAccessor.onUserTaskFinished(identity, callback);
+  public async onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): Promise<Subscription> {
+    return this.managementApiAccessor.onUserTaskFinished(identity, callback);
   }
 
-  public onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): void {
-    this.managementApiAccessor.onManualTaskWaiting(identity, callback);
+  public async onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): Promise<Subscription> {
+    return this.managementApiAccessor.onManualTaskWaiting(identity, callback);
   }
 
-  public onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): void {
-    this.managementApiAccessor.onProcessStarted(identity, callback);
+  public async onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): Promise<Subscription> {
+    return this.managementApiAccessor.onProcessStarted(identity, callback);
   }
 
-  public onProcessWithProcessModelIdStarted(
+  public async onProcessWithProcessModelIdStarted(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessStartedCallback,
     processModelId: string,
-  ): void {
-    this.managementApiAccessor.onProcessWithProcessModelIdStarted(identity, callback, processModelId);
+  ): Promise<Subscription> {
+    return this.managementApiAccessor.onProcessWithProcessModelIdStarted(identity, callback, processModelId);
   }
 
-  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
-    this.managementApiAccessor.onProcessTerminated(identity, callback);
+  public async onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): Promise<Subscription> {
+    return this.managementApiAccessor.onProcessTerminated(identity, callback);
   }
 
-  public onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): void {
-    this.managementApiAccessor.onManualTaskFinished(identity, callback);
+  public async onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): Promise<Subscription> {
+    return this.managementApiAccessor.onManualTaskFinished(identity, callback);
   }
 
-  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
-    this.managementApiAccessor.onProcessEnded(identity, callback);
+  public async onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): Promise<Subscription> {
+    return this.managementApiAccessor.onProcessEnded(identity, callback);
   }
 
   // Correlations

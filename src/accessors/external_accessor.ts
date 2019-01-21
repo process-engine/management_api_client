@@ -35,41 +35,41 @@ export class ExternalAccessor implements IManagementApiAccessor {
     this._socket = io(socketUrl, socketIoOptions);
   }
 
-  public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+  public async onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.userTaskWaiting, callback);
+    this._socket.on(socketSettings.paths.userTaskWaiting, callback); // TODO
   }
 
-  public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+  public async onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.userTaskFinished, callback);
+    this._socket.on(socketSettings.paths.userTaskFinished, callback); // TODO
   }
 
-  public onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): void {
+  public async onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.manualTaskWaiting, callback);
+    this._socket.on(socketSettings.paths.manualTaskWaiting, callback); // TODO
   }
 
-  public onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): void {
+  public async onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.manualTaskFinished, callback);
+    this._socket.on(socketSettings.paths.manualTaskFinished, callback); // TODO
   }
 
-  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+  public async onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.processTerminated, callback);
+    this._socket.on(socketSettings.paths.processTerminated, callback); // TODO
   }
 
-  public onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): void {
+  public async onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.processStarted, callback);
+    this._socket.on(socketSettings.paths.processStarted, callback); // TODO
   }
 
-  public onProcessWithProcessModelIdStarted(
+  public async onProcessWithProcessModelIdStarted(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessStartedCallback,
     processModelId: string,
-  ): void {
+  ): Promise<any> {
     this._ensureIsAuthorized(identity);
 
     /*
@@ -78,12 +78,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
     const eventName: string = socketSettings.paths.processInstanceStarted
       .replace(socketSettings.pathParams.processModelId, processModelId);
 
-    this._socket.on(eventName, callback);
+    this._socket.on(eventName, callback); // TODO
   }
 
-  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+  public async onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): Promise<any> {
     this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.processEnded, callback);
+    this._socket.on(socketSettings.paths.processEnded, callback); // TODO
   }
 
   // Correlations

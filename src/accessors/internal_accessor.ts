@@ -1,4 +1,5 @@
 import {UnauthorizedError} from '@essential-projects/errors_ts';
+import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
 import {DataModels, IManagementApi, IManagementApiAccessor, Messages} from '@process-engine/management_api_contracts';
@@ -12,48 +13,56 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Notifications
-  public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
+  public async onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onUserTaskWaiting(identity, callback);
+
+    return this._managementApiService.onUserTaskWaiting(identity, callback);
   }
 
-  public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
+  public async onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onUserTaskFinished(identity, callback);
+
+    return this._managementApiService.onUserTaskFinished(identity, callback);
   }
 
-  public onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): void {
+  public async onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onManualTaskWaiting(identity, callback);
+
+    return this._managementApiService.onManualTaskWaiting(identity, callback);
   }
 
-  public onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): void {
+  public async onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onManualTaskFinished(identity, callback);
+
+    return this._managementApiService.onManualTaskFinished(identity, callback);
   }
 
-  public onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): void {
+  public async onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onProcessStarted(identity, callback);
+
+    return this._managementApiService.onProcessStarted(identity, callback);
   }
 
-  public onProcessWithProcessModelIdStarted(
+  public async onProcessWithProcessModelIdStarted(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessStartedCallback,
     processModelId: string,
-  ): void {
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onProcessWithProcessModelIdStarted(identity, callback, processModelId);
+
+    return this._managementApiService.onProcessWithProcessModelIdStarted(identity, callback, processModelId);
   }
 
-  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
+  public async onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onProcessTerminated(identity, callback);
+
+    return this._managementApiService.onProcessTerminated(identity, callback);
   }
 
-  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
+  public async onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
-    this._managementApiService.onProcessEnded(identity, callback);
+
+    return this._managementApiService.onProcessEnded(identity, callback);
   }
 
   // Correlations
