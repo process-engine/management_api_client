@@ -25,6 +25,18 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.onUserTaskFinished(identity, callback);
   }
 
+  public async onUserTaskForIdentityWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.onUserTaskForIdentityWaiting(identity, callback);
+  }
+
+  public async onUserTaskForIdentityFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.onUserTaskForIdentityFinished(identity, callback);
+  }
+
   public async onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
@@ -35,6 +47,18 @@ export class InternalAccessor implements IManagementApiAccessor {
     this._ensureIsAuthorized(identity);
 
     return this._managementApiService.onManualTaskFinished(identity, callback);
+  }
+
+  public async onManualTaskForIdentityWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.onManualTaskForIdentityWaiting(identity, callback);
+  }
+
+  public async onManualTaskForIdentityFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.onManualTaskForIdentityFinished(identity, callback);
   }
 
   public async onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): Promise<Subscription> {
