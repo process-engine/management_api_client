@@ -13,83 +13,130 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Notifications
-  public async onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): Promise<Subscription> {
+  public async onUserTaskWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onUserTaskWaiting(identity, callback);
+    return this._managementApiService.onUserTaskWaiting(identity, callback, subscribeOnce);
   }
 
-  public async onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): Promise<Subscription> {
+  public async onUserTaskFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onUserTaskFinished(identity, callback);
+    return this._managementApiService.onUserTaskFinished(identity, callback, subscribeOnce);
   }
 
-  public async onUserTaskForIdentityWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): Promise<Subscription> {
+  public async onUserTaskForIdentityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onUserTaskForIdentityWaiting(identity, callback);
+    return this._managementApiService.onUserTaskForIdentityWaiting(identity, callback, subscribeOnce);
   }
 
-  public async onUserTaskForIdentityFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): Promise<Subscription> {
+  public async onUserTaskForIdentityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onUserTaskForIdentityFinished(identity, callback);
+    return this._managementApiService.onUserTaskForIdentityFinished(identity, callback, subscribeOnce);
   }
 
-  public async onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): Promise<Subscription> {
+  public async onManualTaskWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onManualTaskWaiting(identity, callback);
+    return this._managementApiService.onManualTaskWaiting(identity, callback, subscribeOnce);
   }
 
-  public async onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): Promise<Subscription> {
+  public async onManualTaskFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onManualTaskFinished(identity, callback);
+    return this._managementApiService.onManualTaskFinished(identity, callback, subscribeOnce);
   }
 
-  public async onManualTaskForIdentityWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): Promise<Subscription> {
+  public async onManualTaskForIdentityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onManualTaskForIdentityWaiting(identity, callback);
+    return this._managementApiService.onManualTaskForIdentityWaiting(identity, callback, subscribeOnce);
   }
 
-  public async onManualTaskForIdentityFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): Promise<Subscription> {
+  public async onManualTaskForIdentityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onManualTaskForIdentityFinished(identity, callback);
+    return this._managementApiService.onManualTaskForIdentityFinished(identity, callback, subscribeOnce);
   }
 
-  public async onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): Promise<Subscription> {
+  public async onProcessStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onProcessStarted(identity, callback);
+    return this._managementApiService.onProcessStarted(identity, callback, subscribeOnce);
   }
 
   public async onProcessWithProcessModelIdStarted(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessStartedCallback,
     processModelId: string,
+    subscribeOnce: boolean = false,
   ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onProcessWithProcessModelIdStarted(identity, callback, processModelId);
+    return this._managementApiService.onProcessWithProcessModelIdStarted(identity, callback, processModelId, subscribeOnce);
   }
 
-  public async onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): Promise<Subscription> {
+  public async onProcessTerminated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onProcessTerminated(identity, callback);
+    return this._managementApiService.onProcessTerminated(identity, callback, subscribeOnce);
   }
 
-  public async onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): Promise<Subscription> {
+  public async onProcessEnded(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessEndedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    return this._managementApiService.onProcessEnded(identity, callback);
+    return this._managementApiService.onProcessEnded(identity, callback, subscribeOnce);
   }
 
   public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
+    this._ensureIsAuthorized(identity);
+
     return this._managementApiService.removeSubscription(identity, subscription);
   }
 
