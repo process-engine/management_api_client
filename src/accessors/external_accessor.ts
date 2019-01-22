@@ -30,6 +30,9 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
   // Notifications
   public initializeSocket(identity: IIdentity): void {
+
+    this._ensureIsAuthorized(identity);
+
     const socketUrl: string = `${this.config.socketUrl}/${socketSettings.namespace}`;
     const socketIoOptions: SocketIOClient.ConnectOpts = {
       transportOptions: {
