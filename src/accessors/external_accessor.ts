@@ -199,7 +199,17 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
     this._ensureIsAuthorized(identity);
 
-    return Promise.resolve(); // TODO
+    const callbackToRemove: any = this._subscriptionCollection[subscription.id];
+
+    if (!callbackToRemove) {
+      return;
+    }
+
+    this._socket.off(subscription.id, callbackToRemove);
+
+    delete this._subscriptionCollection[subscription.id];
+
+    return Promise.resolve();
   }
 
   // Correlations
