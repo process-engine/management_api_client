@@ -6,14 +6,21 @@ import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
-import {DataModels, IManagementApiAccessor, Messages, restSettings, socketSettings} from '@process-engine/management_api_contracts';
+import {
+  DataModels,
+  IManagementApiAccessor,
+  IManagementSocketIoAccessor,
+  Messages,
+  restSettings,
+  socketSettings,
+} from '@process-engine/management_api_contracts';
 
-export class ExternalAccessor implements IManagementApiAccessor {
+export class ExternalAccessor implements IManagementApiAccessor, IManagementSocketIoAccessor {
 
   private baseUrl: string = 'api/management/v1';
 
-  private _socket: SocketIOClient.Socket = undefined;
-  private _httpClient: IHttpClient = undefined;
+  private _socket: SocketIOClient.Socket;
+  private _httpClient: IHttpClient;
 
   public config: any;
 
@@ -34,6 +41,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
       },
     };
     this._socket = io(socketUrl, socketIoOptions);
+  }
+
+  public disconnectSocket(identity: IIdentity): void {
+    this._socket.disconnect();
+    this._socket.close();
   }
 
   public async onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): Promise<any> {
