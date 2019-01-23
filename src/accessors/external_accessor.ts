@@ -1,18 +1,36 @@
 /*tslint:disable:max-file-line-count*/
 import * as io from 'socket.io-client';
+import * as uuid from 'uuid';
 
 import {UnauthorizedError} from '@essential-projects/errors_ts';
+import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IHttpClient, IRequestOptions, IResponse} from '@essential-projects/http_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
-import {DataModels, IManagementApiAccessor, Messages, restSettings, socketSettings} from '@process-engine/management_api_contracts';
+import {
+  DataModels,
+  IManagementApiAccessor,
+  IManagementSocketIoAccessor,
+  Messages,
+  restSettings,
+  socketSettings,
+} from '@process-engine/management_api_contracts';
 
-export class ExternalAccessor implements IManagementApiAccessor {
+/**
+ * Connects a Subscription ID to a specific callback.
+ * This allows us to remove that Subscription from SocketIO
+ * when "ExternalAccessor.removeSubscription" is called.
+ */
+type SubscriptionCallbackAssociation = {[subscriptionId: string]: any};
+
+export class ExternalAccessor implements IManagementApiAccessor, IManagementSocketIoAccessor {
 
   private baseUrl: string = 'api/management/v1';
 
-  private _socket: SocketIOClient.Socket = undefined;
-  private _httpClient: IHttpClient = undefined;
+  private _subscriptionCollection: SubscriptionCallbackAssociation = {};
+
+  private _socket: SocketIOClient.Socket;
+  private _httpClient: IHttpClient;
 
   public config: any;
 
@@ -22,6 +40,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
 
   // Notifications
   public initializeSocket(identity: IIdentity): void {
+
+    const noAuthTokenProvided: boolean = !identity || typeof identity.token !== 'string';
+    if (noAuthTokenProvided) {
+      throw new UnauthorizedError('No auth token provided!');
+    }
+
     const socketUrl: string = `${this.config.socketUrl}/${socketSettings.namespace}`;
     const socketIoOptions: SocketIOClient.ConnectOpts = {
       transportOptions: {
@@ -35,55 +59,148 @@ export class ExternalAccessor implements IManagementApiAccessor {
     this._socket = io(socketUrl, socketIoOptions);
   }
 
-  public onUserTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskWaitingCallback): void {
-    this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.userTaskWaiting, callback);
+  public disconnectSocket(identity: IIdentity): void {
+    this._socket.disconnect();
+    this._socket.close();
   }
 
-  public onUserTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnUserTaskFinishedCallback): void {
-    this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.userTaskFinished, callback);
+  public async onUserTaskWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(socketSettings.paths.userTaskWaiting, callback, subscribeOnce);
   }
 
-  public onManualTaskWaiting(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskWaitingCallback): void {
-    this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.manualTaskWaiting, callback);
+  public async onUserTaskFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(socketSettings.paths.userTaskFinished, callback, subscribeOnce);
   }
 
-  public onManualTaskFinished(identity: IIdentity, callback: Messages.CallbackTypes.OnManualTaskFinishedCallback): void {
-    this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.manualTaskFinished, callback);
+  public async onUserTaskForIdentityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    const socketEventName: string = socketSettings.paths.userTaskForIdentityWaiting
+      .replace(socketSettings.pathParams.userId, identity.userId);
+
+    return this._createSocketIoSubscription(socketEventName, callback, subscribeOnce);
   }
 
-  public onProcessTerminated(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessTerminatedCallback): void {
-    this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.processTerminated, callback);
+  public async onUserTaskForIdentityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnUserTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    const socketEventName: string = socketSettings.paths.userTaskForIdentityFinished
+      .replace(socketSettings.pathParams.userId, identity.userId);
+
+    return this._createSocketIoSubscription(socketEventName, callback, subscribeOnce);
   }
 
-  public onProcessStarted(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessStartedCallback): void {
-    this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.processStarted, callback);
+  public async onProcessTerminated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(socketSettings.paths.processTerminated, callback, subscribeOnce);
   }
 
-  public onProcessWithProcessModelIdStarted(
+  public async onProcessStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(socketSettings.paths.processStarted, callback, subscribeOnce);
+  }
+
+  public async onProcessWithProcessModelIdStarted(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessStartedCallback,
     processModelId: string,
-  ): void {
-    this._ensureIsAuthorized(identity);
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
 
-    /*
-     * This will create the event name dynamically; the name consists of the event root path + the Process Model ID.
-     */
     const eventName: string = socketSettings.paths.processInstanceStarted
       .replace(socketSettings.pathParams.processModelId, processModelId);
 
-    this._socket.on(eventName, callback);
+    return this._createSocketIoSubscription(eventName, callback, subscribeOnce);
   }
 
-  public onProcessEnded(identity: IIdentity, callback: Messages.CallbackTypes.OnProcessEndedCallback): void {
-    this._ensureIsAuthorized(identity);
-    this._socket.on(socketSettings.paths.processEnded, callback);
+  public async onManualTaskWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(socketSettings.paths.manualTaskWaiting, callback, subscribeOnce);
+  }
+
+  public async onManualTaskFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(socketSettings.paths.manualTaskFinished, callback, subscribeOnce);
+  }
+
+  public async onManualTaskForIdentityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    const socketEventName: string = socketSettings.paths.manualTaskForIdentityWaiting
+      .replace(socketSettings.pathParams.userId, identity.userId);
+
+    return this._createSocketIoSubscription(socketEventName, callback, subscribeOnce);
+  }
+
+  public async onManualTaskForIdentityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnManualTaskFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    const socketEventName: string = socketSettings.paths.manualTaskForIdentityFinished
+      .replace(socketSettings.pathParams.userId, identity.userId);
+
+    return this._createSocketIoSubscription(socketEventName, callback, subscribeOnce);
+  }
+
+  public async onProcessEnded(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessEndedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(socketSettings.paths.processEnded, callback, subscribeOnce);
+  }
+
+  public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
+
+    const callbackToRemove: any = this._subscriptionCollection[subscription.id];
+
+    if (!callbackToRemove) {
+      return;
+    }
+
+    this._socket.off(subscription.id, callbackToRemove);
+
+    delete this._subscriptionCollection[subscription.id];
+
+    return Promise.resolve();
   }
 
   // Correlations
@@ -183,14 +300,14 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async startProcessInstance(identity: IIdentity,
-                                    processModelId: string,
-                                    startEventId: string,
-                                    payload: DataModels.ProcessModels.ProcessStartRequestPayload,
-                                    startCallbackType: DataModels.ProcessModels.StartCallbackType =
-                                      DataModels.ProcessModels.StartCallbackType.CallbackOnProcessInstanceCreated,
-                                    endEventId?: string,
-                                  ): Promise<DataModels.ProcessModels.ProcessStartResponsePayload> {
+  public async startProcessInstance(
+    identity: IIdentity,
+    processModelId: string,
+    startEventId: string,
+    payload: DataModels.ProcessModels.ProcessStartRequestPayload,
+    startCallbackType: DataModels.ProcessModels.StartCallbackType = DataModels.ProcessModels.StartCallbackType.CallbackOnProcessInstanceCreated,
+    endEventId?: string,
+  ): Promise<DataModels.ProcessModels.ProcessStartResponsePayload> {
 
     const url: string = this._buildStartProcessInstanceUrl(processModelId, startEventId, startCallbackType, endEventId);
 
@@ -215,10 +332,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async updateProcessDefinitionsByName(identity: IIdentity,
-                                              name: string,
-                                              payload: DataModels.ProcessModels.UpdateProcessDefinitionsRequestPayload,
-                                     ): Promise<void> {
+  public async updateProcessDefinitionsByName(
+    identity: IIdentity,
+    name: string,
+    payload: DataModels.ProcessModels.UpdateProcessDefinitionsRequestPayload,
+  ): Promise<void> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -332,9 +450,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getUserTasksForProcessModelInCorrelation(identity: IIdentity,
-                                                        processModelId: string,
-                                                        correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
+  public async getUserTasksForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -350,11 +470,13 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async finishUserTask(identity: IIdentity,
-                              processInstanceId: string,
-                              correlationId: string,
-                              userTaskInstanceId: string,
-                              userTaskResult: DataModels.UserTasks.UserTaskResult): Promise<void> {
+  public async finishUserTask(
+    identity: IIdentity,
+    processInstanceId: string,
+    correlationId: string,
+    userTaskInstanceId: string,
+    userTaskResult: DataModels.UserTasks.UserTaskResult,
+  ): Promise<void> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -395,9 +517,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getManualTasksForProcessModelInCorrelation(identity: IIdentity,
-                                                          processModelId: string,
-                                                          correlationId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
+  public async getManualTasksForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -413,10 +537,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async finishManualTask(identity: IIdentity,
-                                processInstanceId: string,
-                                correlationId: string,
-                                manualTaskInstanceId: string): Promise<void> {
+  public async finishManualTask(
+    identity: IIdentity,
+    processInstanceId: string,
+    correlationId: string,
+    manualTaskInstanceId: string,
+  ): Promise<void> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -449,9 +575,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getRuntimeInformationForFlowNode(identity: IIdentity,
-                                                processModelId: string,
-                                                flowNodeId: string): Promise<DataModels.Kpi.FlowNodeRuntimeInformation> {
+  public async getRuntimeInformationForFlowNode(
+    identity: IIdentity,
+    processModelId: string,
+    flowNodeId: string,
+  ): Promise<DataModels.Kpi.FlowNodeRuntimeInformation> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -497,9 +625,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getActiveTokensForCorrelationAndProcessModel(identity: IIdentity,
-                                                            correlationId: string,
-                                                            processModelId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  public async getActiveTokensForCorrelationAndProcessModel(
+    identity: IIdentity,
+    correlationId: string,
+    processModelId: string,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -549,10 +679,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getTokensForFlowNodeInstance(identity: IIdentity,
-                                            correlationId: string,
-                                            processModelId: string,
-                                            flowNodeId: string): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+  public async getTokensForFlowNodeInstance(
+    identity: IIdentity,
+    correlationId: string,
+    processModelId: string,
+    flowNodeId: string,
+  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -569,9 +701,11 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getTokensForCorrelationAndProcessModel(identity: IIdentity,
-                                                      correlationId: string,
-                                                      processModelId: string): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
+  public async getTokensForCorrelationAndProcessModel(
+    identity: IIdentity,
+    correlationId: string,
+    processModelId: string,
+  ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -587,8 +721,10 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  public async getTokensForProcessInstance(identity: IIdentity,
-                                           processInstanceId: string): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
+  public async getTokensForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -603,10 +739,12 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return httpResponse.result;
   }
 
-  private _buildStartProcessInstanceUrl(processModelId: string,
-                                        startEventId: string,
-                                        startCallbackType: DataModels.ProcessModels.StartCallbackType,
-                                        endEventId: string): string {
+  private _buildStartProcessInstanceUrl(
+    processModelId: string,
+    startEventId: string,
+    startCallbackType: DataModels.ProcessModels.StartCallbackType,
+    endEventId: string,
+  ): string {
 
     let restPath: string = restSettings.paths.startProcessInstance
       .replace(restSettings.params.processModelId, processModelId)
@@ -643,10 +781,19 @@ export class ExternalAccessor implements IManagementApiAccessor {
     return `${this.baseUrl}${url}`;
   }
 
-  private _ensureIsAuthorized(identity: IIdentity): void {
-    const noAuthTokenProvided: boolean = !identity || typeof identity.token !== 'string';
-    if (noAuthTokenProvided) {
-      throw new UnauthorizedError('No auth token provided!');
+  private _createSocketIoSubscription(route: string, callback: any, subscribeOnce: boolean): Subscription {
+
+    if (subscribeOnce) {
+      this._socket.once(route, callback);
+    } else {
+      this._socket.on(route, callback);
     }
+
+    const subscriptionId: string = uuid.v4();
+    const subscription: Subscription = new Subscription(subscriptionId, route, subscribeOnce);
+
+    this._subscriptionCollection[subscriptionId] = callback;
+
+    return subscription;
   }
 }
