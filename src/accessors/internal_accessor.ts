@@ -219,6 +219,13 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.getUserTasksForProcessModel(identity, processModelId);
   }
 
+  public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.getUserTasksForProcessInstance(identity, processInstanceId);
+  }
+
   public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
     return this._managementApiService.getUserTasksForCorrelation(identity, correlationId);
   }
@@ -246,6 +253,13 @@ export class InternalAccessor implements IManagementApiAccessor {
   // ManualTasks
   public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
     return this._managementApiService.getManualTasksForProcessModel(identity, processModelId);
+  }
+
+  public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
+
+    this._ensureIsAuthorized(identity);
+
+    return this._managementApiService.getManualTasksForProcessInstance(identity, processInstanceId);
   }
 
   public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
