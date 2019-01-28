@@ -534,7 +534,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    const urlRestPart: string = restSettings.paths.processModelManualTasks.replace(restSettings.params.processInstanceId, processInstanceId);
+    const urlRestPart: string = restSettings.paths.processInstanceManualTasks.replace(restSettings.params.processInstanceId, processInstanceId);
     const url: string = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<DataModels.ManualTasks.ManualTaskList> =
