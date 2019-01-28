@@ -220,9 +220,6 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
-
-    this._ensureIsAuthorized(identity);
-
     return this._managementApiService.getUserTasksForProcessInstance(identity, processInstanceId);
   }
 
@@ -256,9 +253,6 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-
-    this._ensureIsAuthorized(identity);
-
     return this._managementApiService.getManualTasksForProcessInstance(identity, processInstanceId);
   }
 
