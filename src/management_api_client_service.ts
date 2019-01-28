@@ -280,7 +280,7 @@ export class ManagementApiClientService implements IManagementApi {
   public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getUserTasksForProcessModel(identity, processInstanceId);
+    return this.managementApiAccessor.getUserTasksForProcessInstance(identity, processInstanceId);
   }
 
   public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
