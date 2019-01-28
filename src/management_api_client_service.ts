@@ -278,6 +278,8 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
+    this._ensureIsAuthorized(identity);
+
     return this.managementApiAccessor.getUserTasksForProcessModel(identity, processInstanceId);
   }
 
@@ -317,6 +319,8 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
+    this._ensureIsAuthorized(identity);
+
     return this.managementApiAccessor.getManualTasksForProcessInstance(identity, processInstanceId);
   }
 
