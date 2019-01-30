@@ -187,6 +187,8 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   public async getProcessModelByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.ProcessModels.ProcessModel> {
+    this._ensureIsAuthorized(identity);
+
     return this.managementApiAccessor.getProcessModelByProcessInstanceId(identity, processInstanceId);
   }
 
