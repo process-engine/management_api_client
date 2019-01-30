@@ -1,6 +1,6 @@
 {
   "name": "@process-engine/management_api_client",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "client implementation for using the process-engine.io Management API",
   "main": "dist/commonjs/index.js",
   "typings": "dist/index.d.ts",
