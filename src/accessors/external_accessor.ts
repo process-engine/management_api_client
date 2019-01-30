@@ -300,6 +300,19 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
+  public async getProcessModelByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.ProcessModels.ProcessModel> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const restPath: string = restSettings.paths.processModelByProcessInstanceId.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url: string = this._applyBaseUrl(restPath);
+
+    const httpResponse: IResponse<DataModels.ProcessModels.ProcessModel> =
+      await this._httpClient.get<DataModels.ProcessModels.ProcessModel>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   public async startProcessInstance(
     identity: IIdentity,
     processModelId: string,
@@ -437,6 +450,19 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
+  public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const restPath: string = restSettings.paths.processInstanceUserTasks.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url: string = this._applyBaseUrl(restPath);
+
+    const httpResponse: IResponse<DataModels.UserTasks.UserTaskList> =
+      await this._httpClient.get<DataModels.UserTasks.UserTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
@@ -496,6 +522,19 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
     const urlRestPart: string = restSettings.paths.processModelManualTasks.replace(restSettings.params.processModelId, processModelId);
+    const url: string = this._applyBaseUrl(urlRestPart);
+
+    const httpResponse: IResponse<DataModels.ManualTasks.ManualTaskList> =
+      await this._httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const urlRestPart: string = restSettings.paths.processInstanceManualTasks.replace(restSettings.params.processInstanceId, processInstanceId);
     const url: string = this._applyBaseUrl(urlRestPart);
 
     const httpResponse: IResponse<DataModels.ManualTasks.ManualTaskList> =
