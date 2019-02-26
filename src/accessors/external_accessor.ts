@@ -308,9 +308,9 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   public async startProcessInstance(
     identity: IIdentity,
     processModelId: string,
-    startEventId: string,
     payload: DataModels.ProcessModels.ProcessStartRequestPayload,
     startCallbackType: DataModels.ProcessModels.StartCallbackType = DataModels.ProcessModels.StartCallbackType.CallbackOnProcessInstanceCreated,
+    startEventId?: string,
     endEventId?: string,
   ): Promise<DataModels.ProcessModels.ProcessStartResponsePayload> {
 
@@ -778,10 +778,14 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   ): string {
 
     let restPath: string = restSettings.paths.startProcessInstance
-      .replace(restSettings.params.processModelId, processModelId)
-      .replace(restSettings.params.startEventId, startEventId);
+      .replace(restSettings.params.processModelId, processModelId);
 
     restPath = `${restPath}?start_callback_type=${startCallbackType}`;
+
+    const startEventIdGiven: boolean = startEventId !== undefined;
+    if (startEventId) {
+      restPath = `${restPath}?${restSettings.queryParams.startEventId}=${startEventId}`;
+    }
 
     if (startCallbackType === DataModels.ProcessModels.StartCallbackType.CallbackOnEndEventReached) {
       restPath = `${restPath}&${restSettings.queryParams.endEventId}=${endEventId}`;
