@@ -783,7 +783,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     restPath = `${restPath}?start_callback_type=${startCallbackType}`;
 
     const startEventIdGiven: boolean = startEventId !== undefined;
-    if (startEventId) {
+    if (startEventIdGiven) {
       restPath = `${restPath}?${restSettings.queryParams.startEventId}=${startEventId}`;
     }
 
