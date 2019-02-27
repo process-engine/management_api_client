@@ -22,7 +22,7 @@
     "@essential-projects/errors_ts": "^1.4.0",
     "@essential-projects/http_contracts": "^2.3.0",
     "@essential-projects/iam_contracts": "^3.4.0",
-    "@process-engine/management_api_contracts": "^5.0.0",
+    "@process-engine/management_api_contracts": "feature~implement_blank_handlers",
     "node-uuid": "^1.4.8",
     "socket.io-client": "^2.2.0"
   },
