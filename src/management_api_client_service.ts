@@ -1,3 +1,4 @@
+// tslint:disable:max-file-line-count
 import * as EssentialProjectErrors from '@essential-projects/errors_ts';
 import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
@@ -13,6 +14,46 @@ export class ManagementApiClientService implements IManagementApi {
   }
 
   // Notifications
+  public async onEmptyActivityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onEmptyActivityWaiting(identity, callback, subscribeOnce);
+  }
+
+  public async onEmptyActivityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onEmptyActivityFinished(identity, callback, subscribeOnce);
+  }
+
+  public async onEmptyActivityForIdentityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onEmptyActivityForIdentityWaiting(identity, callback, subscribeOnce);
+  }
+
+  public async onEmptyActivityForIdentityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onEmptyActivityForIdentityFinished(identity, callback, subscribeOnce);
+  }
+
   public async onUserTaskWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnUserTaskWaitingCallback,
@@ -270,6 +311,55 @@ export class ManagementApiClientService implements IManagementApi {
     this._ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.triggerSignalEvent(identity, signalName, payload);
+  }
+
+  // Empty Activities
+  public async getEmptyActivitiesForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getEmptyActivitiesForProcessModel(identity, processModelId);
+  }
+
+  public async getEmptyActivitiesForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getEmptyActivitiesForProcessInstance(identity, processInstanceId);
+  }
+
+  public async getEmptyActivitiesForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getEmptyActivitiesForCorrelation(identity, correlationId);
+  }
+
+  public async getEmptyActivitiesForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
+  }
+
+  public async getWaitingEmptyActivitiesByIdentity(identity: IIdentity): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getWaitingEmptyActivitiesByIdentity(identity);
+  }
+
+  public async finishEmptyActivity(
+    identity: IIdentity,
+    processInstanceId: string,
+    correlationId: string,
+    emptyActivityInstanceId: string,
+  ): Promise<void> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.finishEmptyActivity(identity, processInstanceId, correlationId, emptyActivityInstanceId);
   }
 
   // UserTasks
