@@ -12,6 +12,38 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Notifications
+  public async onEmptyActivityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this._managementApiService.onEmptyActivityWaiting(identity, callback, subscribeOnce);
+  }
+
+  public async onEmptyActivityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this._managementApiService.onEmptyActivityFinished(identity, callback, subscribeOnce);
+  }
+
+  public async onEmptyActivityForIdentityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this._managementApiService.onEmptyActivityForIdentityWaiting(identity, callback, subscribeOnce);
+  }
+
+  public async onEmptyActivityForIdentityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnEmptyActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this._managementApiService.onEmptyActivityForIdentityFinished(identity, callback, subscribeOnce);
+  }
+
   public async onUserTaskWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnUserTaskWaitingCallback,
@@ -212,6 +244,43 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
     return this._managementApiService.triggerSignalEvent(identity, signalName, payload);
+  }
+
+  // Empty Activities
+  public async getEmptyActivitiesForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    return this._managementApiService.getEmptyActivitiesForProcessModel(identity, processModelId);
+  }
+
+  public async getEmptyActivitiesForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    return this._managementApiService.getEmptyActivitiesForProcessInstance(identity, processInstanceId);
+  }
+
+  public async getEmptyActivitiesForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    return this._managementApiService.getEmptyActivitiesForCorrelation(identity, correlationId);
+  }
+
+  public async getEmptyActivitiesForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    return this._managementApiService.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
+  }
+
+  public async getWaitingEmptyActivitiesByIdentity(identity: IIdentity): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    return this._managementApiService.getWaitingEmptyActivitiesByIdentity(identity);
+  }
+
+  public async finishEmptyActivity(
+    identity: IIdentity,
+    processInstanceId: string,
+    correlationId: string,
+    emptyActivityInstanceId: string,
+  ): Promise<void> {
+    return this._managementApiService.finishEmptyActivity(identity, processInstanceId, correlationId, emptyActivityInstanceId);
   }
 
   // UserTasks
