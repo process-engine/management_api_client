@@ -420,4 +420,12 @@ export class InternalAccessor implements IManagementApiAccessor {
 
     return this._managementApiService.getTokensForProcessInstance(identity, processInstanceId);
   }
+
+  public async terminateProcess(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<void> {
+
+    this._managementApiService.terminateProcess(identity, processInstanceId);
+  }
 }
