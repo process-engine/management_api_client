@@ -530,13 +530,13 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getTokensForProcessInstance(identity, processInstanceId);
   }
 
-  public async terminateProcess(
+  public async terminateProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
   ): Promise<void> {
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.terminateProcess(identity, processInstanceId);
+    return this.managementApiAccessor.terminateProcessInstance(identity, processInstanceId);
   }
 
   private _ensureIsAuthorized(identity: IIdentity): void {

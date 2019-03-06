@@ -902,7 +902,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
-  public async terminateProcess(
+  public async terminateProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
   ): Promise<void> {
