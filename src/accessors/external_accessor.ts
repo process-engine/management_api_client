@@ -909,13 +909,13 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    const restPath: string = restSettings.paths.terminateProcess
-      .replace(restSettings.params.processModelId, processInstanceId);
+    const restPath: string = restSettings.paths.terminateProcessInstance
+      .replace(restSettings.params.processInstanceId, processInstanceId);
 
     const url: string = this._applyBaseUrl(restPath);
 
     const httpResponse: IResponse<void> =
-      await this._httpClient.get<void>(url, requestAuthHeaders);
+      await this._httpClient.post(url, {}, requestAuthHeaders);
   }
 
   private _buildStartProcessInstanceUrl(
