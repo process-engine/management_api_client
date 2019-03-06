@@ -902,6 +902,22 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
+  public async terminateProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<void> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const restPath: string = restSettings.paths.terminateProcessInstance
+      .replace(restSettings.params.processInstanceId, processInstanceId);
+
+    const url: string = this._applyBaseUrl(restPath);
+
+    const httpResponse: IResponse<void> =
+      await this._httpClient.post(url, {}, requestAuthHeaders);
+  }
+
   private _buildStartProcessInstanceUrl(
     processModelId: string,
     startEventId: string,
