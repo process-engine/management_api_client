@@ -270,10 +270,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
-  public async getWaitingEmptyActivitiesByIdentity(identity: IIdentity): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this._managementApiService.getWaitingEmptyActivitiesByIdentity(identity);
-  }
-
   public async finishEmptyActivity(
     identity: IIdentity,
     processInstanceId: string,

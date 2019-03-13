@@ -530,17 +530,6 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
-  public async getWaitingEmptyActivitiesByIdentity(identity: IIdentity): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
-
-    const url: string = this._applyBaseUrl(restSettings.paths.getOwnEmptyActivities);
-
-    const httpResponse: IResponse<DataModels.EmptyActivities.EmptyActivityList> =
-      await this._httpClient.get<DataModels.EmptyActivities.EmptyActivityList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
   public async finishEmptyActivity(
     identity: IIdentity,
     processInstanceId: string,
