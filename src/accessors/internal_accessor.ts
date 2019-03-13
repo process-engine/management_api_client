@@ -270,10 +270,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
-  public async getWaitingEmptyActivitiesByIdentity(identity: IIdentity): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this._managementApiService.getWaitingEmptyActivitiesByIdentity(identity);
-  }
-
   public async finishEmptyActivity(
     identity: IIdentity,
     processInstanceId: string,
@@ -419,5 +415,13 @@ export class InternalAccessor implements IManagementApiAccessor {
   ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
     return this._managementApiService.getTokensForProcessInstance(identity, processInstanceId);
+  }
+
+  public async terminateProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<void> {
+
+    this._managementApiService.terminateProcessInstance(identity, processInstanceId);
   }
 }
