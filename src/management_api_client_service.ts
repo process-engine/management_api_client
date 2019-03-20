@@ -97,6 +97,28 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.onUserTaskForIdentityFinished(identity, callback, subscribeOnce);
   }
 
+  public async onCallActivityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCallActivityWaiting(identity, callback, subscribeOnce);
+  }
+
+  public async onCallActivityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCallActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCallActivityFinished(identity, callback, subscribeOnce);
+  }
+
   public async onProcessTerminated(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessTerminatedCallback,

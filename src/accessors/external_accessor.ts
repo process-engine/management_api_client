@@ -133,6 +133,24 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return this.createSocketIoSubscription(identity, socketEventName, callback, subscribeOnce);
   }
 
+  public async onCallActivityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(identity, socketSettings.paths.userTaskWaiting, callback, subscribeOnce);
+  }
+
+  public async onCallActivityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCallActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+
+    return this._createSocketIoSubscription(identity, socketSettings.paths.callActivityFinished, callback, subscribeOnce);
+  }
+
   public async onProcessTerminated(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
