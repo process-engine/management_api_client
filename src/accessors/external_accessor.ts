@@ -873,6 +873,26 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
+  public async getTokensForFlowNodeByProcessInstanceId(
+    identity: IIdentity,
+    processInstanceId: string,
+    flowNodeId: string,
+  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+
+    const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
+
+    const restPath: string = restSettings.paths.getTokensForFlowNode
+      .replace(restSettings.params.processInstanceId, processInstanceId)
+      .replace(restSettings.params.flowNodeId, flowNodeId);
+
+    const url: string = this._applyBaseUrl(restPath);
+
+    const httpResponse: IResponse<Array<DataModels.TokenHistory.TokenHistoryEntry>> =
+      await this._httpClient.get<Array<DataModels.TokenHistory.TokenHistoryEntry>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   public async getTokensForCorrelationAndProcessModel(
     identity: IIdentity,
     correlationId: string,
