@@ -515,6 +515,16 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId);
   }
 
+  public async getTokensForFlowNodeByProcessInstanceId(
+    identity: IIdentity,
+    processInstanceId: string,
+    flowNodeId: string,
+  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getTokensForFlowNodeByProcessInstanceId(identity, processInstanceId, flowNodeId);
+  }
+
   public async getTokensForCorrelationAndProcessModel(
     identity: IIdentity,
     correlationId: string,
