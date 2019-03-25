@@ -835,7 +835,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     processModelId: string,
     processInstanceId: string,
-    ): Promise<Array<DataModels.Logging.LogEntry>> {
+  ): Promise<Array<DataModels.Logging.LogEntry>> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
