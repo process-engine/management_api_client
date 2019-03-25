@@ -494,6 +494,16 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getProcessModelLog(identity, processModelId, correlationId);
   }
 
+  public async getProcessInstanceLog(
+    identity: IIdentity,
+    processModelId: string,
+    processInstanceId: string,
+  ): Promise<Array<DataModels.Logging.LogEntry>> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getProcessInstanceLog(identity, processModelId, processInstanceId);
+  }
+
   public async getTokensForFlowNodeInstance(
     identity: IIdentity,
     correlationId: string,
