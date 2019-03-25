@@ -839,7 +839,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    const restPath: string = restSettings.paths.getProcessModelLog
+    const restPath: string = restSettings.paths.getProcessInstanceLog
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.processInstanceId, processInstanceId);
 
