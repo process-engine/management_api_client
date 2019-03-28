@@ -851,7 +851,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
-  public async getTokensForFlowNodeInstance(
+  public async getTokensForFlowNode(
     identity: IIdentity,
     correlationId: string,
     processModelId: string,
