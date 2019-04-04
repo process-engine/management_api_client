@@ -494,7 +494,17 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.getProcessModelLog(identity, processModelId, correlationId);
   }
 
-  public async getTokensForFlowNodeInstance(
+  public async getProcessInstanceLog(
+    identity: IIdentity,
+    processModelId: string,
+    processInstanceId: string,
+  ): Promise<Array<DataModels.Logging.LogEntry>> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getProcessInstanceLog(identity, processModelId, processInstanceId);
+  }
+
+  public async getTokensForFlowNode(
     identity: IIdentity,
     correlationId: string,
     processModelId: string,
@@ -502,7 +512,7 @@ export class ManagementApiClientService implements IManagementApi {
   ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
     this._ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getTokensForFlowNodeInstance(identity, correlationId, processModelId, flowNodeId);
+    return this.managementApiAccessor.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId);
   }
 
   public async getTokensForCorrelationAndProcessModel(
