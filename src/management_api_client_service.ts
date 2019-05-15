@@ -104,8 +104,6 @@ export class ManagementApiClientService implements IManagementApi {
   ): Promise<Subscription> {
     this._ensureIsAuthorized(identity);
 
-    this._ensureIsAuthorized(identity);
-
     return this.managementApiAccessor.onCallActivityWaiting(identity, callback, subscribeOnce);
   }
 
