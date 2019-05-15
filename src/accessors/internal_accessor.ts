@@ -413,7 +413,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     identity: IIdentity,
     processInstanceId: string,
     flowNodeId: string,
-  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+  ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
     return this._managementApiService.getTokensForFlowNodeByProcessInstanceId(identity, processInstanceId, flowNodeId);
   }

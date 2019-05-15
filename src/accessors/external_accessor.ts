@@ -877,7 +877,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     processInstanceId: string,
     flowNodeId: string,
-  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+  ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
@@ -887,8 +887,8 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url: string = this._applyBaseUrl(restPath);
 
-    const httpResponse: IResponse<Array<DataModels.TokenHistory.TokenHistoryEntry>> =
-      await this._httpClient.get<Array<DataModels.TokenHistory.TokenHistoryEntry>>(url, requestAuthHeaders);
+    const httpResponse: IResponse<DataModels.TokenHistory.TokenHistoryGroup> =
+      await this._httpClient.get<DataModels.TokenHistory.TokenHistoryGroup>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
