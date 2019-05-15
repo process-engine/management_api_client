@@ -139,7 +139,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     subscribeOnce: boolean = false,
   ): Promise<any> {
 
-    return this._createSocketIoSubscription(identity, socketSettings.paths.userTaskWaiting, callback, subscribeOnce);
+    return this._createSocketIoSubscription(identity, socketSettings.paths.callActivityWaiting, callback, subscribeOnce);
   }
 
   public async onCallActivityFinished(
