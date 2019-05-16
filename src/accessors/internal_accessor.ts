@@ -100,6 +100,25 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.onBoundaryEventFinished(identity, callback, subscribeOnce);
   }
 
+
+  public async onIntermediateEventWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnIntermediateEventWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this._managementApiService.onIntermediateEventWaiting(identity, callback, subscribeOnce);
+  }
+
+  public async onIntermediateEventFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnIntermediateEventFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this._managementApiService.onIntermediateEventFinished(identity, callback, subscribeOnce);
+  }
+
   public async onCallActivityWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
