@@ -881,7 +881,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const requestAuthHeaders: IRequestOptions = this._createRequestAuthHeaders(identity);
 
-    const restPath: string = restSettings.paths.getTokensForFlowNodeByInstanceId
+    const restPath: string = restSettings.paths.getTokensForFlowNodeByProcessInstanceId
       .replace(restSettings.params.processInstanceId, processInstanceId)
       .replace(restSettings.params.flowNodeId, flowNodeId);
 
