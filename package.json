@@ -22,7 +22,7 @@
     "@essential-projects/errors_ts": "^1.4.4",
     "@essential-projects/http_contracts": "^2.3.8",
     "@essential-projects/iam_contracts": "^3.4.2",
-    "@process-engine/management_api_contracts": "feature~add_getTokenForFlowNodeByProcessInstanceId",
+    "@process-engine/management_api_contracts": "7.0.0-589434c1-b6",
     "node-uuid": "^1.4.8",
     "socket.io-client": "^2.2.0"
   },
