@@ -409,6 +409,15 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this._managementApiService.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId);
   }
 
+  public async getTokensForFlowNodeByProcessInstanceId(
+    identity: IIdentity,
+    processInstanceId: string,
+    flowNodeId: string,
+  ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
+
+    return this._managementApiService.getTokensForFlowNodeByProcessInstanceId(identity, processInstanceId, flowNodeId);
+  }
+
   public async getTokensForCorrelationAndProcessModel(
     identity: IIdentity,
     correlationId: string,
