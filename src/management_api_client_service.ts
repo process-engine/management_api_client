@@ -97,6 +97,26 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.onUserTaskForIdentityFinished(identity, callback, subscribeOnce);
   }
 
+  public async onBoundaryEventWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnBoundaryEventWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onBoundaryEventWaiting(identity, callback, subscribeOnce);
+  }
+
+  public async onBoundaryEventFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnBoundaryEventFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this._ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onBoundaryEventFinished(identity, callback, subscribeOnce);
+  }
+
   public async onCallActivityWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
