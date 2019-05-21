@@ -440,6 +440,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
   ): Promise<void> {
 
-    this._managementApiService.terminateProcessInstance(identity, processInstanceId);
+    return this._managementApiService.terminateProcessInstance(identity, processInstanceId);
   }
 }
