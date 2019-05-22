@@ -1,14 +1,16 @@
 import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
-import {DataModels, IManagementApi, IManagementApiAccessor, Messages} from '@process-engine/management_api_contracts';
+import {
+  DataModels, IManagementApi, IManagementApiAccessor, Messages,
+} from '@process-engine/management_api_contracts';
 
 export class InternalAccessor implements IManagementApiAccessor {
 
-  private _managementApiService: IManagementApi = undefined;
+  private managementApiService: IManagementApi = undefined;
 
   constructor(managementApiService: IManagementApi) {
-    this._managementApiService = managementApiService;
+    this.managementApiService = managementApiService;
   }
 
   // Notifications
@@ -17,7 +19,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    return this._managementApiService.onEmptyActivityWaiting(identity, callback, subscribeOnce);
+    return this.managementApiService.onEmptyActivityWaiting(identity, callback, subscribeOnce);
   }
 
   public async onEmptyActivityFinished(
@@ -25,7 +27,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     callback: Messages.CallbackTypes.OnEmptyActivityFinishedCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    return this._managementApiService.onEmptyActivityFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onEmptyActivityFinished(identity, callback, subscribeOnce);
   }
 
   public async onEmptyActivityForIdentityWaiting(
@@ -33,7 +35,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    return this._managementApiService.onEmptyActivityForIdentityWaiting(identity, callback, subscribeOnce);
+    return this.managementApiService.onEmptyActivityForIdentityWaiting(identity, callback, subscribeOnce);
   }
 
   public async onEmptyActivityForIdentityFinished(
@@ -41,7 +43,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     callback: Messages.CallbackTypes.OnEmptyActivityFinishedCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    return this._managementApiService.onEmptyActivityForIdentityFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onEmptyActivityForIdentityFinished(identity, callback, subscribeOnce);
   }
 
   public async onUserTaskWaiting(
@@ -50,7 +52,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onUserTaskWaiting(identity, callback, subscribeOnce);
+    return this.managementApiService.onUserTaskWaiting(identity, callback, subscribeOnce);
   }
 
   public async onUserTaskFinished(
@@ -59,7 +61,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onUserTaskFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onUserTaskFinished(identity, callback, subscribeOnce);
   }
 
   public async onUserTaskForIdentityWaiting(
@@ -68,7 +70,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onUserTaskForIdentityWaiting(identity, callback, subscribeOnce);
+    return this.managementApiService.onUserTaskForIdentityWaiting(identity, callback, subscribeOnce);
   }
 
   public async onUserTaskForIdentityFinished(
@@ -77,7 +79,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onUserTaskForIdentityFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onUserTaskForIdentityFinished(identity, callback, subscribeOnce);
   }
 
   public async onManualTaskWaiting(
@@ -86,7 +88,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onManualTaskWaiting(identity, callback, subscribeOnce);
+    return this.managementApiService.onManualTaskWaiting(identity, callback, subscribeOnce);
   }
 
   public async onManualTaskFinished(
@@ -95,7 +97,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onManualTaskFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onManualTaskFinished(identity, callback, subscribeOnce);
   }
 
   public async onManualTaskForIdentityWaiting(
@@ -104,7 +106,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onManualTaskForIdentityWaiting(identity, callback, subscribeOnce);
+    return this.managementApiService.onManualTaskForIdentityWaiting(identity, callback, subscribeOnce);
   }
 
   public async onManualTaskForIdentityFinished(
@@ -113,7 +115,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onManualTaskForIdentityFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onManualTaskForIdentityFinished(identity, callback, subscribeOnce);
   }
 
   public async onProcessStarted(
@@ -122,7 +124,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onProcessStarted(identity, callback, subscribeOnce);
+    return this.managementApiService.onProcessStarted(identity, callback, subscribeOnce);
   }
 
   public async onProcessWithProcessModelIdStarted(
@@ -132,7 +134,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onProcessWithProcessModelIdStarted(identity, callback, processModelId, subscribeOnce);
+    return this.managementApiService.onProcessWithProcessModelIdStarted(identity, callback, processModelId, subscribeOnce);
   }
 
   public async onProcessTerminated(
@@ -141,7 +143,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onProcessTerminated(identity, callback, subscribeOnce);
+    return this.managementApiService.onProcessTerminated(identity, callback, subscribeOnce);
   }
 
   public async onProcessEnded(
@@ -150,45 +152,45 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onProcessEnded(identity, callback, subscribeOnce);
+    return this.managementApiService.onProcessEnded(identity, callback, subscribeOnce);
   }
 
   public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
-    return this._managementApiService.removeSubscription(identity, subscription);
+    return this.managementApiService.removeSubscription(identity, subscription);
   }
 
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
-    return this._managementApiService.getAllCorrelations(identity);
+    return this.managementApiService.getAllCorrelations(identity);
   }
 
   public async getActiveCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
-    return this._managementApiService.getActiveCorrelations(identity);
+    return this.managementApiService.getActiveCorrelations(identity);
   }
 
   public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<DataModels.Correlations.Correlation> {
-    return this._managementApiService.getCorrelationById(identity, correlationId);
+    return this.managementApiService.getCorrelationById(identity, correlationId);
   }
 
   public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.Correlation> {
-    return this._managementApiService.getCorrelationByProcessInstanceId(identity, processInstanceId);
+    return this.managementApiService.getCorrelationByProcessInstanceId(identity, processInstanceId);
   }
 
   public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Correlations.Correlation>> {
-    return this._managementApiService.getCorrelationsByProcessModelId(identity, processModelId);
+    return this.managementApiService.getCorrelationsByProcessModelId(identity, processModelId);
   }
 
   // ProcessModels
   public async getProcessModels(identity: IIdentity): Promise<DataModels.ProcessModels.ProcessModelList> {
-    return this._managementApiService.getProcessModels(identity);
+    return this.managementApiService.getProcessModels(identity);
   }
 
   public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<DataModels.ProcessModels.ProcessModel> {
-    return this._managementApiService.getProcessModelById(identity, processModelId);
+    return this.managementApiService.getProcessModelById(identity, processModelId);
   }
 
   public async getProcessModelByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.ProcessModels.ProcessModel> {
-    return this._managementApiService.getProcessModelByProcessInstanceId(identity, processInstanceId);
+    return this.managementApiService.getProcessModelByProcessInstanceId(identity, processInstanceId);
   }
 
   public async startProcessInstance(
@@ -200,11 +202,11 @@ export class InternalAccessor implements IManagementApiAccessor {
     endEventId?: string,
   ): Promise<DataModels.ProcessModels.ProcessStartResponsePayload> {
 
-    return this._managementApiService.startProcessInstance(identity, processModelId, payload, startCallbackType, startEventId, endEventId);
+    return this.managementApiService.startProcessInstance(identity, processModelId, payload, startCallbackType, startEventId, endEventId);
   }
 
   public async getStartEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
-    return this._managementApiService.getStartEventsForProcessModel(identity, processModelId);
+    return this.managementApiService.getStartEventsForProcessModel(identity, processModelId);
   }
 
   public async updateProcessDefinitionsByName(
@@ -213,20 +215,20 @@ export class InternalAccessor implements IManagementApiAccessor {
     payload: DataModels.ProcessModels.UpdateProcessDefinitionsRequestPayload,
   ): Promise<void> {
 
-    return this._managementApiService.updateProcessDefinitionsByName(identity, name, payload);
+    return this.managementApiService.updateProcessDefinitionsByName(identity, name, payload);
   }
 
   public async deleteProcessDefinitionsByProcessModelId(identity: IIdentity, processModelId: string): Promise<void> {
-    return this._managementApiService.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
+    return this.managementApiService.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
   }
 
   // Events
   public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
-    return this._managementApiService.getWaitingEventsForProcessModel(identity, processModelId);
+    return this.managementApiService.getWaitingEventsForProcessModel(identity, processModelId);
   }
 
   public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Events.EventList> {
-    return this._managementApiService.getWaitingEventsForCorrelation(identity, correlationId);
+    return this.managementApiService.getWaitingEventsForCorrelation(identity, correlationId);
   }
 
   public async getWaitingEventsForProcessModelInCorrelation(
@@ -235,31 +237,31 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
   ): Promise<DataModels.Events.EventList> {
 
-    return this._managementApiService.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiService.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
   public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
-    return this._managementApiService.triggerMessageEvent(identity, messageName, payload);
+    return this.managementApiService.triggerMessageEvent(identity, messageName, payload);
   }
 
   public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
-    return this._managementApiService.triggerSignalEvent(identity, signalName, payload);
+    return this.managementApiService.triggerSignalEvent(identity, signalName, payload);
   }
 
   // Empty Activities
   public async getEmptyActivitiesForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this._managementApiService.getEmptyActivitiesForProcessModel(identity, processModelId);
+    return this.managementApiService.getEmptyActivitiesForProcessModel(identity, processModelId);
   }
 
   public async getEmptyActivitiesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this._managementApiService.getEmptyActivitiesForProcessInstance(identity, processInstanceId);
+    return this.managementApiService.getEmptyActivitiesForProcessInstance(identity, processInstanceId);
   }
 
   public async getEmptyActivitiesForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this._managementApiService.getEmptyActivitiesForCorrelation(identity, correlationId);
+    return this.managementApiService.getEmptyActivitiesForCorrelation(identity, correlationId);
   }
 
   public async getEmptyActivitiesForProcessModelInCorrelation(
@@ -267,7 +269,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
     correlationId: string,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this._managementApiService.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiService.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
   public async finishEmptyActivity(
@@ -276,20 +278,20 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
     emptyActivityInstanceId: string,
   ): Promise<void> {
-    return this._managementApiService.finishEmptyActivity(identity, processInstanceId, correlationId, emptyActivityInstanceId);
+    return this.managementApiService.finishEmptyActivity(identity, processInstanceId, correlationId, emptyActivityInstanceId);
   }
 
   // UserTasks
   public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
-    return this._managementApiService.getUserTasksForProcessModel(identity, processModelId);
+    return this.managementApiService.getUserTasksForProcessModel(identity, processModelId);
   }
 
   public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
-    return this._managementApiService.getUserTasksForProcessInstance(identity, processInstanceId);
+    return this.managementApiService.getUserTasksForProcessInstance(identity, processInstanceId);
   }
 
   public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
-    return this._managementApiService.getUserTasksForCorrelation(identity, correlationId);
+    return this.managementApiService.getUserTasksForCorrelation(identity, correlationId);
   }
 
   public async getUserTasksForProcessModelInCorrelation(
@@ -298,7 +300,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
   ): Promise<DataModels.UserTasks.UserTaskList> {
 
-    return this._managementApiService.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiService.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
   public async finishUserTask(
@@ -309,20 +311,20 @@ export class InternalAccessor implements IManagementApiAccessor {
     userTaskResult: DataModels.UserTasks.UserTaskResult,
   ): Promise<void> {
 
-    return this._managementApiService.finishUserTask(identity, processInstanceId, correlationId, userTaskInstanceId, userTaskResult);
+    return this.managementApiService.finishUserTask(identity, processInstanceId, correlationId, userTaskInstanceId, userTaskResult);
   }
 
   // ManualTasks
   public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-    return this._managementApiService.getManualTasksForProcessModel(identity, processModelId);
+    return this.managementApiService.getManualTasksForProcessModel(identity, processModelId);
   }
 
   public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-    return this._managementApiService.getManualTasksForProcessInstance(identity, processInstanceId);
+    return this.managementApiService.getManualTasksForProcessInstance(identity, processInstanceId);
   }
 
   public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-    return this._managementApiService.getManualTasksForCorrelation(identity, correlationId);
+    return this.managementApiService.getManualTasksForCorrelation(identity, correlationId);
   }
 
   public async getManualTasksForProcessModelInCorrelation(
@@ -331,7 +333,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
   ): Promise<DataModels.ManualTasks.ManualTaskList> {
 
-    return this._managementApiService.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiService.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
   public async finishManualTask(
@@ -341,7 +343,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     manualTaskInstanceId: string,
   ): Promise<void> {
 
-    return this._managementApiService.finishManualTask(identity, processInstanceId, correlationId, manualTaskInstanceId);
+    return this.managementApiService.finishManualTask(identity, processInstanceId, correlationId, manualTaskInstanceId);
   }
 
   // Heatmap related features
@@ -350,7 +352,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
   ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
 
-    return this._managementApiService.getRuntimeInformationForProcessModel(identity, processModelId);
+    return this.managementApiService.getRuntimeInformationForProcessModel(identity, processModelId);
   }
 
   public async getRuntimeInformationForFlowNode(
@@ -359,11 +361,11 @@ export class InternalAccessor implements IManagementApiAccessor {
     flowNodeId: string,
   ): Promise<DataModels.Kpi.FlowNodeRuntimeInformation> {
 
-    return this._managementApiService.getRuntimeInformationForFlowNode(identity, processModelId, flowNodeId);
+    return this.managementApiService.getRuntimeInformationForFlowNode(identity, processModelId, flowNodeId);
   }
 
   public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this._managementApiService.getActiveTokensForProcessModel(identity, processModelId);
+    return this.managementApiService.getActiveTokensForProcessModel(identity, processModelId);
 
   }
 
@@ -372,22 +374,22 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
     processModelId: string,
   ): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this._managementApiService.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
+    return this.managementApiService.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
   }
 
   public async getActiveTokensForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
   ): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this._managementApiService.getActiveTokensForProcessInstance(identity, processInstanceId);
+    return this.managementApiService.getActiveTokensForProcessInstance(identity, processInstanceId);
   }
 
   public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this._managementApiService.getActiveTokensForFlowNode(identity, flowNodeId);
+    return this.managementApiService.getActiveTokensForFlowNode(identity, flowNodeId);
   }
 
   public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<DataModels.Logging.LogEntry>> {
-    return this._managementApiService.getProcessModelLog(identity, processModelId, correlationId);
+    return this.managementApiService.getProcessModelLog(identity, processModelId, correlationId);
   }
 
   public async getProcessInstanceLog(
@@ -396,7 +398,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
   ): Promise<Array<DataModels.Logging.LogEntry>> {
 
-    return this._managementApiService.getProcessInstanceLog(identity, processModelId, processInstanceId);
+    return this.managementApiService.getProcessInstanceLog(identity, processModelId, processInstanceId);
   }
 
   public async getTokensForFlowNode(
@@ -406,7 +408,16 @@ export class InternalAccessor implements IManagementApiAccessor {
     flowNodeId: string,
   ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
 
-    return this._managementApiService.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId);
+    return this.managementApiService.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId);
+  }
+
+  public async getTokensForFlowNodeByProcessInstanceId(
+    identity: IIdentity,
+    processInstanceId: string,
+    flowNodeId: string,
+  ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
+
+    return this.managementApiService.getTokensForFlowNodeByProcessInstanceId(identity, processInstanceId, flowNodeId);
   }
 
   public async getTokensForCorrelationAndProcessModel(
@@ -415,7 +426,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
   ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
-    return this._managementApiService.getTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
+    return this.managementApiService.getTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
   }
 
   public async getTokensForProcessInstance(
@@ -423,7 +434,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
   ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
 
-    return this._managementApiService.getTokensForProcessInstance(identity, processInstanceId);
+    return this.managementApiService.getTokensForProcessInstance(identity, processInstanceId);
   }
 
   public async terminateProcessInstance(
@@ -431,6 +442,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
   ): Promise<void> {
 
-    this._managementApiService.terminateProcessInstance(identity, processInstanceId);
+    return this.managementApiService.terminateProcessInstance(identity, processInstanceId);
   }
+
 }
