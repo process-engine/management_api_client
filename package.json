@@ -19,10 +19,10 @@
   },
   "homepage": "https://github.com/process-engine/management_api_client#readme",
   "dependencies": {
-    "@essential-projects/errors_ts": "^1.4.4",
-    "@essential-projects/http_contracts": "^2.3.8",
-    "@essential-projects/iam_contracts": "^3.4.2",
-    "@process-engine/management_api_contracts": "7.0.0-589434c1-b6",
+    "@essential-projects/errors_ts": "^1.5.0",
+    "@essential-projects/http_contracts": "^2.4.0",
+    "@essential-projects/iam_contracts": "^3.5.0",
+    "@process-engine/management_api_contracts": "^8.0.0",
     "node-uuid": "^1.4.8",
     "socket.io-client": "^2.2.0"
   },
