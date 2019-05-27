@@ -88,7 +88,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onBoundaryEventTriggered(identity, callback, subscribeOnce);
+    return this.managementApiService.onBoundaryEventTriggered(identity, callback, subscribeOnce);
   }
 
   public async onIntermediateEventTriggered(
@@ -97,7 +97,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onIntermediateEventTriggered(identity, callback, subscribeOnce);
+    return this.managementApiService.onIntermediateEventTriggered(identity, callback, subscribeOnce);
   }
 
   public async onIntermediateCatchEventFinished(
@@ -106,7 +106,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onIntermediateCatchEventFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onIntermediateCatchEventFinished(identity, callback, subscribeOnce);
   }
 
   public async onCallActivityWaiting(
@@ -115,7 +115,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onCallActivityWaiting(identity, callback, subscribeOnce);
+    return this.managementApiService.onCallActivityWaiting(identity, callback, subscribeOnce);
   }
 
   public async onCallActivityFinished(
@@ -124,7 +124,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onCallActivityFinished(identity, callback, subscribeOnce);
+    return this.managementApiService.onCallActivityFinished(identity, callback, subscribeOnce);
   }
 
   public async onManualTaskWaiting(

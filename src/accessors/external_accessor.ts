@@ -139,7 +139,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._createSocketIoSubscription(identity, socketSettings.paths.boundaryEventTriggered, callback, subscribeOnce);
+    return this.createSocketIoSubscription(identity, socketSettings.paths.boundaryEventTriggered, callback, subscribeOnce);
   }
 
   public async onIntermediateEventTriggered(
@@ -148,7 +148,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._createSocketIoSubscription(identity, socketSettings.paths.intermediateEventTriggered, callback, subscribeOnce);
+    return this.createSocketIoSubscription(identity, socketSettings.paths.intermediateEventTriggered, callback, subscribeOnce);
   }
 
   public async onIntermediateCatchEventFinished(
@@ -157,7 +157,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._createSocketIoSubscription(identity, socketSettings.paths.intermediateCatchEventFinished, callback, subscribeOnce);
+    return this.createSocketIoSubscription(identity, socketSettings.paths.intermediateCatchEventFinished, callback, subscribeOnce);
   }
 
   public async onCallActivityWaiting(
@@ -166,7 +166,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._createSocketIoSubscription(identity, socketSettings.paths.callActivityWaiting, callback, subscribeOnce);
+    return this.createSocketIoSubscription(identity, socketSettings.paths.callActivityWaiting, callback, subscribeOnce);
   }
 
   public async onCallActivityFinished(
@@ -175,7 +175,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._createSocketIoSubscription(identity, socketSettings.paths.callActivityFinished, callback, subscribeOnce);
+    return this.createSocketIoSubscription(identity, socketSettings.paths.callActivityFinished, callback, subscribeOnce);
   }
 
   public async onProcessTerminated(

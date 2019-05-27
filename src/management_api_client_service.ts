@@ -102,7 +102,7 @@ export class ManagementApiClientService implements IManagementApi {
     callback: Messages.CallbackTypes.OnBoundaryEventTriggeredCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    this._ensureIsAuthorized(identity);
+    this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.onBoundaryEventTriggered(identity, callback, subscribeOnce);
   }
@@ -112,7 +112,7 @@ export class ManagementApiClientService implements IManagementApi {
     callback: Messages.CallbackTypes.OnIntermediateEventTriggeredCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    this._ensureIsAuthorized(identity);
+    this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.onIntermediateEventTriggered(identity, callback, subscribeOnce);
   }
@@ -122,7 +122,7 @@ export class ManagementApiClientService implements IManagementApi {
     callback: Messages.CallbackTypes.OnIntermediateCatchEventFinishedCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    this._ensureIsAuthorized(identity);
+    this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.onIntermediateCatchEventFinished(identity, callback, subscribeOnce);
   }
@@ -132,7 +132,7 @@ export class ManagementApiClientService implements IManagementApi {
     callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    this._ensureIsAuthorized(identity);
+    this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.onCallActivityWaiting(identity, callback, subscribeOnce);
   }
@@ -142,7 +142,7 @@ export class ManagementApiClientService implements IManagementApi {
     callback: Messages.CallbackTypes.OnCallActivityFinishedCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
-    this._ensureIsAuthorized(identity);
+    this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.onCallActivityFinished(identity, callback, subscribeOnce);
   }
