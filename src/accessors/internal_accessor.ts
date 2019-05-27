@@ -82,41 +82,31 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.onUserTaskForIdentityFinished(identity, callback, subscribeOnce);
   }
 
-  public async onBoundaryEventWaiting(
+  public async onBoundaryEventTriggered(
     identity: IIdentity,
-    callback: Messages.CallbackTypes.OnBoundaryEventWaitingCallback,
+    callback: Messages.CallbackTypes.OnBoundaryEventTriggeredCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onBoundaryEventWaiting(identity, callback, subscribeOnce);
+    return this._managementApiService.onBoundaryEventTriggered(identity, callback, subscribeOnce);
   }
 
-  public async onBoundaryEventFinished(
+  public async onIntermediateEventTriggered(
     identity: IIdentity,
-    callback: Messages.CallbackTypes.OnBoundaryEventFinishedCallback,
+    callback: Messages.CallbackTypes.OnIntermediateEventTriggeredCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onBoundaryEventFinished(identity, callback, subscribeOnce);
+    return this._managementApiService.onIntermediateEventTriggered(identity, callback, subscribeOnce);
   }
 
-
-  public async onIntermediateEventWaiting(
+  public async onIntermediateCatchEventFinished(
     identity: IIdentity,
-    callback: Messages.CallbackTypes.OnIntermediateEventWaitingCallback,
+    callback: Messages.CallbackTypes.OnIntermediateCatchEventFinishedCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
 
-    return this._managementApiService.onIntermediateEventWaiting(identity, callback, subscribeOnce);
-  }
-
-  public async onIntermediateEventFinished(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnIntermediateEventFinishedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this._managementApiService.onIntermediateEventFinished(identity, callback, subscribeOnce);
+    return this._managementApiService.onIntermediateCatchEventFinished(identity, callback, subscribeOnce);
   }
 
   public async onCallActivityWaiting(
