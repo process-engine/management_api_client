@@ -137,7 +137,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnBoundaryEventTriggeredCallback,
     subscribeOnce: boolean = false,
-  ): Promise<any> {
+  ): Promise<Subscription> {
 
     return this._createSocketIoSubscription(identity, socketSettings.paths.boundaryEventTriggered, callback, subscribeOnce);
   }
@@ -146,7 +146,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnIntermediateEventTriggeredCallback,
     subscribeOnce: boolean = false,
-  ): Promise<any> {
+  ): Promise<Subscription> {
 
     return this._createSocketIoSubscription(identity, socketSettings.paths.intermediateEventTriggered, callback, subscribeOnce);
   }
@@ -155,7 +155,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnIntermediateCatchEventFinishedCallback,
     subscribeOnce: boolean = false,
-  ): Promise<any> {
+  ): Promise<Subscription> {
 
     return this._createSocketIoSubscription(identity, socketSettings.paths.intermediateCatchEventFinished, callback, subscribeOnce);
   }
@@ -164,7 +164,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
     subscribeOnce: boolean = false,
-  ): Promise<any> {
+  ): Promise<Subscription> {
 
     return this._createSocketIoSubscription(identity, socketSettings.paths.callActivityWaiting, callback, subscribeOnce);
   }
@@ -173,7 +173,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnCallActivityFinishedCallback,
     subscribeOnce: boolean = false,
-  ): Promise<any> {
+  ): Promise<Subscription> {
 
     return this._createSocketIoSubscription(identity, socketSettings.paths.callActivityFinished, callback, subscribeOnce);
   }
