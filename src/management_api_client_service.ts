@@ -107,14 +107,24 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.onBoundaryEventTriggered(identity, callback, subscribeOnce);
   }
 
-  public async onIntermediateEventTriggered(
+  public async onIntermediateThrowEventTriggered(
     identity: IIdentity,
-    callback: Messages.CallbackTypes.OnIntermediateEventTriggeredCallback,
+    callback: Messages.CallbackTypes.OnIntermediateThrowEventTriggeredCallback,
     subscribeOnce: boolean = false,
   ): Promise<Subscription> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.onIntermediateEventTriggered(identity, callback, subscribeOnce);
+    return this.managementApiAccessor.onIntermediateThrowEventTriggered(identity, callback, subscribeOnce);
+  }
+
+  public async onIntermediateCatchEventReached(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnIntermediateCatchEventReachedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onIntermediateCatchEventReached(identity, callback, subscribeOnce);
   }
 
   public async onIntermediateCatchEventFinished(
