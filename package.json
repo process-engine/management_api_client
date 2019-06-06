@@ -31,7 +31,7 @@
     "@essential-projects/errors_ts": "^1.5.0",
     "@essential-projects/http_contracts": "^2.4.0",
     "@essential-projects/iam_contracts": "^3.5.0",
-    "@process-engine/management_api_contracts": "10.0.0-423219a7-b15",
+    "@process-engine/management_api_contracts": "feature~additional_notifications_for_activities",
     "node-uuid": "^1.4.8",
     "socket.io-client": "^2.2.0"
   },
