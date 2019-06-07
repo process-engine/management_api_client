@@ -14,6 +14,22 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Notifications
+  public async onActivityReached(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnActivityReachedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this.managementApiService.onActivityReached(identity, callback, subscribeOnce);
+  }
+
+  public async onActivityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this.managementApiService.onActivityFinished(identity, callback, subscribeOnce);
+  }
+
   public async onEmptyActivityWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
@@ -116,24 +132,6 @@ export class InternalAccessor implements IManagementApiAccessor {
   ): Promise<Subscription> {
 
     return this.managementApiService.onIntermediateCatchEventFinished(identity, callback, subscribeOnce);
-  }
-
-  public async onCallActivityWaiting(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.managementApiService.onCallActivityWaiting(identity, callback, subscribeOnce);
-  }
-
-  public async onCallActivityFinished(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnCallActivityFinishedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.managementApiService.onCallActivityFinished(identity, callback, subscribeOnce);
   }
 
   public async onManualTaskWaiting(
