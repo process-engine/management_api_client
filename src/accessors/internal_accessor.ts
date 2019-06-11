@@ -335,6 +335,14 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.finishEmptyActivity(identity, processInstanceId, correlationId, emptyActivityInstanceId);
   }
 
+
+  // FlowNodeInstances
+  public async getFlowNodeInstancesForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<Array<DataModels.FlowNodes.FlowNodeInstance>> {
+
+    return this.managementApiService.getFlowNodeInstancesForProcessInstance(identity, processInstanceId);
+  }
+
+
   // UserTasks
   public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
     return this.managementApiService.getUserTasksForProcessModel(identity, processModelId);
