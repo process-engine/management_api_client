@@ -591,10 +591,11 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     await this.httpClient.post(url, body, requestAuthHeaders);
   }
 
-
-
   // FlowNodeInstances
-  public async getFlowNodeInstancesForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<Array<DataModels.FlowNodes.FlowNodeInstance>> {
+  public async getFlowNodeInstancesForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<Array<DataModels.FlowNodes.FlowNodeInstance>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -605,7 +606,6 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     return httpResponse.result;
   }
-
 
   // UserTasks
   public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
