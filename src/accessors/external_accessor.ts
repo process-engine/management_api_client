@@ -591,6 +591,22 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     await this.httpClient.post(url, body, requestAuthHeaders);
   }
 
+  // FlowNodeInstances
+  public async getFlowNodeInstancesForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getFlowNodeInstancesForProcessInstance.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url = this.applyBaseUrl(restPath);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.FlowNodeInstances.FlowNodeInstance>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   // UserTasks
   public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
 
