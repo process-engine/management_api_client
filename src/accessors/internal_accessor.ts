@@ -339,7 +339,7 @@ export class InternalAccessor implements IManagementApiAccessor {
   public async getFlowNodeInstancesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
-  ): Promise<Array<DataModels.FlowNodes.FlowNodeInstance>> {
+  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
 
     return this.managementApiService.getFlowNodeInstancesForProcessInstance(identity, processInstanceId);
   }

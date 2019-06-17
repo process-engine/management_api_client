@@ -595,14 +595,14 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   public async getFlowNodeInstancesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
-  ): Promise<Array<DataModels.FlowNodes.FlowNodeInstance>> {
+  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.getFlowNodeInstancesForProcessInstance.replace(restSettings.params.processInstanceId, processInstanceId);
     const url = this.applyBaseUrl(restPath);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.FlowNodes.FlowNodeInstance>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<Array<DataModels.FlowNodeInstances.FlowNodeInstance>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }

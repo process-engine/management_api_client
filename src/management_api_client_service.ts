@@ -421,7 +421,7 @@ export class ManagementApiClientService implements IManagementApi {
   public async getFlowNodeInstancesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
-  ): Promise<Array<DataModels.FlowNodes.FlowNodeInstance>> {
+  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getFlowNodeInstancesForProcessInstance(identity, processInstanceId);
