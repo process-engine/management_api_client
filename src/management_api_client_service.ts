@@ -157,37 +157,6 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.onCallActivityFinished(identity, callback, subscribeOnce);
   }
 
-  public async onProcessTerminated(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-    this.ensureIsAuthorized(identity);
-
-    return this.managementApiAccessor.onProcessTerminated(identity, callback, subscribeOnce);
-  }
-
-  public async onProcessStarted(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessStartedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-    this.ensureIsAuthorized(identity);
-
-    return this.managementApiAccessor.onProcessStarted(identity, callback, subscribeOnce);
-  }
-
-  public async onProcessWithProcessModelIdStarted(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessStartedCallback,
-    processModelId: string,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-    this.ensureIsAuthorized(identity);
-
-    return this.managementApiAccessor.onProcessWithProcessModelIdStarted(identity, callback, processModelId, subscribeOnce);
-  }
-
   public async onManualTaskWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnManualTaskWaitingCallback,
@@ -226,6 +195,47 @@ export class ManagementApiClientService implements IManagementApi {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.onManualTaskForIdentityFinished(identity, callback, subscribeOnce);
+  }
+
+  public async onProcessStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onProcessStarted(identity, callback, subscribeOnce);
+  }
+
+  public async onProcessWithProcessModelIdStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    processModelId: string,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onProcessWithProcessModelIdStarted(identity, callback, processModelId, subscribeOnce);
+  }
+
+  public async onProcessTerminated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onProcessTerminated(identity, callback, subscribeOnce);
+  }
+
+  public async onProcessError(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessErrorCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onProcessError(identity, callback, subscribeOnce);
   }
 
   public async onProcessEnded(

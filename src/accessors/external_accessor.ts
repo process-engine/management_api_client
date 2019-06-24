@@ -187,37 +187,6 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return this.createSocketIoSubscription(identity, socketSettings.paths.callActivityFinished, callback, subscribeOnce);
   }
 
-  public async onProcessTerminated(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.createSocketIoSubscription(identity, socketSettings.paths.processTerminated, callback, subscribeOnce);
-  }
-
-  public async onProcessStarted(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessStartedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.createSocketIoSubscription(identity, socketSettings.paths.processStarted, callback, subscribeOnce);
-  }
-
-  public async onProcessWithProcessModelIdStarted(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessStartedCallback,
-    processModelId: string,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    const eventName: string = socketSettings.paths.processInstanceStarted
-      .replace(socketSettings.pathParams.processModelId, processModelId);
-
-    return this.createSocketIoSubscription(identity, eventName, callback, subscribeOnce);
-  }
-
   public async onManualTaskWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnManualTaskWaitingCallback,
@@ -258,6 +227,46 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(socketSettings.pathParams.userId, identity.userId);
 
     return this.createSocketIoSubscription(identity, socketEventName, callback, subscribeOnce);
+  }
+
+  public async onProcessStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.processStarted, callback, subscribeOnce);
+  }
+
+  public async onProcessWithProcessModelIdStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    processModelId: string,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    const eventName: string = socketSettings.paths.processInstanceStarted
+      .replace(socketSettings.pathParams.processModelId, processModelId);
+
+    return this.createSocketIoSubscription(identity, eventName, callback, subscribeOnce);
+  }
+
+  public async onProcessTerminated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.processTerminated, callback, subscribeOnce);
+  }
+
+  public async onProcessError(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessErrorCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.processError, callback, subscribeOnce);
   }
 
   public async onProcessEnded(
