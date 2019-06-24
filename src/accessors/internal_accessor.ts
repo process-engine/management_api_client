@@ -200,6 +200,15 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.onProcessTerminated(identity, callback, subscribeOnce);
   }
 
+  public async onProcessError(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessErrorCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.managementApiService.onProcessError(identity, callback, subscribeOnce);
+  }
+
   public async onProcessEnded(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnProcessEndedCallback,
