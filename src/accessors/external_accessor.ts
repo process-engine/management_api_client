@@ -53,6 +53,42 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   }
 
   // Notifications
+  public async onActivityReached(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnActivityReachedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+    return this.createSocketIoSubscription(identity, socketSettings.paths.activityReached, callback, subscribeOnce);
+  }
+
+  public async onActivityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<any> {
+    return this.createSocketIoSubscription(identity, socketSettings.paths.activityFinished, callback, subscribeOnce);
+  }
+
+  // ------------ For backwards compatibility only
+
+  public async onCallActivityWaiting(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this.createSocketIoSubscription(identity, socketSettings.paths.callActivityWaiting, callback, subscribeOnce);
+  }
+
+  public async onCallActivityFinished(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCallActivityFinishedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    return this.createSocketIoSubscription(identity, socketSettings.paths.callActivityFinished, callback, subscribeOnce);
+  }
+
+  // ------------
+
   public async onEmptyActivityWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnEmptyActivityWaitingCallback,
@@ -169,55 +205,6 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return this.createSocketIoSubscription(identity, socketSettings.paths.intermediateCatchEventFinished, callback, subscribeOnce);
   }
 
-  public async onCallActivityWaiting(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnCallActivityWaitingCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.createSocketIoSubscription(identity, socketSettings.paths.callActivityWaiting, callback, subscribeOnce);
-  }
-
-  public async onCallActivityFinished(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnCallActivityFinishedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.createSocketIoSubscription(identity, socketSettings.paths.callActivityFinished, callback, subscribeOnce);
-  }
-
-  public async onProcessTerminated(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.createSocketIoSubscription(identity, socketSettings.paths.processTerminated, callback, subscribeOnce);
-  }
-
-  public async onProcessStarted(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessStartedCallback,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    return this.createSocketIoSubscription(identity, socketSettings.paths.processStarted, callback, subscribeOnce);
-  }
-
-  public async onProcessWithProcessModelIdStarted(
-    identity: IIdentity,
-    callback: Messages.CallbackTypes.OnProcessStartedCallback,
-    processModelId: string,
-    subscribeOnce: boolean = false,
-  ): Promise<Subscription> {
-
-    const eventName: string = socketSettings.paths.processInstanceStarted
-      .replace(socketSettings.pathParams.processModelId, processModelId);
-
-    return this.createSocketIoSubscription(identity, eventName, callback, subscribeOnce);
-  }
-
   public async onManualTaskWaiting(
     identity: IIdentity,
     callback: Messages.CallbackTypes.OnManualTaskWaitingCallback,
@@ -258,6 +245,46 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(socketSettings.pathParams.userId, identity.userId);
 
     return this.createSocketIoSubscription(identity, socketEventName, callback, subscribeOnce);
+  }
+
+  public async onProcessStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.processStarted, callback, subscribeOnce);
+  }
+
+  public async onProcessWithProcessModelIdStarted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessStartedCallback,
+    processModelId: string,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    const eventName: string = socketSettings.paths.processInstanceStarted
+      .replace(socketSettings.pathParams.processModelId, processModelId);
+
+    return this.createSocketIoSubscription(identity, eventName, callback, subscribeOnce);
+  }
+
+  public async onProcessTerminated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessTerminatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.processTerminated, callback, subscribeOnce);
+  }
+
+  public async onProcessError(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnProcessErrorCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.processError, callback, subscribeOnce);
   }
 
   public async onProcessEnded(
@@ -589,6 +616,22 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const body: {} = {};
     await this.httpClient.post(url, body, requestAuthHeaders);
+  }
+
+  // FlowNodeInstances
+  public async getFlowNodeInstancesForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getFlowNodeInstancesForProcessInstance.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url = this.applyBaseUrl(restPath);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.FlowNodeInstances.FlowNodeInstance>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
   }
 
   // UserTasks

@@ -1,6 +1,6 @@
 {
   "name": "@process-engine/management_api_client",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "client implementation for using the process-engine.io Management API",
   "main": "dist/commonjs/index.js",
   "typings": "dist/index.d.ts",
@@ -9,8 +9,17 @@
     "url": "git+https://github.com/process-engine/management_api_client.git"
   },
   "author": "5Minds IT-Solutions GmbH & Co. KG",
-  "contributors": [
+  "maintainers": [
+    "Alexander Kasten <alexander.kasten@5minds.de>",
     "Christian Werner <christian.werner@5minds.de>",
+    "René Föhring <rene.foehring@5minds.de>",
+    "Steffen Knaup <steffen.knaup@5minds.de>"
+  ],
+  "contributors": [
+    "Bastian Schnittger <bastian.schnittger@5minds.de>",
+    "Christoph Gnip <christoph.gnip@5minds.de>",
+    "Robin Lenz <robin.lenz@5minds.de>",
+    "Robin Palkovits <robin.palkovits@5minds.de>",
     "Sebastian Meier <sebastian.meier@5minds.de>"
   ],
   "license": "MIT",
@@ -22,7 +31,8 @@
     "@essential-projects/errors_ts": "^1.5.0",
     "@essential-projects/http_contracts": "^2.4.0",
     "@essential-projects/iam_contracts": "^3.5.0",
-    "@process-engine/management_api_contracts": "^9.0.0",
+    "@process-engine/management_api_contracts": "^10.0.0",
+    "loggerhythm": "^3.0.4",
     "node-uuid": "^1.4.8",
     "socket.io-client": "^2.2.0"
   },
