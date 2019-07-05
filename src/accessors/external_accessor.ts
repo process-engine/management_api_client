@@ -313,6 +313,18 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     delete this.subscriptionCollection[subscription.id];
   }
 
+  // Cronjobs
+  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const url = this.applyBaseUrl(restSettings.paths.getActiveCronjobs);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobConfiguration>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
 

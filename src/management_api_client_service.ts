@@ -286,6 +286,13 @@ export class ManagementApiClientService implements IManagementApi {
     return this.managementApiAccessor.removeSubscription(identity, subscription);
   }
 
+  // Cronjobs
+  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getAllActiveCronjobs(identity);
+  }
+
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
     this.ensureIsAuthorized(identity);
