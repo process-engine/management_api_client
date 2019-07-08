@@ -1,6 +1,6 @@
 {
   "name": "@process-engine/management_api_client",
-  "version": "5.3.0",
+  "version": "5.4.0",
   "description": "client implementation for using the process-engine.io Management API",
   "main": "dist/commonjs/index.js",
   "typings": "dist/index.d.ts",
@@ -31,8 +31,9 @@
     "@essential-projects/errors_ts": "^1.5.0",
     "@essential-projects/http_contracts": "^2.4.0",
     "@essential-projects/iam_contracts": "^3.5.0",
-    "@process-engine/management_api_contracts": "^10.0.0",
+    "@process-engine/management_api_contracts": "11.0.0-7300eb3f-b18",
     "loggerhythm": "^3.0.4",
+    "moment": "^2.24.0",
     "node-uuid": "^1.4.8",
     "socket.io-client": "^2.2.0"
   },

@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as moment from 'moment';
 import * as uuid from 'node-uuid';
 import * as io from 'socket.io-client';
 
@@ -311,6 +312,28 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     socketForIdentity.off(subscription.eventName, callbackToRemove);
 
     delete this.subscriptionCollection[subscription.id];
+  }
+
+  // Cronjobs
+  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const url = this.applyBaseUrl(restSettings.paths.getActiveCronjobs);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobConfiguration>>(url, requestAuthHeaders);
+
+    // We need to restore the datatype of `nextExecution`, since that property gets stringified when transported over http.
+    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobConfiguration => {
+      const mappedEntry = entry;
+      if (entry.nextExecution) {
+        mappedEntry.nextExecution = moment(entry.nextExecution).toDate();
+      }
+
+      return mappedEntry;
+    });
+
+    return mappedResult;
   }
 
   // Correlations
