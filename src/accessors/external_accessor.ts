@@ -336,6 +336,61 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return mappedResult;
   }
 
+  public async getCronjobExecutionHistoryForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    startEventId?: string,
+  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    let url = this.applyBaseUrl(restSettings.paths.getCronjobExecutionHistoryForProcessModel)
+      .replace(restSettings.params.processModelId, processModelId);
+
+    if (startEventId) {
+      url = `${url}?start_event_id=${startEventId}`;
+    }
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
+
+    // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
+    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+      const mappedEntry = entry;
+      if (entry.executedAt) {
+        mappedEntry.executedAt = moment(entry.executedAt).toDate();
+      }
+
+      return mappedEntry;
+    });
+
+    return mappedResult;
+  }
+
+  public async getCronjobExecutionHistoryForCrontab(
+    identity: IIdentity,
+    crontab: string,
+  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const url = this.applyBaseUrl(restSettings.paths.getCronjobExecutionHistoryForCrontab)
+      .replace(restSettings.params.crontab, crontab);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
+
+    // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
+    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+      const mappedEntry = entry;
+      if (entry.executedAt) {
+        mappedEntry.executedAt = moment(entry.executedAt).toDate();
+      }
+
+      return mappedEntry;
+    });
+
+    return mappedResult;
+  }
+
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
 
