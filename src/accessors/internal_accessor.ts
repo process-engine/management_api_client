@@ -240,6 +240,26 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.managementApiService.removeSubscription(identity, subscription);
   }
 
+  // Cronjobs
+  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+    return this.managementApiService.getAllActiveCronjobs(identity);
+  }
+
+  public async getCronjobExecutionHistoryForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    startEventId?: string,
+  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+    return this.managementApiService.getCronjobExecutionHistoryForProcessModel(identity, processModelId, startEventId);
+  }
+
+  public async getCronjobExecutionHistoryForCrontab(
+    identity: IIdentity,
+    crontab: string,
+  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+    return this.managementApiService.getCronjobExecutionHistoryForCrontab(identity, crontab);
+  }
+
   // Correlations
   public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
     return this.managementApiService.getAllCorrelations(identity);

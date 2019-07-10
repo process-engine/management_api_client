@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as moment from 'moment';
 import * as uuid from 'node-uuid';
 import * as io from 'socket.io-client';
 
@@ -311,6 +312,83 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     socketForIdentity.off(subscription.eventName, callbackToRemove);
 
     delete this.subscriptionCollection[subscription.id];
+  }
+
+  // Cronjobs
+  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const url = this.applyBaseUrl(restSettings.paths.getActiveCronjobs);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobConfiguration>>(url, requestAuthHeaders);
+
+    // We need to restore the datatype of `nextExecution`, since that property gets stringified when transported over http.
+    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobConfiguration => {
+      const mappedEntry = entry;
+      if (entry.nextExecution) {
+        mappedEntry.nextExecution = moment(entry.nextExecution).toDate();
+      }
+
+      return mappedEntry;
+    });
+
+    return mappedResult;
+  }
+
+  public async getCronjobExecutionHistoryForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    startEventId?: string,
+  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    let url = this.applyBaseUrl(restSettings.paths.getCronjobExecutionHistoryForProcessModel)
+      .replace(restSettings.params.processModelId, processModelId);
+
+    if (startEventId) {
+      url = `${url}?start_event_id=${startEventId}`;
+    }
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
+
+    // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
+    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+      const mappedEntry = entry;
+      if (entry.executedAt) {
+        mappedEntry.executedAt = moment(entry.executedAt).toDate();
+      }
+
+      return mappedEntry;
+    });
+
+    return mappedResult;
+  }
+
+  public async getCronjobExecutionHistoryForCrontab(
+    identity: IIdentity,
+    crontab: string,
+  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const url = this.applyBaseUrl(restSettings.paths.getCronjobExecutionHistoryForCrontab)
+      .replace(restSettings.params.crontab, crontab);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
+
+    // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
+    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+      const mappedEntry = entry;
+      if (entry.executedAt) {
+        mappedEntry.executedAt = moment(entry.executedAt).toDate();
+      }
+
+      return mappedEntry;
+    });
+
+    return mappedResult;
   }
 
   // Correlations
