@@ -5,12 +5,12 @@ import {Subscription} from '@essential-projects/event_aggregator_contracts';
 import {IIdentity} from '@essential-projects/iam_contracts';
 
 import {
-  DataModels, IManagementApi, IManagementApiAccessor, Messages,
+  DataModels, IManagementApiAccessor, IManagementApiClient, Messages,
 } from '@process-engine/management_api_contracts';
 
 const logger = Logger.createLogger('processengine:management_api:client');
 
-export class ManagementApiClientService implements IManagementApi {
+export class ManagementApiClientService implements IManagementApiClient {
 
   private managementApiAccessor: IManagementApiAccessor = undefined;
 
