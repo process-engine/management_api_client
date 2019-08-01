@@ -10,7 +10,7 @@ import {
 
 const logger = Logger.createLogger('processengine:management_api:client');
 
-export class ManagementApiClientService implements IManagementApiClient {
+export class ManagementApiClient implements IManagementApiClient {
 
   private managementApiAccessor: IManagementApiAccessor = undefined;
 
