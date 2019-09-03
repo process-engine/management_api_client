@@ -24,7 +24,7 @@ pipeline {
   }
 
   stages {
-    stage('prepare') {
+    stage('Prepare Version') {
       steps {
         script {
           raw_package_version = sh(script: 'node --print --eval "require(\'./package.json\').version"', returnStdout: true).trim()
@@ -37,25 +37,25 @@ pipeline {
         }
       }
     }
-    stage('lint') {
+    stage('Lint') {
       steps {
         sh('node --version')
         sh('npm run lint')
       }
     }
-    stage('build') {
+    stage('Build') {
       steps {
         sh('node --version')
         sh('npm run build')
       }
     }
-    stage('test') {
+    stage('Test') {
       steps {
         sh('node --version')
         sh('npm run test')
       }
     }
-    stage('publish') {
+    stage('Publish') {
       steps {
         script {
           def branch = env.BRANCH_NAME;
@@ -104,7 +104,7 @@ pipeline {
         }
       }
     }
-    stage('cleanup') {
+    stage('Cleanup') {
       steps {
         script {
           // this stage just exists, so the cleanup-work that happens in the post-script
