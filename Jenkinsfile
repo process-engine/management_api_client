@@ -24,14 +24,11 @@ pipeline {
   }
 
   stages {
-    stage('Prepare Version') {
+    stage('Install dependencies') {
       steps {
         nodejs(configId: env.NPM_RC_FILE, nodeJSInstallationName: env.NODE_JS_VERSION) {
           sh('node --version')
           sh('npm install --ignore-scripts')
-
-          // does prepare the version, but not commit it
-          sh('node ./node_modules/.bin/ci_tools prepare-version --allow-dirty-workdir')
         }
       }
     }
@@ -53,30 +50,33 @@ pipeline {
         sh('npm run test')
       }
     }
-    stage('Commit & tag version') {
+    stage('Set package version') {
+      steps {
+        sh('node --version')
+        sh('node ./node_modules/.bin/ci_tools prepare-version --allow-dirty-workdir');
+      }
+    }
+    stage('Publish to npm') {
+      steps {
+        nodejs(configId: env.NPM_RC_FILE, nodeJSInstallationName: env.NODE_JS_VERSION) {
+          sh('node ./node_modules/.bin/ci_tools publish-npm-package --create-tag-from-branch-name')
+        }
+      }
+    }
+    stage('Publish to GitHub') {
       when {
         anyOf {
-          branch "master"
           branch "beta"
           branch "develop"
+          branch "master"
         }
       }
       steps {
         withCredentials([
           usernamePassword(credentialsId: 'process-engine-ci_github-token', passwordVariable: 'GH_TOKEN', usernameVariable: 'GH_USER')
         ]) {
-          // does not change the version, but commit and tag it
           sh('node ./node_modules/.bin/ci_tools commit-and-tag-version --only-on-primary-branches')
-
           sh('node ./node_modules/.bin/ci_tools update-github-release --only-on-primary-branches --use-title-and-text-from-git-tag');
-        }
-
-      }
-    }
-    stage('Publish') {
-      steps {
-        nodejs(configId: env.NPM_RC_FILE, nodeJSInstallationName: env.NODE_JS_VERSION) {
-          sh('node ./node_modules/.bin/ci_tools publish-npm-package --create-tag-from-branch-name')
         }
       }
     }
