@@ -32,22 +32,26 @@ pipeline {
         }
       }
     }
-    stage('Lint') {
-      steps {
-        sh('node --version')
-        sh('npm run lint')
-      }
-    }
-    stage('Build') {
+    stage('Build Sources') {
       steps {
         sh('node --version')
         sh('npm run build')
       }
     }
     stage('Test') {
-      steps {
-        sh('node --version')
-        sh('npm run test')
+      parallel {
+        stage('Lint sources') {
+          steps {
+            sh('node --version')
+            sh('npm run lint')
+          }
+        }
+        stage('Execute tests') {
+          steps {
+            sh('node --version')
+            sh('npm run test')
+          }
+        }
       }
     }
     stage('Set package version') {
