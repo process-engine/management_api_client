@@ -496,7 +496,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   public async startProcessInstance(
     identity: IIdentity,
     processModelId: string,
-    payload: DataModels.ProcessModels.ProcessStartRequestPayload,
+    payload?: DataModels.ProcessModels.ProcessStartRequestPayload,
     startCallbackType: DataModels.ProcessModels.StartCallbackType = DataModels.ProcessModels.StartCallbackType.CallbackOnProcessInstanceCreated,
     startEventId?: string,
     endEventId?: string,
