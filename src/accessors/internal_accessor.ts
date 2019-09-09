@@ -251,6 +251,42 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.notificationService.onProcessEnded(identity, callback, subscribeOnce);
   }
 
+  public async onCronjobCreated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobCreatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.notificationService.onCronjobCreated(identity, callback, subscribeOnce);
+  }
+
+  public async onCronjobExecuted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobExecutedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.notificationService.onCronjobExecuted(identity, callback, subscribeOnce);
+  }
+
+  public async onCronjobStopped(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobStoppedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.notificationService.onCronjobStopped(identity, callback, subscribeOnce);
+  }
+
+  public async onCronjobUpdated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobUpdatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.notificationService.onCronjobUpdated(identity, callback, subscribeOnce);
+  }
+
   // ------------ For backwards compatibility only
 
   public async onCallActivityWaiting(
