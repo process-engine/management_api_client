@@ -287,42 +287,58 @@ export class ManagementApiClient implements IManagementApiClient {
   }
 
   // Cronjobs
-  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+  public async getAllActiveCronjobs(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getAllActiveCronjobs(identity);
+    return this.managementApiAccessor.getAllActiveCronjobs(identity, offset, limit);
   }
 
   public async getCronjobExecutionHistoryForProcessModel(
     identity: IIdentity,
     processModelId: string,
     startEventId?: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getCronjobExecutionHistoryForProcessModel(identity, processModelId, startEventId);
+    return this.managementApiAccessor.getCronjobExecutionHistoryForProcessModel(identity, processModelId, startEventId, offset, limit);
   }
 
   public async getCronjobExecutionHistoryForCrontab(
     identity: IIdentity,
     crontab: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getCronjobExecutionHistoryForCrontab(identity, crontab);
+    return this.managementApiAccessor.getCronjobExecutionHistoryForCrontab(identity, crontab, offset, limit);
   }
 
   // Correlations
-  public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
+  public async getAllCorrelations(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getAllCorrelations(identity);
+    return this.managementApiAccessor.getAllCorrelations(identity, offset, limit);
   }
 
-  public async getActiveCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
+  public async getActiveCorrelations(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getActiveCorrelations(identity);
+    return this.managementApiAccessor.getActiveCorrelations(identity, offset, limit);
   }
 
   public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<DataModels.Correlations.Correlation> {
@@ -337,17 +353,26 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.getCorrelationByProcessInstanceId(identity, processInstanceId);
   }
 
-  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Correlations.Correlation>> {
+  public async getCorrelationsByProcessModelId(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getCorrelationsByProcessModelId(identity, processModelId);
+    return this.managementApiAccessor.getCorrelationsByProcessModelId(identity, processModelId, offset, limit);
   }
 
   // ProcessModels
-  public async getProcessModels(identity: IIdentity): Promise<DataModels.ProcessModels.ProcessModelList> {
+  public async getProcessModels(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ProcessModels.ProcessModelList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getProcessModels(identity);
+    return this.managementApiAccessor.getProcessModels(identity, offset, limit);
   }
 
   public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<DataModels.ProcessModels.ProcessModel> {
@@ -407,16 +432,26 @@ export class ManagementApiClient implements IManagementApiClient {
   }
 
   // Events
-  public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
+  public async getWaitingEventsForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getWaitingEventsForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getWaitingEventsForProcessModel(identity, processModelId, offset, limit);
   }
 
-  public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Events.EventList> {
+  public async getWaitingEventsForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getWaitingEventsForCorrelation(identity, correlationId);
+    return this.managementApiAccessor.getWaitingEventsForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getWaitingEventsForProcessModelInCorrelation(
@@ -443,35 +478,49 @@ export class ManagementApiClient implements IManagementApiClient {
   }
 
   // Empty Activities
-  public async getEmptyActivitiesForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+  public async getEmptyActivitiesForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getEmptyActivitiesForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getEmptyActivitiesForProcessModel(identity, processModelId, offset, limit);
   }
 
   public async getEmptyActivitiesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getEmptyActivitiesForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getEmptyActivitiesForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getEmptyActivitiesForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+  public async getEmptyActivitiesForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getEmptyActivitiesForCorrelation(identity, correlationId);
+    return this.managementApiAccessor.getEmptyActivitiesForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getEmptyActivitiesForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiAccessor.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async finishEmptyActivity(
@@ -489,39 +538,58 @@ export class ManagementApiClient implements IManagementApiClient {
   public async getFlowNodeInstancesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getFlowNodeInstancesForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getFlowNodeInstancesForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
+  public async getUserTasksForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getUserTasksForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getUserTasksForProcessModel(identity, processModelId, offset, limit);
   }
 
-  public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
+  public async getUserTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getUserTasksForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getUserTasksForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
+  public async getUserTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getUserTasksForCorrelation(identity, correlationId);
+    return this.managementApiAccessor.getUserTasksForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getUserTasksForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.UserTasks.UserTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiAccessor.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async finishUserTask(
@@ -537,32 +605,49 @@ export class ManagementApiClient implements IManagementApiClient {
   }
 
   // ManualTasks
-  public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
+  public async getManualTasksForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getManualTasksForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getManualTasksForProcessModel(identity, processModelId, offset, limit);
   }
 
-  public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
+  public async getManualTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getManualTasksForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getManualTasksForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
+  public async getManualTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getManualTasksForCorrelation(identity, correlationId);
+    return this.managementApiAccessor.getManualTasksForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getManualTasksForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.ManualTasks.ManualTaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiAccessor.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async finishManualTask(
@@ -580,10 +665,12 @@ export class ManagementApiClient implements IManagementApiClient {
   public async getRuntimeInformationForProcessModel(
     identity: IIdentity,
     processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getRuntimeInformationForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getRuntimeInformationForProcessModel(identity, processModelId, offset, limit);
   }
 
   public async getRuntimeInformationForFlowNode(
@@ -596,51 +683,73 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.getRuntimeInformationForFlowNode(identity, processModelId, flowNodeId);
   }
 
-  public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  public async getActiveTokensForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getActiveTokensForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getActiveTokensForProcessModel(identity, processModelId, offset, limit);
   }
 
   public async getActiveTokensForCorrelationAndProcessModel(
     identity: IIdentity,
     correlationId: string,
     processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.ActiveToken>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
+    return this.managementApiAccessor.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId, offset, limit);
   }
 
   public async getActiveTokensForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.ActiveToken>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getActiveTokensForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getActiveTokensForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  public async getActiveTokensForFlowNode(
+    identity: IIdentity,
+    flowNodeId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getActiveTokensForFlowNode(identity, flowNodeId);
+    return this.managementApiAccessor.getActiveTokensForFlowNode(identity, flowNodeId, offset, limit);
   }
 
-  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<DataModels.Logging.LogEntry>> {
+  public async getProcessModelLog(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId?: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Logging.LogEntry>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getProcessModelLog(identity, processModelId, correlationId);
+    return this.managementApiAccessor.getProcessModelLog(identity, processModelId, correlationId, offset, limit);
   }
 
   public async getProcessInstanceLog(
     identity: IIdentity,
     processModelId: string,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Logging.LogEntry>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getProcessInstanceLog(identity, processModelId, processInstanceId);
+    return this.managementApiAccessor.getProcessInstanceLog(identity, processModelId, processInstanceId, offset, limit);
   }
 
   public async getTokensForFlowNode(
@@ -648,10 +757,12 @@ export class ManagementApiClient implements IManagementApiClient {
     correlationId: string,
     processModelId: string,
     flowNodeId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId);
+    return this.managementApiAccessor.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId, offset, limit);
   }
 
   public async getTokensForFlowNodeByProcessInstanceId(
