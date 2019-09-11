@@ -431,6 +431,15 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
   }
 
+  public async terminateProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+  ): Promise<void> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.terminateProcessInstance(identity, processInstanceId);
+  }
+
   // Empty Activities
   public async getEmptyActivitiesForProcessModel(
     identity: IIdentity,
@@ -792,15 +801,6 @@ export class ManagementApiClient implements IManagementApiClient {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getTokensForProcessInstance(identity, processInstanceId);
-  }
-
-  public async terminateProcessInstance(
-    identity: IIdentity,
-    processInstanceId: string,
-  ): Promise<void> {
-    this.ensureIsAuthorized(identity);
-
-    return this.managementApiAccessor.terminateProcessInstance(identity, processInstanceId);
   }
 
   private ensureIsAuthorized(identity: IIdentity): void {
