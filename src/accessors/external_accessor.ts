@@ -429,12 +429,14 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    let url = this.buildUrl(restSettings.paths.getCronjobExecutionHistoryForProcessModel, offset, limit)
+    let url = restSettings.paths.getCronjobExecutionHistoryForProcessModel
       .replace(restSettings.params.processModelId, processModelId);
 
     if (startEventId) {
       url = `${url}?start_event_id=${startEventId}`;
     }
+
+    url = this.buildUrl(url, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
 
