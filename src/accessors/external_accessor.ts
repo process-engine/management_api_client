@@ -842,6 +842,62 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
+  // Tasks
+  public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Tasks.TaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.processModelTasks.replace(restSettings.params.processModelId, processModelId);
+    const url = this.applyBaseUrl(urlRestPart);
+
+    const httpResponse = await this.httpClient.get<DataModels.Tasks.TaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.Tasks.TaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.processInstanceTasks.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url = this.applyBaseUrl(urlRestPart);
+
+    const httpResponse = await this.httpClient.get<DataModels.Tasks.TaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Tasks.TaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.correlationTasks.replace(restSettings.params.correlationId, correlationId);
+    const url = this.applyBaseUrl(urlRestPart);
+
+    const httpResponse = await this.httpClient.get<DataModels.Tasks.TaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getTasksForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+  ): Promise<DataModels.Tasks.TaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.processModelCorrelationTasks
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.correlationId, correlationId);
+
+    const url = this.applyBaseUrl(urlRestPart);
+
+    const httpResponse = await this.httpClient.get<DataModels.Tasks.TaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   // ManualTasks
   public async getManualTasksForProcessModel(
     identity: IIdentity,
