@@ -333,6 +333,15 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return this.createSocketIoSubscription(identity, socketSettings.paths.cronjobUpdated, callback, subscribeOnce);
   }
 
+  public async onCronjobRemoved(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobRemovedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.cronjobRemoved, callback, subscribeOnce);
+  }
+
   public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
 
     const socketForIdentity = this.getSocketForIdentity(identity);

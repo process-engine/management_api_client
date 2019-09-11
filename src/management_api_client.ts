@@ -320,6 +320,16 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.onCronjobStopped(identity, callback, subscribeOnce);
   }
 
+  public async onCronjobRemoved(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobRemovedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCronjobRemoved(identity, callback, subscribeOnce);
+  }
+
   public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
     this.ensureIsAuthorized(identity);
 
