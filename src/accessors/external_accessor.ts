@@ -843,6 +843,18 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   }
 
   // Tasks
+  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.Tasks.TaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.allSuspendedTasks;
+    const url = this.applyBaseUrl(urlRestPart);
+
+    const httpResponse = await this.httpClient.get<DataModels.Tasks.TaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
   public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Tasks.TaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);

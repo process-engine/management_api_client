@@ -723,6 +723,12 @@ export class ManagementApiClient implements IManagementApiClient {
   }
 
   // Tasks
+  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.Tasks.TaskList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getAllSuspendedTasks(identity);
+  }
+
   public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Tasks.TaskList> {
     this.ensureIsAuthorized(identity);
 

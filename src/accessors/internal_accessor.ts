@@ -531,6 +531,10 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Tasks
+  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.Tasks.TaskList> {
+    return this.taskService.getAllSuspendedTasks(identity);
+  }
+
   public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Tasks.TaskList> {
     return this.taskService.getTasksForProcessModel(identity, processModelId);
   }
