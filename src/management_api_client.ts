@@ -524,11 +524,13 @@ export class ManagementApiClient implements IManagementApiClient {
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.Events.EventList> {
 
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiAccessor.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {

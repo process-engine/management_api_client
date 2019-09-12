@@ -458,8 +458,10 @@ export class InternalAccessor implements IManagementApiAccessor {
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.Events.EventList> {
-    return this.eventService.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.eventService.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
