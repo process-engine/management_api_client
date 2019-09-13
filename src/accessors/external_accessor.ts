@@ -314,12 +314,95 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     delete this.subscriptionCollection[subscription.id];
   }
 
-  // Cronjobs
-  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+  // Correlations
+  public async getAllCorrelations(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const url = this.applyBaseUrl(restSettings.paths.getActiveCronjobs);
+    const url = this.buildUrl(restSettings.paths.getAllCorrelations, offset, limit);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getActiveCorrelations(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const url = this.buildUrl(restSettings.paths.getActiveCorrelations, offset, limit);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<DataModels.Correlations.Correlation> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths
+      .getCorrelationById
+      .replace(restSettings.params.correlationId, correlationId);
+
+    const url = this.buildUrl(restPath);
+
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.Correlation>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.Correlation> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getCorrelationByProcessInstanceId
+      .replace(restSettings.params.processInstanceId, processInstanceId);
+
+    const url = this.buildUrl(restPath);
+
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.Correlation>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getCorrelationsByProcessModelId(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getCorrelationsByProcessModelId
+      .replace(restSettings.params.processModelId, processModelId);
+
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  // Cronjobs
+  public async getAllActiveCronjobs(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const url = this.buildUrl(restSettings.paths.getActiveCronjobs, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobConfiguration>>(url, requestAuthHeaders);
 
@@ -340,16 +423,20 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     processModelId: string,
     startEventId?: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    let url = this.applyBaseUrl(restSettings.paths.getCronjobExecutionHistoryForProcessModel)
+    let url = restSettings.paths.getCronjobExecutionHistoryForProcessModel
       .replace(restSettings.params.processModelId, processModelId);
 
     if (startEventId) {
       url = `${url}?start_event_id=${startEventId}`;
     }
+
+    url = this.buildUrl(url, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
 
@@ -369,11 +456,13 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   public async getCronjobExecutionHistoryForCrontab(
     identity: IIdentity,
     crontab: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const url = this.applyBaseUrl(restSettings.paths.getCronjobExecutionHistoryForCrontab)
+    const url = this.buildUrl(restSettings.paths.getCronjobExecutionHistoryForCrontab, offset, limit)
       .replace(restSettings.params.crontab, crontab);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
@@ -391,78 +480,16 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return mappedResult;
   }
 
-  // Correlations
-  public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const url = this.applyBaseUrl(restSettings.paths.getAllCorrelations);
-
-    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getActiveCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const url = this.applyBaseUrl(restSettings.paths.getActiveCorrelations);
-
-    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<DataModels.Correlations.Correlation> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths
-      .getCorrelationById
-      .replace(restSettings.params.correlationId, correlationId);
-
-    const url = this.applyBaseUrl(restPath);
-
-    const httpResponse = await this.httpClient.get<DataModels.Correlations.Correlation>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.Correlation> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.getCorrelationByProcessInstanceId
-      .replace(restSettings.params.processInstanceId, processInstanceId);
-
-    const url = this.applyBaseUrl(restPath);
-
-    const httpResponse = await this.httpClient.get<DataModels.Correlations.Correlation>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Correlations.Correlation>> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.getCorrelationsByProcessModelId
-      .replace(restSettings.params.processModelId, processModelId);
-
-    const url = this.applyBaseUrl(restPath);
-
-    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
   // ProcessModels
-  public async getProcessModels(identity: IIdentity): Promise<DataModels.ProcessModels.ProcessModelList> {
+  public async getProcessModels(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ProcessModels.ProcessModelList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const url = this.applyBaseUrl(restSettings.paths.processModels);
+    const url = this.buildUrl(restSettings.paths.processModels, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.ProcessModels.ProcessModelList>(url, requestAuthHeaders);
 
@@ -474,7 +501,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.processModelById.replace(restSettings.params.processModelId, processModelId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     const httpResponse = await this.httpClient.get<DataModels.ProcessModels.ProcessModel>(url, requestAuthHeaders);
 
@@ -486,7 +513,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.processModelByProcessInstanceId.replace(restSettings.params.processInstanceId, processInstanceId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     const httpResponse = await this.httpClient.get<DataModels.ProcessModels.ProcessModel>(url, requestAuthHeaders);
 
@@ -518,7 +545,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.processModelStartEvents.replace(restSettings.params.processModelId, processModelId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     const httpResponse = await this.httpClient.get<DataModels.Events.EventList>(url, requestAuthHeaders);
 
@@ -534,7 +561,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.updateProcessDefinitionsByName.replace(restSettings.params.processDefinitionsName, name);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     await this.httpClient.post<DataModels.ProcessModels.UpdateProcessDefinitionsRequestPayload, void>(url, payload, requestAuthHeaders);
   }
@@ -543,87 +570,39 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.deleteProcessDefinitionsByProcessModelId.replace(restSettings.params.processModelId, processModelId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     await this.httpClient.get(url, requestAuthHeaders);
   }
 
-  // Events
-  public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.waitingProcessModelEvents.replace(restSettings.params.processModelId, processModelId);
-    const url = this.applyBaseUrl(restPath);
-
-    const httpResponse = await this.httpClient.get<DataModels.Events.EventList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Events.EventList> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.waitingCorrelationEvents.replace(restSettings.params.correlationId, correlationId);
-    const url = this.applyBaseUrl(restPath);
-
-    const httpResponse = await this.httpClient.get<DataModels.Events.EventList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getWaitingEventsForProcessModelInCorrelation(
+  public async terminateProcessInstance(
     identity: IIdentity,
-    processModelId: string,
-    correlationId: string,
-  ): Promise<DataModels.Events.EventList> {
+    processInstanceId: string,
+  ): Promise<void> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const restPath = restSettings.paths.waitingProcessModelCorrelationEvents
-      .replace(restSettings.params.processModelId, processModelId)
-      .replace(restSettings.params.correlationId, correlationId);
+    const restPath = restSettings.paths.terminateProcessInstance
+      .replace(restSettings.params.processInstanceId, processInstanceId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
-    const httpResponse = await this.httpClient.get<DataModels.Events.EventList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.triggerMessageEvent
-      .replace(restSettings.params.eventName, messageName);
-
-    const url = this.applyBaseUrl(restPath);
-
-    await this.httpClient.post<DataModels.Events.EventTriggerPayload, void>(url, payload, requestAuthHeaders);
-  }
-
-  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.triggerSignalEvent
-      .replace(restSettings.params.eventName, signalName);
-
-    const url = this.applyBaseUrl(restPath);
-
-    await this.httpClient.post<DataModels.Events.EventTriggerPayload, void>(url, payload, requestAuthHeaders);
+    await this.httpClient.post(url, {}, requestAuthHeaders);
   }
 
   // Empty Activities
-  public async getEmptyActivitiesForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+  public async getEmptyActivitiesForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.processModelEmptyActivities
       .replace(restSettings.params.processModelId, processModelId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.EmptyActivities.EmptyActivityList>(url, requestAuthHeaders);
 
@@ -633,26 +612,33 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   public async getEmptyActivitiesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.processInstanceEmptyActivities
       .replace(restSettings.params.processInstanceId, processInstanceId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.EmptyActivities.EmptyActivityList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getEmptyActivitiesForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+  public async getEmptyActivitiesForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.correlationEmptyActivities
       .replace(restSettings.params.correlationId, correlationId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.EmptyActivities.EmptyActivityList>(url, requestAuthHeaders);
 
@@ -663,6 +649,8 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -670,7 +658,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.correlationId, correlationId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.EmptyActivities.EmptyActivityList>(url, requestAuthHeaders);
 
@@ -690,59 +678,248 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.correlationId, correlationId)
       .replace(restSettings.params.emptyActivityInstanceId, emptyActivityInstanceId);
 
-    url = this.applyBaseUrl(url);
+    url = this.buildUrl(url);
 
     const body: {} = {};
     await this.httpClient.post(url, body, requestAuthHeaders);
+  }
+
+  // Events
+  public async getWaitingEventsForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.waitingProcessModelEvents.replace(restSettings.params.processModelId, processModelId);
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.Events.EventList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getWaitingEventsForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.waitingCorrelationEvents.replace(restSettings.params.correlationId, correlationId);
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.Events.EventList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getWaitingEventsForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.waitingProcessModelCorrelationEvents
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.correlationId, correlationId);
+
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.Events.EventList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.triggerMessageEvent
+      .replace(restSettings.params.eventName, messageName);
+
+    const url = this.buildUrl(restPath);
+
+    await this.httpClient.post<DataModels.Events.EventTriggerPayload, void>(url, payload, requestAuthHeaders);
+  }
+
+  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.triggerSignalEvent
+      .replace(restSettings.params.eventName, signalName);
+
+    const url = this.buildUrl(restPath);
+
+    await this.httpClient.post<DataModels.Events.EventTriggerPayload, void>(url, payload, requestAuthHeaders);
   }
 
   // FlowNodeInstances
   public async getFlowNodeInstancesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.getFlowNodeInstancesForProcessInstance.replace(restSettings.params.processInstanceId, processInstanceId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.FlowNodeInstances.FlowNodeInstance>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
+  // ManualTasks
+  public async getManualTasksForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.processModelManualTasks.replace(restSettings.params.processModelId, processModelId);
+    const url = this.buildUrl(urlRestPart, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getManualTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.processInstanceManualTasks.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url = this.buildUrl(urlRestPart, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getManualTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.correlationManualTasks.replace(restSettings.params.correlationId, correlationId);
+    const url = this.buildUrl(urlRestPart, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getManualTasksForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.processModelCorrelationManualTasks
+      .replace(restSettings.params.processModelId, processModelId)
+      .replace(restSettings.params.correlationId, correlationId);
+
+    const url = this.buildUrl(urlRestPart, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async finishManualTask(
+    identity: IIdentity,
+    processInstanceId: string,
+    correlationId: string,
+    manualTaskInstanceId: string,
+  ): Promise<void> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const urlRestPart = restSettings.paths.finishManualTask
+      .replace(restSettings.params.processInstanceId, processInstanceId)
+      .replace(restSettings.params.correlationId, correlationId)
+      .replace(restSettings.params.manualTaskInstanceId, manualTaskInstanceId);
+
+    const url = this.buildUrl(urlRestPart);
+
+    await this.httpClient.post(url, {}, requestAuthHeaders);
+  }
+
   // UserTasks
-  public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
+  public async getUserTasksForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.processModelUserTasks.replace(restSettings.params.processModelId, processModelId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.UserTasks.UserTaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
+  public async getUserTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.processInstanceUserTasks.replace(restSettings.params.processInstanceId, processInstanceId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.UserTasks.UserTaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
+  public async getUserTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.correlationUserTasks.replace(restSettings.params.correlationId, correlationId);
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.UserTasks.UserTaskList>(url, requestAuthHeaders);
 
@@ -753,6 +930,8 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.UserTasks.UserTaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
@@ -761,7 +940,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.correlationId, correlationId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.UserTasks.UserTaskList>(url, requestAuthHeaders);
 
@@ -783,90 +962,17 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.correlationId, correlationId)
       .replace(restSettings.params.userTaskInstanceId, userTaskInstanceId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     await this.httpClient.post<DataModels.UserTasks.UserTaskResult, void>(url, userTaskResult, requestAuthHeaders);
-  }
-
-  // ManualTasks
-  public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const urlRestPart = restSettings.paths.processModelManualTasks.replace(restSettings.params.processModelId, processModelId);
-    const url = this.applyBaseUrl(urlRestPart);
-
-    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const urlRestPart = restSettings.paths.processInstanceManualTasks.replace(restSettings.params.processInstanceId, processInstanceId);
-    const url = this.applyBaseUrl(urlRestPart);
-
-    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const urlRestPart = restSettings.paths.correlationManualTasks.replace(restSettings.params.correlationId, correlationId);
-    const url = this.applyBaseUrl(urlRestPart);
-
-    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getManualTasksForProcessModelInCorrelation(
-    identity: IIdentity,
-    processModelId: string,
-    correlationId: string,
-  ): Promise<DataModels.ManualTasks.ManualTaskList> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const urlRestPart = restSettings.paths.processModelCorrelationManualTasks
-      .replace(restSettings.params.processModelId, processModelId)
-      .replace(restSettings.params.correlationId, correlationId);
-
-    const url = this.applyBaseUrl(urlRestPart);
-
-    const httpResponse = await this.httpClient.get<DataModels.ManualTasks.ManualTaskList>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async finishManualTask(
-    identity: IIdentity,
-    processInstanceId: string,
-    correlationId: string,
-    manualTaskInstanceId: string,
-  ): Promise<void> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const urlRestPart = restSettings.paths.finishManualTask
-      .replace(restSettings.params.processInstanceId, processInstanceId)
-      .replace(restSettings.params.correlationId, correlationId)
-      .replace(restSettings.params.manualTaskInstanceId, manualTaskInstanceId);
-
-    const url = this.applyBaseUrl(urlRestPart);
-
-    await this.httpClient.post(url, {}, requestAuthHeaders);
   }
 
   // Heatmap related features
   public async getRuntimeInformationForProcessModel(
     identity: IIdentity,
     processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
@@ -874,7 +980,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const restPath = restSettings.paths.getRuntimeInformationForProcessModel
       .replace(restSettings.params.processModelId, processModelId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.FlowNodeRuntimeInformation>>(url, requestAuthHeaders);
 
@@ -893,35 +999,26 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.flowNodeId, flowNodeId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     const httpResponse = await this.httpClient.get<DataModels.Kpi.FlowNodeRuntimeInformation>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  public async getActiveTokensForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.getActiveTokensForProcessModel
       .replace(restSettings.params.processModelId, processModelId);
 
-    const url = this.applyBaseUrl(restPath);
-
-    const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
-  public async getActiveTokensForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.getActiveTokensForProcessInstance
-      .replace(restSettings.params.processInstanceId, processInstanceId);
-
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
 
@@ -932,6 +1029,8 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     correlationId: string,
     processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
@@ -940,28 +1039,58 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.correlationId, correlationId)
       .replace(restSettings.params.processModelId, processModelId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  public async getActiveTokensForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getActiveTokensForProcessInstance
+      .replace(restSettings.params.processInstanceId, processInstanceId);
+
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getActiveTokensForFlowNode(
+    identity: IIdentity,
+    flowNodeId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.getActiveTokensForFlowNode
       .replace(restSettings.params.flowNodeId, flowNodeId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<DataModels.Logging.LogEntry>> {
+  public async getProcessModelLog(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId?: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Logging.LogEntry>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -972,7 +1101,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       restPath = `${restPath}?${restSettings.queryParams.correlationId}=${correlationId}`;
     }
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Logging.LogEntry>>(url, requestAuthHeaders);
 
@@ -983,6 +1112,8 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     processModelId: string,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Logging.LogEntry>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
@@ -991,7 +1122,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.processInstanceId, processInstanceId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.Logging.LogEntry>>(url, requestAuthHeaders);
 
@@ -1003,6 +1134,8 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     correlationId: string,
     processModelId: string,
     flowNodeId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
@@ -1012,7 +1145,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.flowNodeId, flowNodeId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<Array<DataModels.TokenHistory.TokenHistoryEntry>>(url, requestAuthHeaders);
 
@@ -1031,7 +1164,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.processInstanceId, processInstanceId)
       .replace(restSettings.params.flowNodeId, flowNodeId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     const httpResponse = await this.httpClient.get<DataModels.TokenHistory.TokenHistoryGroup>(url, requestAuthHeaders);
 
@@ -1050,7 +1183,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       .replace(restSettings.params.correlationId, correlationId)
       .replace(restSettings.params.processModelId, processModelId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     const httpResponse = await this.httpClient.get<DataModels.TokenHistory.TokenHistoryGroup>(url, requestAuthHeaders);
 
@@ -1067,26 +1200,11 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const restPath = restSettings.paths.getTokensForProcessInstance
       .replace(restSettings.params.processInstanceId, processInstanceId);
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     const httpResponse = await this.httpClient.get<DataModels.TokenHistory.TokenHistoryGroup>(url, requestAuthHeaders);
 
     return httpResponse.result;
-  }
-
-  public async terminateProcessInstance(
-    identity: IIdentity,
-    processInstanceId: string,
-  ): Promise<void> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.terminateProcessInstance
-      .replace(restSettings.params.processInstanceId, processInstanceId);
-
-    const url = this.applyBaseUrl(restPath);
-
-    await this.httpClient.post(url, {}, requestAuthHeaders);
   }
 
   private buildStartProcessInstanceUrl(
@@ -1110,7 +1228,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       restPath = `${restPath}&${restSettings.queryParams.endEventId}=${endEventId}`;
     }
 
-    const url = this.applyBaseUrl(restPath);
+    const url = this.buildUrl(restPath);
 
     return url;
   }
@@ -1131,8 +1249,16 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return requestAuthHeaders;
   }
 
-  private applyBaseUrl(url: string): string {
-    return `${this.baseUrl}${url}`;
+  private buildUrl(url: string, offset: number = 0, limit: number = 0): string {
+    let finalUrl = `${this.baseUrl}${url}`;
+
+    if (finalUrl.indexOf('?') > 0) {
+      finalUrl = `${finalUrl}&offset=${offset}&limit=${limit}`;
+    } else {
+      finalUrl = `${finalUrl}?offset=${offset}&limit=${limit}`;
+    }
+
+    return finalUrl;
   }
 
   private createSocketIoSubscription(identity: IIdentity, route: string, callback: any, subscribeOnce: boolean): Subscription {

@@ -276,12 +276,20 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Correlations
-  public async getAllCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
-    return this.correlationService.getAllCorrelations(identity);
+  public async getAllCorrelations(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
+    return this.correlationService.getAllCorrelations(identity, offset, limit);
   }
 
-  public async getActiveCorrelations(identity: IIdentity): Promise<Array<DataModels.Correlations.Correlation>> {
-    return this.correlationService.getActiveCorrelations(identity);
+  public async getActiveCorrelations(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
+    return this.correlationService.getActiveCorrelations(identity, offset, limit);
   }
 
   public async getCorrelationById(identity: IIdentity, correlationId: string): Promise<DataModels.Correlations.Correlation> {
@@ -292,33 +300,50 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.correlationService.getCorrelationByProcessInstanceId(identity, processInstanceId);
   }
 
-  public async getCorrelationsByProcessModelId(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Correlations.Correlation>> {
-    return this.correlationService.getCorrelationsByProcessModelId(identity, processModelId);
+  public async getCorrelationsByProcessModelId(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Correlations.Correlation>> {
+    return this.correlationService.getCorrelationsByProcessModelId(identity, processModelId, offset, limit);
   }
 
   // Cronjobs
-  public async getAllActiveCronjobs(identity: IIdentity): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
-    return this.cronjobService.getAllActiveCronjobs(identity);
+  public async getAllActiveCronjobs(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+    return this.cronjobService.getAllActiveCronjobs(identity, offset, limit);
   }
 
   public async getCronjobExecutionHistoryForProcessModel(
     identity: IIdentity,
     processModelId: string,
     startEventId?: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
-    return this.cronjobService.getCronjobExecutionHistoryForProcessModel(identity, processModelId, startEventId);
+    return this.cronjobService.getCronjobExecutionHistoryForProcessModel(identity, processModelId, startEventId, offset, limit);
   }
 
   public async getCronjobExecutionHistoryForCrontab(
     identity: IIdentity,
     crontab: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
-    return this.cronjobService.getCronjobExecutionHistoryForCrontab(identity, crontab);
+    return this.cronjobService.getCronjobExecutionHistoryForCrontab(identity, crontab, offset, limit);
   }
 
   // ProcessModels
-  public async getProcessModels(identity: IIdentity): Promise<DataModels.ProcessModels.ProcessModelList> {
-    return this.processModelService.getProcessModels(identity);
+  public async getProcessModels(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ProcessModels.ProcessModelList> {
+    return this.processModelService.getProcessModels(identity, offset, limit);
   }
 
   public async getProcessModelById(identity: IIdentity, processModelId: string): Promise<DataModels.ProcessModels.ProcessModel> {
@@ -327,6 +352,17 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   public async getProcessModelByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.ProcessModels.ProcessModel> {
     return this.processModelService.getProcessModelByProcessInstanceId(identity, processInstanceId);
+  }
+
+  public async startProcessInstance(
+    identity: IIdentity,
+    processModelId: string,
+    payload?: DataModels.ProcessModels.ProcessStartRequestPayload,
+    startCallbackType: DataModels.ProcessModels.StartCallbackType = DataModels.ProcessModels.StartCallbackType.CallbackOnProcessInstanceCreated,
+    startEventId?: string,
+    endEventId?: string,
+  ): Promise<DataModels.ProcessModels.ProcessStartResponsePayload> {
+    return this.processModelService.startProcessInstance(identity, processModelId, payload, startCallbackType, startEventId, endEventId);
   }
 
   public async getStartEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
@@ -338,7 +374,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     name: string,
     payload: DataModels.ProcessModels.UpdateProcessDefinitionsRequestPayload,
   ): Promise<void> {
-
     return this.processModelService.updateProcessDefinitionsByName(identity, name, payload);
   }
 
@@ -346,74 +381,49 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.processModelService.deleteProcessDefinitionsByProcessModelId(identity, processModelId);
   }
 
-  public async startProcessInstance(
-    identity: IIdentity,
-    processModelId: string,
-    payload?: DataModels.ProcessModels.ProcessStartRequestPayload,
-    startCallbackType: DataModels.ProcessModels.StartCallbackType = DataModels.ProcessModels.StartCallbackType.CallbackOnProcessInstanceCreated,
-    startEventId?: string,
-    endEventId?: string,
-  ): Promise<DataModels.ProcessModels.ProcessStartResponsePayload> {
-
-    return this.processModelService.startProcessInstance(identity, processModelId, payload, startCallbackType, startEventId, endEventId);
-  }
-
   public async terminateProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
   ): Promise<void> {
-
     return this.processModelService.terminateProcessInstance(identity, processInstanceId);
   }
 
-  // Events
-  public async getWaitingEventsForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Events.EventList> {
-    return this.eventService.getWaitingEventsForProcessModel(identity, processModelId);
-  }
-
-  public async getWaitingEventsForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Events.EventList> {
-    return this.eventService.getWaitingEventsForCorrelation(identity, correlationId);
-  }
-
-  public async getWaitingEventsForProcessModelInCorrelation(
+  // Empty Activities
+  public async getEmptyActivitiesForProcessModel(
     identity: IIdentity,
     processModelId: string,
-    correlationId: string,
-  ): Promise<DataModels.Events.EventList> {
-
-    return this.eventService.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId);
-  }
-
-  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
-    return this.eventService.triggerMessageEvent(identity, messageName, payload);
-  }
-
-  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
-    return this.eventService.triggerSignalEvent(identity, signalName, payload);
-  }
-
-  // Empty Activities
-  public async getEmptyActivitiesForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this.emptyActivityService.getEmptyActivitiesForProcessModel(identity, processModelId);
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    return this.emptyActivityService.getEmptyActivitiesForProcessModel(identity, processModelId, offset, limit);
   }
 
   public async getEmptyActivitiesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this.emptyActivityService.getEmptyActivitiesForProcessInstance(identity, processInstanceId);
+    return this.emptyActivityService.getEmptyActivitiesForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getEmptyActivitiesForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this.emptyActivityService.getEmptyActivitiesForCorrelation(identity, correlationId);
+  public async getEmptyActivitiesForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
+    return this.emptyActivityService.getEmptyActivitiesForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getEmptyActivitiesForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.EmptyActivities.EmptyActivityList> {
-    return this.emptyActivityService.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.emptyActivityService.getEmptyActivitiesForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async finishEmptyActivity(
@@ -425,35 +435,89 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.emptyActivityService.finishEmptyActivity(identity, processInstanceId, correlationId, emptyActivityInstanceId);
   }
 
+  // Events
+  public async getWaitingEventsForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
+    return this.eventService.getWaitingEventsForProcessModel(identity, processModelId, offset, limit);
+  }
+
+  public async getWaitingEventsForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
+    return this.eventService.getWaitingEventsForCorrelation(identity, correlationId, offset, limit);
+  }
+
+  public async getWaitingEventsForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.Events.EventList> {
+    return this.eventService.getWaitingEventsForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
+  }
+
+  public async triggerMessageEvent(identity: IIdentity, messageName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
+    return this.eventService.triggerMessageEvent(identity, messageName, payload);
+  }
+
+  public async triggerSignalEvent(identity: IIdentity, signalName: string, payload?: DataModels.Events.EventTriggerPayload): Promise<void> {
+    return this.eventService.triggerSignalEvent(identity, signalName, payload);
+  }
+
   // FlowNodeInstances
   public async getFlowNodeInstancesForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
-
-    return this.flowNodeInstanceService.getFlowNodeInstancesForProcessInstance(identity, processInstanceId);
+    return this.flowNodeInstanceService.getFlowNodeInstancesForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
   // ManualTasks
-  public async getManualTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-    return this.manualTaskService.getManualTasksForProcessModel(identity, processModelId);
+  public async getManualTasksForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
+    return this.manualTaskService.getManualTasksForProcessModel(identity, processModelId, offset, limit);
   }
 
-  public async getManualTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-    return this.manualTaskService.getManualTasksForProcessInstance(identity, processInstanceId);
+  public async getManualTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
+    return this.manualTaskService.getManualTasksForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getManualTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.ManualTasks.ManualTaskList> {
-    return this.manualTaskService.getManualTasksForCorrelation(identity, correlationId);
+  public async getManualTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.ManualTasks.ManualTaskList> {
+    return this.manualTaskService.getManualTasksForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getManualTasksForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.ManualTasks.ManualTaskList> {
-
-    return this.manualTaskService.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.manualTaskService.getManualTasksForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async finishManualTask(
@@ -462,30 +526,45 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
     manualTaskInstanceId: string,
   ): Promise<void> {
-
     return this.manualTaskService.finishManualTask(identity, processInstanceId, correlationId, manualTaskInstanceId);
   }
 
   // UserTasks
-  public async getUserTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.UserTasks.UserTaskList> {
-    return this.userTaskService.getUserTasksForProcessModel(identity, processModelId);
+  public async getUserTasksForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
+    return this.userTaskService.getUserTasksForProcessModel(identity, processModelId, offset, limit);
   }
 
-  public async getUserTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.UserTasks.UserTaskList> {
-    return this.userTaskService.getUserTasksForProcessInstance(identity, processInstanceId);
+  public async getUserTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
+    return this.userTaskService.getUserTasksForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getUserTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.UserTasks.UserTaskList> {
-    return this.userTaskService.getUserTasksForCorrelation(identity, correlationId);
+  public async getUserTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.UserTasks.UserTaskList> {
+    return this.userTaskService.getUserTasksForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getUserTasksForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.UserTasks.UserTaskList> {
-
-    return this.userTaskService.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.userTaskService.getUserTasksForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   public async finishUserTask(
@@ -495,7 +574,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     userTaskInstanceId: string,
     userTaskResult: DataModels.UserTasks.UserTaskResult,
   ): Promise<void> {
-
     return this.userTaskService.finishUserTask(identity, processInstanceId, correlationId, userTaskInstanceId, userTaskResult);
   }
 
@@ -503,9 +581,10 @@ export class InternalAccessor implements IManagementApiAccessor {
   public async getRuntimeInformationForProcessModel(
     identity: IIdentity,
     processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
-
-    return this.kpiService.getRuntimeInformationForProcessModel(identity, processModelId);
+    return this.kpiService.getRuntimeInformationForProcessModel(identity, processModelId, offset, limit);
   }
 
   public async getRuntimeInformationForFlowNode(
@@ -513,45 +592,64 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
     flowNodeId: string,
   ): Promise<DataModels.Kpi.FlowNodeRuntimeInformation> {
-
     return this.kpiService.getRuntimeInformationForFlowNode(identity, processModelId, flowNodeId);
   }
 
-  public async getActiveTokensForProcessModel(identity: IIdentity, processModelId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this.kpiService.getActiveTokensForProcessModel(identity, processModelId);
-
+  public async getActiveTokensForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+    return this.kpiService.getActiveTokensForProcessModel(identity, processModelId, offset, limit);
   }
 
   public async getActiveTokensForCorrelationAndProcessModel(
     identity: IIdentity,
     correlationId: string,
     processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this.kpiService.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
+    return this.kpiService.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId, offset, limit);
   }
 
   public async getActiveTokensForProcessInstance(
     identity: IIdentity,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this.kpiService.getActiveTokensForProcessInstance(identity, processInstanceId);
+    return this.kpiService.getActiveTokensForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getActiveTokensForFlowNode(identity: IIdentity, flowNodeId: string): Promise<Array<DataModels.Kpi.ActiveToken>> {
-    return this.kpiService.getActiveTokensForFlowNode(identity, flowNodeId);
+  public async getActiveTokensForFlowNode(
+    identity: IIdentity,
+    flowNodeId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+    return this.kpiService.getActiveTokensForFlowNode(identity, flowNodeId, offset, limit);
   }
 
-  public async getProcessModelLog(identity: IIdentity, processModelId: string, correlationId?: string): Promise<Array<DataModels.Logging.LogEntry>> {
-    return this.loggingService.getProcessModelLog(identity, processModelId, correlationId);
+  public async getProcessModelLog(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId?: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<Array<DataModels.Logging.LogEntry>> {
+    return this.loggingService.getProcessModelLog(identity, processModelId, correlationId, offset, limit);
   }
 
   public async getProcessInstanceLog(
     identity: IIdentity,
     processModelId: string,
     processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.Logging.LogEntry>> {
-
-    return this.loggingService.getProcessInstanceLog(identity, processModelId, processInstanceId);
+    return this.loggingService.getProcessInstanceLog(identity, processModelId, processInstanceId, offset, limit);
   }
 
   public async getTokensForFlowNode(
@@ -559,9 +657,10 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
     processModelId: string,
     flowNodeId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
-
-    return this.tokenHistoryService.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId);
+    return this.tokenHistoryService.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId, offset, limit);
   }
 
   public async getTokensForFlowNodeByProcessInstanceId(
@@ -569,7 +668,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
     flowNodeId: string,
   ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
-
     return this.tokenHistoryService.getTokensForFlowNodeByProcessInstanceId(identity, processInstanceId, flowNodeId);
   }
 
@@ -578,7 +676,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
     processModelId: string,
   ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
-
     return this.tokenHistoryService.getTokensForCorrelationAndProcessModel(identity, correlationId, processModelId);
   }
 
@@ -586,7 +683,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     identity: IIdentity,
     processInstanceId: string,
   ): Promise<DataModels.TokenHistory.TokenHistoryGroup> {
-
     return this.tokenHistoryService.getTokensForProcessInstance(identity, processInstanceId);
   }
 
