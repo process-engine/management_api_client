@@ -19,7 +19,6 @@ export class InternalAccessor implements IManagementApiAccessor {
   private processModelService: APIs.IProcessModelManagementApi;
   private tokenHistoryService: APIs.ITokenHistoryManagementApi;
   private userTaskService: APIs.IUserTaskManagementApi;
-  private taskService: APIs.ITaskManagementApi;
 
   constructor(
     correlationService: APIs.ICorrelationManagementApi,
@@ -34,7 +33,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelService: APIs.IProcessModelManagementApi,
     tokenHistoryService: APIs.ITokenHistoryManagementApi,
     userTaskService: APIs.IUserTaskManagementApi,
-    taskService: APIs.ITaskManagementApi,
   ) {
     this.correlationService = correlationService;
     this.cronjobService = cronjobService;
@@ -48,7 +46,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     this.processModelService = processModelService;
     this.tokenHistoryService = tokenHistoryService;
     this.userTaskService = userTaskService;
-    this.taskService = taskService;
   }
 
   // Notifications
@@ -532,19 +529,19 @@ export class InternalAccessor implements IManagementApiAccessor {
 
   // Tasks
   public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.FlowNodeInstances.TaskList> {
-    return this.taskService.getAllSuspendedTasks(identity);
+    return this.flowNodeInstanceService.getAllSuspendedTasks(identity);
   }
 
   public async getSuspendedTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
-    return this.taskService.getSuspendedTasksForProcessModel(identity, processModelId);
+    return this.flowNodeInstanceService.getSuspendedTasksForProcessModel(identity, processModelId);
   }
 
   public async getSuspendedTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
-    return this.taskService.getSuspendedTasksForProcessInstance(identity, processInstanceId);
+    return this.flowNodeInstanceService.getSuspendedTasksForProcessInstance(identity, processInstanceId);
   }
 
   public async getSuspendedTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
-    return this.taskService.getSuspendedTasksForCorrelation(identity, correlationId);
+    return this.flowNodeInstanceService.getSuspendedTasksForCorrelation(identity, correlationId);
   }
 
   public async getSuspendedTasksForProcessModelInCorrelation(
@@ -553,7 +550,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId: string,
   ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
-    return this.taskService.getSuspendedTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.flowNodeInstanceService.getSuspendedTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
   // ManualTasks
