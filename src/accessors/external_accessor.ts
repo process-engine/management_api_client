@@ -843,48 +843,67 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
   }
 
   // Tasks
-  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getAllSuspendedTasks(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const urlRestPart = restSettings.paths.allSuspendedTasks;
-    const url = this.applyBaseUrl(urlRestPart);
+    const urlRestPath = restSettings.paths.allSuspendedTasks;
+    const url = this.buildUrl(urlRestPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.FlowNodeInstances.TaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getSuspendedTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const urlRestPart = restSettings.paths.processModelTasks.replace(restSettings.params.processModelId, processModelId);
-    const url = this.applyBaseUrl(urlRestPart);
+    const urlRestPath = restSettings.paths.suspendedProcessModelTasks.replace(restSettings.params.processModelId, processModelId);
+    const url = this.buildUrl(urlRestPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.FlowNodeInstances.TaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getSuspendedTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const urlRestPart = restSettings.paths.processInstanceTasks.replace(restSettings.params.processInstanceId, processInstanceId);
-    const url = this.applyBaseUrl(urlRestPart);
+    const urlRestPath = restSettings.paths.suspendedProcessInstanceTasks.replace(restSettings.params.processInstanceId, processInstanceId);
+    const url = this.buildUrl(urlRestPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.FlowNodeInstances.TaskList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
 
-  public async getSuspendedTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const urlRestPart = restSettings.paths.correlationTasks.replace(restSettings.params.correlationId, correlationId);
-    const url = this.applyBaseUrl(urlRestPart);
+    const urlRestPath = restSettings.paths.suspendedCorrelationTasks.replace(restSettings.params.correlationId, correlationId);
+    const url = this.buildUrl(urlRestPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.FlowNodeInstances.TaskList>(url, requestAuthHeaders);
 
@@ -895,15 +914,17 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
-    const urlRestPart = restSettings.paths.processModelCorrelationTasks
+    const urlRestPath = restSettings.paths.suspendedProcessModelCorrelationTasks
       .replace(restSettings.params.processModelId, processModelId)
       .replace(restSettings.params.correlationId, correlationId);
 
-    const url = this.applyBaseUrl(urlRestPart);
+    const url = this.buildUrl(urlRestPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.FlowNodeInstances.TaskList>(url, requestAuthHeaders);
 

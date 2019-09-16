@@ -723,38 +723,58 @@ export class ManagementApiClient implements IManagementApiClient {
   }
 
   // Tasks
-  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getAllSuspendedTasks(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getAllSuspendedTasks(identity);
+    return this.managementApiAccessor.getAllSuspendedTasks(identity, offset, limit);
   }
 
-  public async getSuspendedTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForProcessModel(
+    identity: IIdentity, processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getSuspendedTasksForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getSuspendedTasksForProcessModel(identity, processModelId, offset, limit);
   }
 
-  public async getSuspendedTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getSuspendedTasksForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getSuspendedTasksForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
-  public async getSuspendedTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getSuspendedTasksForCorrelation(identity, correlationId);
+    return this.managementApiAccessor.getSuspendedTasksForCorrelation(identity, correlationId, offset, limit);
   }
 
   public async getSuspendedTasksForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
   ): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getSuspendedTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiAccessor.getSuspendedTasksForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
   }
 
   // Heatmap related features
