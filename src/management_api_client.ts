@@ -723,25 +723,25 @@ export class ManagementApiClient implements IManagementApiClient {
   }
 
   // Tasks
-  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.Tasks.TaskList> {
+  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getAllSuspendedTasks(identity);
   }
 
-  public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Tasks.TaskList> {
+  public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getTasksForProcessModel(identity, processModelId);
   }
 
-  public async getTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.Tasks.TaskList> {
+  public async getTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getTasksForProcessInstance(identity, processInstanceId);
   }
 
-  public async getTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Tasks.TaskList> {
+  public async getTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getTasksForCorrelation(identity, correlationId);
@@ -751,7 +751,7 @@ export class ManagementApiClient implements IManagementApiClient {
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
-  ): Promise<DataModels.Tasks.TaskList> {
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getTasksForProcessModelInCorrelation(identity, processModelId, correlationId);

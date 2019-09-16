@@ -531,19 +531,19 @@ export class InternalAccessor implements IManagementApiAccessor {
   }
 
   // Tasks
-  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.Tasks.TaskList> {
+  public async getAllSuspendedTasks(identity: IIdentity): Promise<DataModels.FlowNodeInstances.TaskList> {
     return this.taskService.getAllSuspendedTasks(identity);
   }
 
-  public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.Tasks.TaskList> {
+  public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     return this.taskService.getTasksForProcessModel(identity, processModelId);
   }
 
-  public async getTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.Tasks.TaskList> {
+  public async getTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     return this.taskService.getTasksForProcessInstance(identity, processInstanceId);
   }
 
-  public async getTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.Tasks.TaskList> {
+  public async getTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     return this.taskService.getTasksForCorrelation(identity, correlationId);
   }
 
@@ -551,7 +551,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
-  ): Promise<DataModels.Tasks.TaskList> {
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
     return this.taskService.getTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
