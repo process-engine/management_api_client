@@ -729,32 +729,32 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.getAllSuspendedTasks(identity);
   }
 
-  public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getTasksForProcessModel(identity, processModelId);
+    return this.managementApiAccessor.getSuspendedTasksForProcessModel(identity, processModelId);
   }
 
-  public async getTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getTasksForProcessInstance(identity, processInstanceId);
+    return this.managementApiAccessor.getSuspendedTasksForProcessInstance(identity, processInstanceId);
   }
 
-  public async getTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+  public async getSuspendedTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getTasksForCorrelation(identity, correlationId);
+    return this.managementApiAccessor.getSuspendedTasksForCorrelation(identity, correlationId);
   }
 
-  public async getTasksForProcessModelInCorrelation(
+  public async getSuspendedTasksForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
   ): Promise<DataModels.FlowNodeInstances.TaskList> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.managementApiAccessor.getSuspendedTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
   // Heatmap related features

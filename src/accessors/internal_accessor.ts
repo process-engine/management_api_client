@@ -535,25 +535,25 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.taskService.getAllSuspendedTasks(identity);
   }
 
-  public async getTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
-    return this.taskService.getTasksForProcessModel(identity, processModelId);
+  public async getSuspendedTasksForProcessModel(identity: IIdentity, processModelId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+    return this.taskService.getSuspendedTasksForProcessModel(identity, processModelId);
   }
 
-  public async getTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
-    return this.taskService.getTasksForProcessInstance(identity, processInstanceId);
+  public async getSuspendedTasksForProcessInstance(identity: IIdentity, processInstanceId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+    return this.taskService.getSuspendedTasksForProcessInstance(identity, processInstanceId);
   }
 
-  public async getTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
-    return this.taskService.getTasksForCorrelation(identity, correlationId);
+  public async getSuspendedTasksForCorrelation(identity: IIdentity, correlationId: string): Promise<DataModels.FlowNodeInstances.TaskList> {
+    return this.taskService.getSuspendedTasksForCorrelation(identity, correlationId);
   }
 
-  public async getTasksForProcessModelInCorrelation(
+  public async getSuspendedTasksForProcessModelInCorrelation(
     identity: IIdentity,
     processModelId: string,
     correlationId: string,
   ): Promise<DataModels.FlowNodeInstances.TaskList> {
 
-    return this.taskService.getTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
+    return this.taskService.getSuspendedTasksForProcessModelInCorrelation(identity, processModelId, correlationId);
   }
 
   // ManualTasks
