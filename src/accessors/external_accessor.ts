@@ -297,6 +297,51 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return this.createSocketIoSubscription(identity, socketSettings.paths.processEnded, callback, subscribeOnce);
   }
 
+  public async onCronjobCreated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobCreatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.cronjobCreated, callback, subscribeOnce);
+  }
+
+  public async onCronjobExecuted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobExecutedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.cronjobExecuted, callback, subscribeOnce);
+  }
+
+  public async onCronjobStopped(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobStoppedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.cronjobStopped, callback, subscribeOnce);
+  }
+
+  public async onCronjobUpdated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobUpdatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.cronjobUpdated, callback, subscribeOnce);
+  }
+
+  public async onCronjobRemoved(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobRemovedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+
+    return this.createSocketIoSubscription(identity, socketSettings.paths.cronjobRemoved, callback, subscribeOnce);
+  }
+
   public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
 
     const socketForIdentity = this.getSocketForIdentity(identity);

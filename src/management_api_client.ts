@@ -280,6 +280,56 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.onProcessEnded(identity, callback, subscribeOnce);
   }
 
+  public async onCronjobExecuted(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobExecutedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCronjobExecuted(identity, callback, subscribeOnce);
+  }
+
+  public async onCronjobCreated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobCreatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCronjobCreated(identity, callback, subscribeOnce);
+  }
+
+  public async onCronjobUpdated(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobUpdatedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCronjobUpdated(identity, callback, subscribeOnce);
+  }
+
+  public async onCronjobStopped(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobStoppedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCronjobStopped(identity, callback, subscribeOnce);
+  }
+
+  public async onCronjobRemoved(
+    identity: IIdentity,
+    callback: Messages.CallbackTypes.OnCronjobRemovedCallback,
+    subscribeOnce: boolean = false,
+  ): Promise<Subscription> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.onCronjobRemoved(identity, callback, subscribeOnce);
+  }
+
   public async removeSubscription(identity: IIdentity, subscription: Subscription): Promise<void> {
     this.ensureIsAuthorized(identity);
 
