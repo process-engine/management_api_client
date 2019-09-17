@@ -341,7 +341,7 @@ export class ManagementApiClient implements IManagementApiClient {
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getAllCorrelations(identity, offset, limit);
@@ -351,7 +351,7 @@ export class ManagementApiClient implements IManagementApiClient {
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getActiveCorrelations(identity, offset, limit);
@@ -374,7 +374,7 @@ export class ManagementApiClient implements IManagementApiClient {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getCorrelationsByProcessModelId(identity, processModelId, offset, limit);
@@ -385,7 +385,7 @@ export class ManagementApiClient implements IManagementApiClient {
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+  ): Promise<DataModels.Cronjobs.CronjobList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getAllActiveCronjobs(identity, offset, limit);
@@ -397,7 +397,7 @@ export class ManagementApiClient implements IManagementApiClient {
     startEventId?: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+  ): Promise<DataModels.Cronjobs.CronjobHistoryList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getCronjobExecutionHistoryForProcessModel(identity, processModelId, startEventId, offset, limit);
@@ -408,7 +408,7 @@ export class ManagementApiClient implements IManagementApiClient {
     crontab: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+  ): Promise<DataModels.Cronjobs.CronjobHistoryList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getCronjobExecutionHistoryForCrontab(identity, crontab, offset, limit);
@@ -601,7 +601,7 @@ export class ManagementApiClient implements IManagementApiClient {
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
+  ): Promise<DataModels.FlowNodeInstances.FlowNodeInstanceList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getFlowNodeInstancesForProcessInstance(identity, processInstanceId, offset, limit);
@@ -728,7 +728,7 @@ export class ManagementApiClient implements IManagementApiClient {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
+  ): Promise<DataModels.Kpi.FlowNodeRuntimeInformationList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getRuntimeInformationForProcessModel(identity, processModelId, offset, limit);
@@ -749,7 +749,7 @@ export class ManagementApiClient implements IManagementApiClient {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getActiveTokensForProcessModel(identity, processModelId, offset, limit);
@@ -761,7 +761,7 @@ export class ManagementApiClient implements IManagementApiClient {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId, offset, limit);
@@ -772,7 +772,7 @@ export class ManagementApiClient implements IManagementApiClient {
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getActiveTokensForProcessInstance(identity, processInstanceId, offset, limit);
@@ -783,7 +783,7 @@ export class ManagementApiClient implements IManagementApiClient {
     flowNodeId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getActiveTokensForFlowNode(identity, flowNodeId, offset, limit);
@@ -795,7 +795,7 @@ export class ManagementApiClient implements IManagementApiClient {
     correlationId?: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Logging.LogEntry>> {
+  ): Promise<DataModels.Logging.LogEntryList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getProcessModelLog(identity, processModelId, correlationId, offset, limit);
@@ -807,7 +807,7 @@ export class ManagementApiClient implements IManagementApiClient {
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Logging.LogEntry>> {
+  ): Promise<DataModels.Logging.LogEntryList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getProcessInstanceLog(identity, processModelId, processInstanceId, offset, limit);
@@ -820,7 +820,7 @@ export class ManagementApiClient implements IManagementApiClient {
     flowNodeId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+  ): Promise<DataModels.TokenHistory.TokenHistoryEntryList> {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId, offset, limit);

@@ -325,7 +325,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
     return this.correlationService.getAllCorrelations(identity, offset, limit);
   }
 
@@ -333,7 +333,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
     return this.correlationService.getActiveCorrelations(identity, offset, limit);
   }
 
@@ -350,7 +350,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
     return this.correlationService.getCorrelationsByProcessModelId(identity, processModelId, offset, limit);
   }
 
@@ -359,7 +359,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+  ): Promise<DataModels.Cronjobs.CronjobList> {
     return this.cronjobService.getAllActiveCronjobs(identity, offset, limit);
   }
 
@@ -369,7 +369,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     startEventId?: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+  ): Promise<DataModels.Cronjobs.CronjobHistoryList> {
     return this.cronjobService.getCronjobExecutionHistoryForProcessModel(identity, processModelId, startEventId, offset, limit);
   }
 
@@ -378,7 +378,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     crontab: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+  ): Promise<DataModels.Cronjobs.CronjobHistoryList> {
     return this.cronjobService.getCronjobExecutionHistoryForCrontab(identity, crontab, offset, limit);
   }
 
@@ -523,7 +523,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
+  ): Promise<DataModels.FlowNodeInstances.FlowNodeInstanceList> {
     return this.flowNodeInstanceService.getFlowNodeInstancesForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
@@ -628,7 +628,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
+  ): Promise<DataModels.Kpi.FlowNodeRuntimeInformationList> {
     return this.kpiService.getRuntimeInformationForProcessModel(identity, processModelId, offset, limit);
   }
 
@@ -645,7 +645,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     return this.kpiService.getActiveTokensForProcessModel(identity, processModelId, offset, limit);
   }
 
@@ -655,7 +655,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     return this.kpiService.getActiveTokensForCorrelationAndProcessModel(identity, correlationId, processModelId, offset, limit);
   }
 
@@ -664,7 +664,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     return this.kpiService.getActiveTokensForProcessInstance(identity, processInstanceId, offset, limit);
   }
 
@@ -673,7 +673,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     flowNodeId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
     return this.kpiService.getActiveTokensForFlowNode(identity, flowNodeId, offset, limit);
   }
 
@@ -683,7 +683,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     correlationId?: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Logging.LogEntry>> {
+  ): Promise<DataModels.Logging.LogEntryList> {
     return this.loggingService.getProcessModelLog(identity, processModelId, correlationId, offset, limit);
   }
 
@@ -693,7 +693,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Logging.LogEntry>> {
+  ): Promise<DataModels.Logging.LogEntryList> {
     return this.loggingService.getProcessInstanceLog(identity, processModelId, processInstanceId, offset, limit);
   }
 
@@ -704,7 +704,7 @@ export class InternalAccessor implements IManagementApiAccessor {
     flowNodeId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+  ): Promise<DataModels.TokenHistory.TokenHistoryEntryList> {
     return this.tokenHistoryService.getTokensForFlowNode(identity, correlationId, processModelId, flowNodeId, offset, limit);
   }
 
