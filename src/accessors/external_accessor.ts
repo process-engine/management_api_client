@@ -364,13 +364,13 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const url = this.buildUrl(restSettings.paths.getAllCorrelations, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.CorrelationList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -379,13 +379,13 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const url = this.buildUrl(restSettings.paths.getActiveCorrelations, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.CorrelationList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -424,7 +424,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Correlations.Correlation>> {
+  ): Promise<DataModels.Correlations.CorrelationList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -433,7 +433,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Correlations.Correlation>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.CorrelationList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -443,16 +443,16 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     identity: IIdentity,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobConfiguration>> {
+  ): Promise<DataModels.Cronjobs.CronjobList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const url = this.buildUrl(restSettings.paths.getActiveCronjobs, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobConfiguration>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Cronjobs.CronjobList>(url, requestAuthHeaders);
 
     // We need to restore the datatype of `nextExecution`, since that property gets stringified when transported over http.
-    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobConfiguration => {
+    const mappedCronjobs = httpResponse.result.cronjobs.map((entry): DataModels.Cronjobs.CronjobConfiguration => {
       const mappedEntry = entry;
       if (entry.nextExecution) {
         mappedEntry.nextExecution = moment(entry.nextExecution).toDate();
@@ -461,7 +461,12 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       return mappedEntry;
     });
 
-    return mappedResult;
+    const result = new DataModels.Cronjobs.CronjobList();
+
+    result.cronjobs = mappedCronjobs;
+    result.totalCount = httpResponse.result.totalCount;
+
+    return result;
   }
 
   public async getCronjobExecutionHistoryForProcessModel(
@@ -470,7 +475,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     startEventId?: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+  ): Promise<DataModels.Cronjobs.CronjobHistoryList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -483,10 +488,10 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     url = this.buildUrl(url, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Cronjobs.CronjobHistoryList>(url, requestAuthHeaders);
 
     // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
-    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+    const mappedCronjobHistories = httpResponse.result.cronjobHistories.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
       const mappedEntry = entry;
       if (entry.executedAt) {
         mappedEntry.executedAt = moment(entry.executedAt).toDate();
@@ -495,7 +500,12 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       return mappedEntry;
     });
 
-    return mappedResult;
+    const result = new DataModels.Cronjobs.CronjobHistoryList();
+
+    result.cronjobHistories = mappedCronjobHistories;
+    result.totalCount = httpResponse.result.totalCount;
+
+    return result;
   }
 
   public async getCronjobExecutionHistoryForCrontab(
@@ -503,17 +513,17 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     crontab: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Cronjobs.CronjobHistoryEntry>> {
+  ): Promise<DataModels.Cronjobs.CronjobHistoryList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const url = this.buildUrl(restSettings.paths.getCronjobExecutionHistoryForCrontab, offset, limit)
       .replace(restSettings.params.crontab, crontab);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Cronjobs.CronjobHistoryEntry>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Cronjobs.CronjobHistoryList>(url, requestAuthHeaders);
 
     // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
-    const mappedResult = httpResponse.result.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+    const mappedCronjobHistories = httpResponse.result.cronjobHistories.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
       const mappedEntry = entry;
       if (entry.executedAt) {
         mappedEntry.executedAt = moment(entry.executedAt).toDate();
@@ -522,7 +532,12 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
       return mappedEntry;
     });
 
-    return mappedResult;
+    const result = new DataModels.Cronjobs.CronjobHistoryList();
+
+    result.cronjobHistories = mappedCronjobHistories;
+    result.totalCount = httpResponse.result.totalCount;
+
+    return result;
   }
 
   // ProcessModels
@@ -815,14 +830,14 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.FlowNodeInstances.FlowNodeInstance>> {
+  ): Promise<DataModels.FlowNodeInstances.FlowNodeInstanceList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
     const restPath = restSettings.paths.getFlowNodeInstancesForProcessInstance.replace(restSettings.params.processInstanceId, processInstanceId);
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.FlowNodeInstances.FlowNodeInstance>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.FlowNodeInstances.FlowNodeInstanceList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1018,7 +1033,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.FlowNodeRuntimeInformation>> {
+  ): Promise<DataModels.Kpi.FlowNodeRuntimeInformationList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1027,7 +1042,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.FlowNodeRuntimeInformation>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Kpi.FlowNodeRuntimeInformationList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1056,7 +1071,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1065,7 +1080,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Kpi.ActiveTokenList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1076,7 +1091,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     processModelId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1086,7 +1101,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Kpi.ActiveTokenList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1096,7 +1111,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1105,7 +1120,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Kpi.ActiveTokenList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1115,7 +1130,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     flowNodeId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Kpi.ActiveToken>> {
+  ): Promise<DataModels.Kpi.ActiveTokenList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1124,7 +1139,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Kpi.ActiveToken>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Kpi.ActiveTokenList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1135,7 +1150,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     correlationId?: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Logging.LogEntry>> {
+  ): Promise<DataModels.Logging.LogEntryList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1148,7 +1163,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Logging.LogEntry>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Logging.LogEntryList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1159,7 +1174,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     processInstanceId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.Logging.LogEntry>> {
+  ): Promise<DataModels.Logging.LogEntryList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1169,7 +1184,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.Logging.LogEntry>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.Logging.LogEntryList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
@@ -1181,7 +1196,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     flowNodeId: string,
     offset: number = 0,
     limit: number = 0,
-  ): Promise<Array<DataModels.TokenHistory.TokenHistoryEntry>> {
+  ): Promise<DataModels.TokenHistory.TokenHistoryEntryList> {
 
     const requestAuthHeaders = this.createRequestAuthHeaders(identity);
 
@@ -1192,7 +1207,7 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const url = this.buildUrl(restPath, offset, limit);
 
-    const httpResponse = await this.httpClient.get<Array<DataModels.TokenHistory.TokenHistoryEntry>>(url, requestAuthHeaders);
+    const httpResponse = await this.httpClient.get<DataModels.TokenHistory.TokenHistoryEntryList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }
