@@ -722,6 +722,61 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.finishUserTask(identity, processInstanceId, correlationId, userTaskInstanceId, userTaskResult);
   }
 
+  // Tasks
+  public async getAllSuspendedTasks(
+    identity: IIdentity,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getAllSuspendedTasks(identity, offset, limit);
+  }
+
+  public async getSuspendedTasksForProcessModel(
+    identity: IIdentity, processModelId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getSuspendedTasksForProcessModel(identity, processModelId, offset, limit);
+  }
+
+  public async getSuspendedTasksForProcessInstance(
+    identity: IIdentity,
+    processInstanceId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getSuspendedTasksForProcessInstance(identity, processInstanceId, offset, limit);
+  }
+
+  public async getSuspendedTasksForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getSuspendedTasksForCorrelation(identity, correlationId, offset, limit);
+  }
+
+  public async getSuspendedTasksForProcessModelInCorrelation(
+    identity: IIdentity,
+    processModelId: string,
+    correlationId: string,
+    offset: number = 0,
+    limit: number = 0,
+  ): Promise<DataModels.FlowNodeInstances.TaskList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getSuspendedTasksForProcessModelInCorrelation(identity, processModelId, correlationId, offset, limit);
+  }
+
   // Heatmap related features
   public async getRuntimeInformationForProcessModel(
     identity: IIdentity,
