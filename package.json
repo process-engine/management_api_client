@@ -31,7 +31,7 @@
     "@essential-projects/errors_ts": "^1.5.0",
     "@essential-projects/http_contracts": "^2.4.0",
     "@essential-projects/iam_contracts": "^3.5.0",
-    "@process-engine/management_api_contracts": "feature~remove_on_call_activity_waiting_notification",
+    "@process-engine/management_api_contracts": "13.0.0-d2eb9786-b32",
     "loggerhythm": "^3.0.4",
     "moment": "^2.24.0",
     "node-uuid": "^1.4.8",
