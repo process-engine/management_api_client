@@ -431,8 +431,11 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const httpResponse = await this.httpClient.get<DataModels.Cronjobs.CronjobList>(url, requestAuthHeaders);
 
+    const resultIsNoCronjobList: boolean = httpResponse.result.cronjobs === undefined;
+
+    const cronjobs = resultIsNoCronjobList ? httpResponse.result as any : httpResponse.result.cronjobs;
     // We need to restore the datatype of `nextExecution`, since that property gets stringified when transported over http.
-    const mappedCronjobs = httpResponse.result.cronjobs.map((entry): DataModels.Cronjobs.CronjobConfiguration => {
+    const mappedCronjobs = cronjobs.map((entry): DataModels.Cronjobs.CronjobConfiguration => {
       const mappedEntry = entry;
       if (entry.nextExecution) {
         mappedEntry.nextExecution = moment(entry.nextExecution).toDate();
@@ -440,6 +443,10 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
       return mappedEntry;
     });
+
+    if (resultIsNoCronjobList) {
+      return mappedCronjobs;
+    }
 
     const result = new DataModels.Cronjobs.CronjobList();
 
@@ -470,8 +477,12 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const httpResponse = await this.httpClient.get<DataModels.Cronjobs.CronjobHistoryList>(url, requestAuthHeaders);
 
+    const resultIsNoCronjobHistoryList: boolean = httpResponse.result.cronjobHistories === undefined;
+
+    const cronjobHistories = resultIsNoCronjobHistoryList ? httpResponse.result as any : httpResponse.result.cronjobHistories;
+
     // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
-    const mappedCronjobHistories = httpResponse.result.cronjobHistories.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+    const mappedCronjobHistories = cronjobHistories.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
       const mappedEntry = entry;
       if (entry.executedAt) {
         mappedEntry.executedAt = moment(entry.executedAt).toDate();
@@ -479,6 +490,10 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
       return mappedEntry;
     });
+
+    if (resultIsNoCronjobHistoryList) {
+      return mappedCronjobHistories;
+    }
 
     const result = new DataModels.Cronjobs.CronjobHistoryList();
 
@@ -502,8 +517,12 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
     const httpResponse = await this.httpClient.get<DataModels.Cronjobs.CronjobHistoryList>(url, requestAuthHeaders);
 
+    const resultIsNoCronjobHistoryList: boolean = httpResponse.result.cronjobHistories === undefined;
+
+    const cronjobHistories = resultIsNoCronjobHistoryList ? httpResponse.result as any : httpResponse.result.cronjobHistories;
+
     // We need to restore the datatype of `executedAt`, since that property gets stringified when transported over http.
-    const mappedCronjobHistories = httpResponse.result.cronjobHistories.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
+    const mappedCronjobHistories = cronjobHistories.map((entry): DataModels.Cronjobs.CronjobHistoryEntry => {
       const mappedEntry = entry;
       if (entry.executedAt) {
         mappedEntry.executedAt = moment(entry.executedAt).toDate();
@@ -511,6 +530,10 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
 
       return mappedEntry;
     });
+
+    if (resultIsNoCronjobHistoryList) {
+      return mappedCronjobHistories;
+    }
 
     const result = new DataModels.Cronjobs.CronjobHistoryList();
 
