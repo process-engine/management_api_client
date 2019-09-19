@@ -331,10 +331,10 @@ export class ManagementApiClient implements IManagementApiClient {
     return this.managementApiAccessor.getCorrelationById(identity, correlationId);
   }
 
-  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.Correlation> {
+  public async getProcessInstanceById(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.ProcessInstance> {
     this.ensureIsAuthorized(identity);
 
-    return this.managementApiAccessor.getCorrelationByProcessInstanceId(identity, processInstanceId);
+    return this.managementApiAccessor.getProcessInstanceById(identity, processInstanceId);
   }
 
   public async getCorrelationsByProcessModelId(
@@ -346,6 +346,39 @@ export class ManagementApiClient implements IManagementApiClient {
     this.ensureIsAuthorized(identity);
 
     return this.managementApiAccessor.getCorrelationsByProcessModelId(identity, processModelId, offset, limit);
+  }
+
+  public async getProcessInstancesForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getProcessInstancesForCorrelation(identity, correlationId, offset, limit);
+  }
+
+  public async getProcessInstancesForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getProcessInstancesForProcessModel(identity, processModelId, offset, limit);
+  }
+
+  public async getProcessInstancesByState(
+    identity: IIdentity,
+    state: DataModels.Correlations.CorrelationState,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+    this.ensureIsAuthorized(identity);
+
+    return this.managementApiAccessor.getProcessInstancesByState(identity, state, offset, limit);
   }
 
   // Cronjobs
