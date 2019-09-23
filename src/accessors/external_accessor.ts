@@ -385,20 +385,6 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     return httpResponse.result;
   }
 
-  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.Correlation> {
-
-    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
-
-    const restPath = restSettings.paths.getCorrelationByProcessInstanceId
-      .replace(restSettings.params.processInstanceId, processInstanceId);
-
-    const url = this.buildUrl(restPath);
-
-    const httpResponse = await this.httpClient.get<DataModels.Correlations.Correlation>(url, requestAuthHeaders);
-
-    return httpResponse.result;
-  }
-
   public async getCorrelationsByProcessModelId(
     identity: IIdentity,
     processModelId: string,
@@ -414,6 +400,77 @@ export class ExternalAccessor implements IManagementApiAccessor, IManagementSock
     const url = this.buildUrl(restPath, offset, limit);
 
     const httpResponse = await this.httpClient.get<DataModels.Correlations.CorrelationList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getProcessInstanceById(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.ProcessInstance> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getProcessInstanceById
+      .replace(restSettings.params.processInstanceId, processInstanceId);
+
+    const url = this.buildUrl(restPath);
+
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.ProcessInstance>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getProcessInstancesForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getProcessInstancesForCorrelation
+      .replace(restSettings.params.correlationId, correlationId);
+
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.ProcessInstanceList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getProcessInstancesForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getProcessInstancesForProcessModel
+      .replace(restSettings.params.processModelId, processModelId);
+
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.ProcessInstanceList>(url, requestAuthHeaders);
+
+    return httpResponse.result;
+  }
+
+  public async getProcessInstancesByState(
+    identity: IIdentity,
+    state: DataModels.Correlations.CorrelationState,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+
+    const requestAuthHeaders = this.createRequestAuthHeaders(identity);
+
+    const restPath = restSettings.paths.getProcessInstancesByState
+      .replace(restSettings.params.processInstanceState, state);
+
+    const url = this.buildUrl(restPath, offset, limit);
+
+    const httpResponse = await this.httpClient.get<DataModels.Correlations.ProcessInstanceList>(url, requestAuthHeaders);
 
     return httpResponse.result;
   }

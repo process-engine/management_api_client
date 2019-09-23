@@ -321,10 +321,6 @@ export class InternalAccessor implements IManagementApiAccessor {
     return this.correlationService.getCorrelationById(identity, correlationId);
   }
 
-  public async getCorrelationByProcessInstanceId(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.Correlation> {
-    return this.correlationService.getCorrelationByProcessInstanceId(identity, processInstanceId);
-  }
-
   public async getCorrelationsByProcessModelId(
     identity: IIdentity,
     processModelId: string,
@@ -332,6 +328,37 @@ export class InternalAccessor implements IManagementApiAccessor {
     limit: number = 0,
   ): Promise<DataModels.Correlations.CorrelationList> {
     return this.correlationService.getCorrelationsByProcessModelId(identity, processModelId, offset, limit);
+  }
+
+  public async getProcessInstanceById(identity: IIdentity, processInstanceId: string): Promise<DataModels.Correlations.ProcessInstance> {
+    return this.correlationService.getProcessInstanceById(identity, processInstanceId);
+  }
+
+  public async getProcessInstancesForCorrelation(
+    identity: IIdentity,
+    correlationId: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+    return this.correlationService.getProcessInstancesForCorrelation(identity, correlationId, offset, limit);
+  }
+
+  public async getProcessInstancesForProcessModel(
+    identity: IIdentity,
+    processModelId: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+    return this.correlationService.getProcessInstancesForProcessModel(identity, processModelId, offset, limit);
+  }
+
+  public async getProcessInstancesByState(
+    identity: IIdentity,
+    state: DataModels.Correlations.CorrelationState,
+    offset?: number,
+    limit?: number,
+  ): Promise<DataModels.Correlations.ProcessInstanceList> {
+    return this.correlationService.getProcessInstancesByState(identity, state, offset, limit);
   }
 
   // Cronjobs
